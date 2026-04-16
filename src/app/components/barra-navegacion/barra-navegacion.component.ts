@@ -10,10 +10,13 @@ import { provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideX, lucideSun, lucideMoon } from '@ng-icons/lucide';
 import { NgIconComponent } from '@ng-icons/core';
 
+import { NavMenuDesktopComponent } from './nav-menu-desktop.component';
+import { NavMenuMobileComponent } from './nav-menu-mobile.component';
+
 @Component({
   selector: 'app-barra-navegacion',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, LoginModalComponent, HlmButton, HlmIcon, NgIconComponent],
+  imports: [CommonModule, LoginModalComponent, HlmButton, HlmIcon, NgIconComponent, NavMenuDesktopComponent, NavMenuMobileComponent],
   providers: [provideIcons({ lucideMenu, lucideX, lucideSun, lucideMoon })],
   template: `
     <nav class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -23,22 +26,7 @@ import { NgIconComponent } from '@ng-icons/core';
           Cine POOR
         </div>
 
-        <ul class="hidden items-center gap-4 md:flex">
-          @for (link of filteredLinks(); track link.to) {
-            <li>
-              <a
-                hlmBtn
-                variant="ghost"
-                [routerLink]="link.to"
-                routerLinkActive="bg-accent text-accent-foreground font-semibold"
-                [routerLinkActiveOptions]="{exact: link.exact}"
-                class="px-4 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground"
-              >
-                {{ link.label }}
-              </a>
-            </li>
-          }
-        </ul>
+        <app-nav-menu-desktop [filteredLinks]="filteredLinks()" />
 
         <div class="flex items-center gap-2">
             <button
@@ -76,37 +64,12 @@ import { NgIconComponent } from '@ng-icons/core';
       </div>
 
       @if (menuAbierto()) {
-        <div class="flex flex-col gap-2 border-t border-border py-4 md:hidden px-4">
-          @for (link of filteredLinks(); track link.to) {
-              <a
-                hlmBtn
-                variant="ghost"
-                [routerLink]="link.to"
-                routerLinkActive="bg-accent text-accent-foreground font-semibold"
-                [routerLinkActiveOptions]="{exact: link.exact}"
-                class="w-full justify-center px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
-                (click)="menuAbierto.set(false)"
-              >
-              {{ link.label }}
-            </a>
-          }
-
-          <div class="flex flex-col items-center gap-2 pt-2 border-t border-border mt-2">
-            <button hlmBtn variant="ghost" size="icon" (click)="toggleTheme()" class="w-full flex justify-center mb-2">
-              @if (isDarkMode()) {
-                <ng-icon hlm name="lucideSun" size="sm"></ng-icon>
-              } @else {
-                <ng-icon hlm name="lucideMoon" size="sm"></ng-icon>
-              }
-            </button>
-            @if (authStore.isAuthenticated()) {
-              <span class="text-sm font-medium text-muted-foreground">{{ authStore.user()?.email || 'Usuario' }}</span>
-              <button hlmBtn variant="destructive" class="w-full" (click)="handleLogout()">Salir</button>
-            } @else {
-              <app-login-modal />
-            }
-          </div>
-        </div>
+        <app-nav-menu-mobile
+          [filteredLinks]="filteredLinks()"
+          [isDarkMode]="isDarkMode()"
+          (closeMenu)="menuAbierto.set(false)"
+          (toggleTheme)="toggleTheme()"
+        />
       }
     </nav>
   `

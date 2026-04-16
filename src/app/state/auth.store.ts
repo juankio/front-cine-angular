@@ -40,6 +40,14 @@ export class AuthStore {
     }
   }
 
+  setLoading(value: boolean) {
+    this._loading.set(value);
+  }
+
+  setError(error: string | null) {
+    this._error.set(error);
+  }
+
   // Actions
   async login(credentials: any): Promise<any> {
     this._loading.set(true);
