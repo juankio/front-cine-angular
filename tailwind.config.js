@@ -7,7 +7,13 @@ module.exports = {
     "./libs/ui/**/*.{html,ts}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['"Bebas Neue"', 'sans-serif'],
+        body: ['Outfit', 'sans-serif'],
+        display: ['"Bebas Neue"', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 }

@@ -15,23 +15,24 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
     <app-default-layout>
       <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-10">
 
-        <!-- Hero -->
-        <hlm-card class="relative overflow-hidden flex flex-col p-10 w-full shadow-lg border-white/10 bg-slate-950/40 backdrop-blur-2xl">
+        <!-- Nuevo Hero Limpio y Minimalista -->
+        <hlm-card class="relative flex flex-col p-10 md:p-14 w-full shadow-sm border-border bg-card overflow-hidden">
           
-          <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-            <div class="absolute -top-32 -left-32 w-[30rem] h-[30rem] bg-blue-600/40 rounded-full mix-blend-screen filter blur-[128px] animate-pulse"></div>
-            <div class="absolute top-0 right-0 w-96 h-96 bg-purple-600/30 rounded-full mix-blend-screen filter blur-[120px]"></div>
-            <div class="absolute -bottom-32 left-1/3 w-[25rem] h-[25rem] bg-indigo-500/40 rounded-full mix-blend-screen filter blur-[100px]"></div>
-          </div>
+          <!-- Gradiente radial sutil de fondo -->
+          <div class="absolute top-0 inset-x-0 h-full bg-gradient-to-b from-primary/5 via-primary/[0.02] to-transparent pointer-events-none"></div>
 
-          <div class="relative z-10 flex flex-col md:flex-row gap-6 w-full items-center justify-between">
-            <div class="text-center md:text-left">
-              <h1 class="text-5xl font-extrabold tracking-tight text-white drop-shadow-sm">Cine POOR</h1>
-              <p class="text-slate-300 mt-3 text-lg font-medium">Compra tu combo, elige función y reserva tu mesa en minutos.</p>
+          <div class="relative z-10 flex flex-col md:flex-row gap-8 w-full items-center justify-between">
+            <div class="text-center md:text-left flex-1">
+              <h1 class="text-6xl md:text-8xl font-display tracking-widest text-foreground uppercase drop-shadow-sm">
+                Cine POOR
+              </h1>
+              <p class="text-muted-foreground mt-4 text-lg md:text-xl font-medium max-w-lg mx-auto md:mx-0">
+                Compra tu combo, elige función y reserva tu mesa en minutos.
+              </p>
             </div>
-            <div class="relative w-full md:w-80">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <input hlmInput type="text" placeholder="Buscar película..." class="w-full pl-10 bg-slate-900/50 border-slate-700/50 text-white placeholder:text-slate-400 focus-visible:ring-blue-500 backdrop-blur-md h-12 rounded-xl shadow-inner relative z-10" />
+            <div class="relative w-full md:w-96 flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input hlmInput type="text" placeholder="Buscar película..." class="w-full pl-12 h-14 text-lg rounded-xl bg-background border-border shadow-sm focus-visible:ring-primary relative z-10 transition-all hover:border-primary/50" />
             </div>
           </div>
         </hlm-card>
