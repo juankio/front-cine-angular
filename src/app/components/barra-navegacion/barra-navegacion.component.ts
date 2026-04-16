@@ -27,9 +27,9 @@ import { NgIconComponent } from '@ng-icons/core';
                 hlmBtn
                 variant="ghost"
                 [routerLink]="link.to"
-                routerLinkActive="bg-neutral-100 dark:bg-neutral-800 font-medium"
+                routerLinkActive="bg-accent text-accent-foreground font-semibold"
                 [routerLinkActiveOptions]="{exact: link.exact}"
-                class="px-4 py-2 rounded-lg text-sm text-neutral-700 dark:text-neutral-300"
+                class="px-4 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground"
               >
                 {{ link.label }}
               </a>
@@ -38,12 +38,12 @@ import { NgIconComponent } from '@ng-icons/core';
         </ul>
 
         <div class="flex items-center gap-2">
-          <button
-            hlmBtn
-            variant="ghost"
-            size="icon"
-            class="md:hidden text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-            [attr.aria-expanded]="menuAbierto()"
+            <button
+              hlmBtn
+              variant="ghost"
+              size="icon"
+              class="md:hidden text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              [attr.aria-expanded]="menuAbierto()"
             aria-label="Abrir menu de navegacion"
             (click)="toggleMenu()"
           >
@@ -63,7 +63,7 @@ import { NgIconComponent } from '@ng-icons/core';
               }
             </button>
             @if (authStore.isAuthenticated()) {
-              <span class="text-sm text-gray-600 dark:text-gray-300">{{ authStore.user()?.email || 'Usuario' }}</span>
+              <span class="text-sm font-medium text-muted-foreground mr-2">{{ authStore.user()?.email || 'Usuario' }}</span>
               <button hlmBtn variant="destructive" size="sm" (click)="handleLogout()">Salir</button>
             } @else {
               <app-login-modal />
@@ -73,22 +73,22 @@ import { NgIconComponent } from '@ng-icons/core';
       </div>
 
       @if (menuAbierto()) {
-        <div class="flex flex-col gap-2 border-t border-gray-200 py-4 dark:border-gray-800 md:hidden px-4">
+        <div class="flex flex-col gap-2 border-t border-border py-4 md:hidden px-4">
           @for (link of filteredLinks(); track link.to) {
-            <a
-              hlmBtn
-              variant="ghost"
-              [routerLink]="link.to"
-              routerLinkActive="bg-neutral-100 dark:bg-neutral-800 font-medium"
-              [routerLinkActiveOptions]="{exact: link.exact}"
-              class="w-full justify-center px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300"
-              (click)="menuAbierto.set(false)"
-            >
+              <a
+                hlmBtn
+                variant="ghost"
+                [routerLink]="link.to"
+                routerLinkActive="bg-accent text-accent-foreground font-semibold"
+                [routerLinkActiveOptions]="{exact: link.exact}"
+                class="w-full justify-center px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
+                (click)="menuAbierto.set(false)"
+              >
               {{ link.label }}
             </a>
           }
 
-          <div class="flex flex-col items-center gap-2 pt-2 border-t border-gray-100 dark:border-gray-800 mt-2">
+          <div class="flex flex-col items-center gap-2 pt-2 border-t border-border mt-2">
             <button hlmBtn variant="ghost" size="icon" (click)="toggleTheme()" class="w-full flex justify-center mb-2">
               @if (isDarkMode()) {
                 <ng-icon hlm name="lucideSun" size="sm"></ng-icon>
@@ -97,7 +97,7 @@ import { NgIconComponent } from '@ng-icons/core';
               }
             </button>
             @if (authStore.isAuthenticated()) {
-              <span class="text-sm text-gray-600 dark:text-gray-300">{{ authStore.user()?.email || 'Usuario' }}</span>
+              <span class="text-sm font-medium text-muted-foreground">{{ authStore.user()?.email || 'Usuario' }}</span>
               <button hlmBtn variant="destructive" class="w-full" (click)="handleLogout()">Salir</button>
             } @else {
               <app-login-modal />
