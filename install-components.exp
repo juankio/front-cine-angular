@@ -1,0 +1,6 @@
+#!/usr/bin/expect -f
+set timeout -1
+spawn npx ng g @spartan-ng/cli:ui button
+expect "Choose a directory to place your spartan libraries"
+send "\r"
+expect eof

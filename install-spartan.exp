@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+set timeout -1
+spawn ng g @spartan-ng/cli:init
+expect "Choose which application you want to add the theme to"
+send "\r"
+expect "Choose which theme to apply"
+send "\r"
+expect "Choose your border radius"
+send "\r"
+expect eof
