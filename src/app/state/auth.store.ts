@@ -34,6 +34,12 @@ export class AuthStore {
     return u?.rol === 'cliente' || u?.role === 'cliente' || u?.rol === 'client';
   });
 
+  constructor() {
+    if (this._token()) {
+      this.fetchUser();
+    }
+  }
+
   // Actions
   async login(credentials: any): Promise<any> {
     this._loading.set(true);

@@ -11,15 +11,15 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
     <app-barra-navegacion />
     <div class="flex w-full h-[calc(100vh-64px)]">
       <!-- Sidebar -->
-      <aside class="w-64 shrink-0 border-r border-gray-200 dark:border-gray-800 px-4 py-3 bg-white dark:bg-gray-900 overflow-y-auto">
+      <aside class="w-64 shrink-0 border-r border-border px-4 py-3 bg-card overflow-y-auto">
         <ul class="flex flex-col gap-2">
           @for (item of navItems; track item.to) {
             <li>
               <a
                 [routerLink]="item.to"
-                routerLinkActive="border-l-blue-500 text-blue-600 dark:text-blue-300 bg-neutral-50 dark:bg-neutral-800"
+                routerLinkActive="border-l-primary text-primary bg-muted"
                 [routerLinkActiveOptions]="{exact: item.exact}"
-                class="flex items-center gap-2 px-4 py-2 w-full justify-start border-l-4 border-l-transparent rounded-r-sm rounded-l-none text-base font-bold text-gray-700 dark:text-gray-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                class="flex items-center gap-2 px-4 py-2 w-full justify-start border-l-4 border-l-transparent rounded-r-sm rounded-l-none text-base font-bold text-muted-foreground hover:bg-muted/50 transition-colors"
               >
                 <!-- SVG Icon fallback since we aren't using UIcon directly -->
                 @if (item.icon === 'home') {
@@ -41,7 +41,7 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
       </aside>
 
       <!-- Contenido -->
-      <main class="flex-1 min-w-0 overflow-y-auto bg-gray-50 dark:bg-gray-950">
+      <main class="flex-1 min-w-0 overflow-y-auto bg-background">
         <ng-content></ng-content>
       </main>
     </div>

@@ -7,7 +7,7 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
   imports: [BarraNavegacionComponent],
   template: `
     <app-barra-navegacion />
-    <main class="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-950">
+    <main class="min-h-[calc(100vh-64px)] bg-background text-foreground">
       <ng-content></ng-content>
     </main>
   `
