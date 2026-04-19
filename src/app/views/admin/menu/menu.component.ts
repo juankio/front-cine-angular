@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuService } from '../../../services/menu.service';
+import { ToastService } from '../../../services/toast.service';
 
 import { HlmTableImports } from '@spartan-ng/helm/table';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -98,6 +99,7 @@ import { MenuFormComponent } from '../../../components/menu-form/menu-form.compo
 })
 export class MenuComponent implements OnInit {
   private menuService = inject(MenuService);
+  private toastService = inject(ToastService);
 
   productos = signal<any[]>([]);
   loading = signal(false);
@@ -144,7 +146,7 @@ export class MenuComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al eliminar producto', err);
-        alert('Hubo un error al eliminar el producto.');
+        this.toastService.error('Hubo un error al eliminar el producto.');
       }
     });
   }

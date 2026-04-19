@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuService } from '../../../services/menu.service';
+import { ToastService } from '../../../services/toast.service';
 
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
@@ -130,6 +131,7 @@ interface CartItem {
 })
 export class PosComponent implements OnInit {
   private menuService = inject(MenuService);
+  private toastService = inject(ToastService);
 
   productos = signal<any[]>([]);
   loading = signal(false);
@@ -209,7 +211,7 @@ export class PosComponent implements OnInit {
     this.procesando.set(true);
     // Simulación de llamada a backend para registrar venta directa
     setTimeout(() => {
-      alert(`¡Venta registrada con éxito!\nTotal cobrado: \$${this.totalPrecio().toFixed(2)}`);
+      this.toastService.success(`¡Venta registrada con éxito!\nTotal cobrado: \$${this.totalPrecio().toFixed(2)}`);
       this.carrito.set([]);
       this.procesando.set(false);
     }, 800);

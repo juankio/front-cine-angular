@@ -1,16 +1,19 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalasService } from '../../../services/salas.service';
+import { ToastService } from '../../../services/toast.service';
 
 import { HlmTableImports } from '@spartan-ng/helm/table';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { SalaFormComponent } from '../../../components/sala-form/sala-form.component';
+import { FuncionFormComponent } from '../../../components/funcion-form/funcion-form.component';
+import { MonitoreoSalaComponent } from '../../../components/monitoreo-sala/monitoreo-sala.component';
 
 @Component({
   selector: 'app-salas',
   standalone: true,
-  imports: [CommonModule, HlmTableImports, HlmCardImports, HlmButtonImports, SalaFormComponent],
+  imports: [CommonModule, HlmTableImports, HlmCardImports, HlmButtonImports, SalaFormComponent, FuncionFormComponent, MonitoreoSalaComponent],
   template: `
     <div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-500 text-foreground">
       <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-border/40 pb-6">
@@ -31,8 +34,8 @@ import { SalaFormComponent } from '../../../components/sala-form/sala-form.compo
             <thead>
               <tr class="border-b border-border/50 bg-muted/20">
                 <th class="font-display tracking-widest uppercase text-muted-foreground p-4">Nombre de Sala</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground p-4">Dimensiones (F x A)</th>
                 <th class="font-display tracking-widest uppercase text-muted-foreground p-4">Capacidad Total</th>
+                <th class="font-display tracking-widest uppercase text-muted-foreground p-4">Funciones Asignadas</th>
                 <th class="font-display tracking-widest uppercase text-muted-foreground p-4 text-right">Acciones</th>
               </tr>
             </thead>
@@ -58,16 +61,22 @@ import { SalaFormComponent } from '../../../components/sala-form/sala-form.compo
                       <span class="font-display tracking-wider text-2xl text-foreground">{{ sala.nombre }}</span>
                     </td>
                     <td class="p-4">
-                      <span class="inline-flex items-center rounded-sm bg-muted/50 px-3 py-1 text-sm font-display tracking-widest text-muted-foreground border border-border/50">
-                        {{ sala.asientos?.length || 0 }} FILAS
-                      </span>
-                    </td>
-                    <td class="p-4">
                       <span class="font-display tracking-widest text-primary text-3xl">{{ calcularTotalAsientos(sala) }}</span>
                       <span class="text-sm text-muted-foreground font-display tracking-wider ml-1">ASIENTOS</span>
                     </td>
+                    <td class="p-4">
+                      <span class="inline-flex items-center rounded-sm bg-muted/50 px-3 py-1 text-sm font-display tracking-widest text-muted-foreground border border-border/50">
+                        {{ sala.filas || 0 }} FILAS
+                      </span>
+                    </td>
                     <td class="p-4 text-right">
-                      <button (click)="eliminar(sala._id || sala.id)" class="text-muted-foreground hover:text-destructive hover:bg-destructive/10 p-2 rounded transition-colors opacity-0 group-hover:opacity-100" title="Eliminar sala">
+                      <button (click)="abrirModalMonitoreo(sala)" class="text-blue-500 hover:text-white hover:bg-blue-500 bg-blue-500/10 p-2 rounded transition-colors mr-2" title="Monitor de Asientos">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                      </button>
+                      <button (click)="abrirModalFuncion(sala)" class="text-green-500 hover:text-white hover:bg-green-500 bg-green-500/10 p-2 rounded transition-colors mr-2" title="Asignar Película / Programar Función">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/><path d="M7 3v18"/><path d="M17 3v18"/></svg>
+                      </button>
+                      <button (click)="eliminar(sala._id || sala.id)" class="text-red-500 hover:text-white hover:bg-red-500 bg-red-500/10 p-2 rounded transition-colors" title="Eliminar sala">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                       </button>
                     </td>
@@ -79,21 +88,38 @@ import { SalaFormComponent } from '../../../components/sala-form/sala-form.compo
         </div>
       </div>
 
-      <!-- Modal para crear -->
+      <!-- Modales -->
       <app-sala-form
         [visible]="modalAbierto()"
         (closed)="cerrarModal()"
-        (saved)="onSalaGuardada()"
-      ></app-sala-form>
+        (saved)="onSalaGuardada()">
+      </app-sala-form>
+
+      <app-funcion-form
+        [visible]="modalFuncionAbierto()"
+        [sala]="salaSeleccionada"
+        (closed)="cerrarModalFuncion()"
+        (saved)="onFuncionGuardada()">
+      </app-funcion-form>
+
+      <app-monitoreo-sala
+        [visible]="modalMonitoreoAbierto()"
+        [sala]="salaSeleccionada"
+        (closed)="cerrarModalMonitoreo()">
+      </app-monitoreo-sala>
     </div>
   `
 })
 export class SalasComponent implements OnInit {
   private salasService = inject(SalasService);
+  private toastService = inject(ToastService);
 
   salas = signal<any[]>([]);
   loading = signal(false);
   modalAbierto = signal(false);
+  modalFuncionAbierto = signal(false);
+  modalMonitoreoAbierto = signal(false);
+  salaSeleccionada: any = null;
 
   ngOnInit() {
     this.cargarSalas();
@@ -115,17 +141,7 @@ export class SalasComponent implements OnInit {
   }
 
   calcularTotalAsientos(sala: any): number {
-    if (!sala.asientos || !Array.isArray(sala.asientos)) return 0;
-    
-    // Suponiendo que sala.asientos es un array de filas (matrices 2D o arrays de objetos)
-    // Cuenta la cantidad total de asientos disponibles en la sala
-    let total = 0;
-    sala.asientos.forEach((fila: any) => {
-      if (Array.isArray(fila.asientos)) {
-        total += fila.asientos.length;
-      }
-    });
-    return total;
+    return sala.capacidad || ((sala.filas || 0) * (sala.asientosPorFila || 0));
   }
 
   abrirModal() {
@@ -141,6 +157,31 @@ export class SalasComponent implements OnInit {
     this.cargarSalas();
   }
 
+  abrirModalFuncion(sala: any) {
+    this.salaSeleccionada = sala;
+    this.modalFuncionAbierto.set(true);
+  }
+
+  cerrarModalFuncion() {
+    this.modalFuncionAbierto.set(false);
+    this.salaSeleccionada = null;
+  }
+
+  abrirModalMonitoreo(sala: any) {
+    this.salaSeleccionada = sala;
+    this.modalMonitoreoAbierto.set(true);
+  }
+
+  cerrarModalMonitoreo() {
+    this.modalMonitoreoAbierto.set(false);
+    this.salaSeleccionada = null;
+  }
+
+  onFuncionGuardada() {
+    this.cerrarModalFuncion();
+    this.cargarSalas(); // Recargar para ver el cambio de "Funciones Asignadas"
+  }
+
   eliminar(id: string) {
     if (!confirm('¿Estás seguro de que deseas eliminar esta sala?')) return;
     
@@ -150,7 +191,7 @@ export class SalasComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al eliminar la sala', err);
-        alert('No se puede eliminar la sala si ya tiene funciones programadas o compras.');
+        this.toastService.error('No se puede eliminar la sala si ya tiene funciones programadas o compras.');
       }
     });
   }

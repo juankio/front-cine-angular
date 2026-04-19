@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, inject, signal, OnChanges, Simp
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PeliculasService } from '../../services/peliculas.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-pelicula-form',
@@ -9,7 +10,7 @@ import { PeliculasService } from '../../services/peliculas.service';
   imports: [CommonModule, FormsModule],
   template: `
     @if (visible) {
-      <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <!-- Backdrop -->
         <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" (click)="cerrar()"></div>
         
@@ -105,6 +106,7 @@ export class PeliculaFormComponent implements OnChanges {
   @Output() saved = new EventEmitter<void>();
 
   private peliculasService = inject(PeliculasService);
+  private toastService = inject(ToastService);
   guardando = signal(false);
   imageError = false;
 
@@ -161,7 +163,7 @@ export class PeliculaFormComponent implements OnChanges {
         error: (err) => {
           console.error('Error al actualizar', err);
           this.guardando.set(false);
-          alert('Error al actualizar la película.');
+          this.toastService.error('Error al actualizar la película.');
         }
       });
     } else {
@@ -175,7 +177,7 @@ export class PeliculaFormComponent implements OnChanges {
         error: (err) => {
           console.error('Error al guardar', err);
           this.guardando.set(false);
-          alert('Error al crear la película.');
+          this.toastService.error('Error al crear la película.');
         }
       });
     }

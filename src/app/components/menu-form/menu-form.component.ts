@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuService } from '../../services/menu.service';
+import { ToastService } from '../../services/toast.service';
 
 import { HlmLabel } from '@spartan-ng/helm/label';
 import { HlmInput } from '@spartan-ng/helm/input';
@@ -14,7 +15,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
   template: `
     @if (visible) {
       <!-- Backdrop -->
-      <div class="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <!-- Modal -->
         <div class="bg-card text-card-foreground border border-border shadow-lg rounded-lg w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           <div class="p-6">
@@ -107,6 +108,7 @@ export class MenuFormComponent {
   @Output() saved = new EventEmitter<void>();
 
   private menuService = inject(MenuService);
+  private toastService = inject(ToastService);
 
   guardando = false;
 
@@ -140,7 +142,7 @@ export class MenuFormComponent {
       error: (err) => {
         console.error('Error guardando ítem del menú:', err);
         this.guardando = false;
-        alert('Hubo un error al guardar el producto.');
+        this.toastService.error('Hubo un error al guardar el producto.');
       }
     });
   }

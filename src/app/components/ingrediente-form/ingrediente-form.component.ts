@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IngredientesService } from '../../services/ingredientes.service';
+import { ToastService } from '../../services/toast.service';
 
 import { HlmLabel } from '@spartan-ng/helm/label';
 import { HlmInput } from '@spartan-ng/helm/input';
@@ -13,7 +14,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
   imports: [CommonModule, FormsModule, HlmLabel, HlmInput, HlmButtonImports],
   template: `
     @if (visible) {
-      <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <div class="bg-black/90 text-white border border-white/10 shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           <div class="p-6">
             <div class="flex items-center justify-between mb-6">
@@ -96,6 +97,7 @@ export class IngredienteFormComponent {
   @Output() saved = new EventEmitter<void>();
 
   private ingredientesService = inject(IngredientesService);
+  private toastService = inject(ToastService);
 
   guardando = false;
 
@@ -127,7 +129,7 @@ export class IngredienteFormComponent {
       error: (err) => {
         console.error('Error guardando ingrediente:', err);
         this.guardando = false;
-        alert('Hubo un error al guardar el ingrediente.');
+        this.toastService.error('Hubo un error al guardar el ingrediente.');
       }
     });
   }

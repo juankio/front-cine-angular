@@ -106,8 +106,8 @@ import { EntradasService } from '../../services/entradas.service';
                   <tr hlmTr class="hover:bg-primary/5 transition-colors">
                     <td hlmTd class="text-sm font-body py-4">{{ reserva.createdAt | date:'short' }}</td>
                     <td hlmTd class="font-body py-4">
-                      <div class="font-medium text-lg text-primary">{{ reserva.funcion?.pelicula?.titulo || 'Película Desconocida' }}</div>
-                      <div class="text-xs text-muted-foreground">Sala {{ reserva.funcion?.sala?.nombre || '-' }} | {{ reserva.funcion?.fechaInicio | date:'shortTime' }}</div>
+                      <div class="font-medium text-lg text-primary">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</div>
+                      <div class="text-xs text-muted-foreground">Sala {{ reserva.salaNombre || '-' }} | {{ reserva.inicioFuncion | date:'shortTime' }}</div>
                     </td>
                     <td hlmTd class="py-4">
                       <div class="flex flex-wrap gap-1">

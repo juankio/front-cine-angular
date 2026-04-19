@@ -20,7 +20,7 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
 
       <div class="relative z-10 flex w-full h-[calc(100vh-64px)] overflow-hidden">
         <!-- Sidebar Limpio -->
-        <aside class="w-64 shrink-0 border-r border-border/50 bg-card/40 backdrop-blur-xl flex flex-col z-20">
+        <aside class="w-64 shrink-0 border-r border-border/50 bg-card/40 backdrop-blur-xl flex flex-col z-0 relative">
           <div class="p-6 pb-2">
             <p class="font-display tracking-[0.1em] uppercase text-primary text-sm font-semibold">Panel de Control</p>
           </div>

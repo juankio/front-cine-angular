@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PeliculasService } from '../../services/peliculas.service';
 import { SalasService } from '../../services/salas.service';
 import { EntradasService } from '../../services/entradas.service';
+import { ToastService } from '../../services/toast.service';
 import { DefaultLayoutComponent } from '../../layouts/default-layout/default-layout.component';
 
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -65,17 +66,17 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
               @if (funciones().length === 0) {
                 <p class="text-muted-foreground italic col-span-full">No hay funciones programadas para esta película.</p>
               } @else {
-                @for (funcion of funciones(); track funcion._id) {
+                @for (funcion of funciones(); track funcion._id || funcion.id) {
                   <hlm-card 
                     class="cursor-pointer transition-all hover:border-primary"
-                    [class.border-primary]="funcionSeleccionada()?._id === funcion._id"
-                    [class.bg-primary]="funcionSeleccionada()?._id === funcion._id"
-                    [class.text-primary-foreground]="funcionSeleccionada()?._id === funcion._id"
+                    [class.border-primary]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
+                    [class.bg-primary]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
+                    [class.text-primary-foreground]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
                     (click)="seleccionarFuncion(funcion)">
                     <div class="p-4 flex flex-col">
-                      <div class="text-sm opacity-80 mb-1">{{ funcion.fechaInicio | date:'fullDate' }}</div>
-                      <div class="text-2xl font-bold mb-2">{{ funcion.fechaInicio | date:'shortTime' }}</div>
-                      <div class="flex items-center gap-2 mt-auto pt-2 border-t" [class.border-primary-foreground/20]="funcionSeleccionada()?._id === funcion._id" [class.border-border]="funcionSeleccionada()?._id !== funcion._id">
+                      <div class="text-sm opacity-80 mb-1">{{ (funcion.fechaInicio || funcion.inicio) | date:'fullDate' }}</div>
+                      <div class="text-2xl font-bold mb-2">{{ (funcion.fechaInicio || funcion.inicio) | date:'shortTime' }}</div>
+                      <div class="flex items-center gap-2 mt-auto pt-2 border-t" [class.border-primary-foreground/20]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)" [class.border-border]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) !== (funcion._id || funcion.id)">
                         <span class="font-medium text-sm">Sala {{ funcion.sala?.nombre || 'Desconocida' }}</span>
                         <span class="text-xs opacity-70 ml-auto">{{ funcion.formato || '2D' }} • {{ funcion.idioma || 'Sub' }}</span>
                       </div>
@@ -105,46 +106,57 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                       <div class="absolute -top-6 w-full text-center text-sm font-display tracking-[0.5em] text-muted-foreground uppercase">Pantalla</div>
                     </div>
 
-                    <!-- Grilla -->
-                    <div class="flex flex-col gap-3">
-                      @for (fila of matrizAsientos(); track fila.letra) {
-                        <div class="flex items-center gap-4">
-                          <span class="w-6 text-center font-bold text-muted-foreground">{{ fila.letra }}</span>
+                    <!-- Grilla Asientos Curved -->
+                    <div class="flex flex-col gap-4 perspective-1000 mt-8 mb-4">
+                      @for (fila of matrizAsientos(); track fila.letra; let i = $index) {
+                        <div class="flex items-center gap-6 justify-center" [style.transform]="'translateY(' + (i * -2) + 'px) rotateX(' + (i * 0.5) + 'deg)'">
+                          <span class="w-6 text-center font-display text-lg text-muted-foreground">{{ fila.letra }}</span>
                           <div class="flex gap-2">
-                            @for (asiento of fila.asientos; track asiento.id) {
+                            @for (asiento of fila.asientos; track asiento.id; let j = $index) {
                               <button 
-                                class="w-8 h-8 md:w-10 md:h-10 rounded-t-lg rounded-b-sm border transition-all text-xs font-medium"
-                                [class.bg-muted]="asiento.estado === 'ocupado'"
-                                [class.border-transparent]="asiento.estado === 'ocupado'"
-                                [class.text-muted-foreground/30]="asiento.estado === 'ocupado'"
+                                class="relative w-8 h-8 md:w-10 md:h-10 rounded-t-xl rounded-b-md border transition-all text-xs font-display tracking-widest flex items-center justify-center overflow-hidden group shadow-lg"
+                                [style.transform]="'translateY(' + (Math.abs((fila.asientos.length / 2) - j) * 2) + 'px)'"
+                                [class.bg-muted/20]="asiento.estado === 'ocupado'"
+                                [class.border-border/30]="asiento.estado === 'ocupado'"
+                                [class.text-muted-foreground/20]="asiento.estado === 'ocupado'"
                                 [class.cursor-not-allowed]="asiento.estado === 'ocupado'"
+                                [class.shadow-none]="asiento.estado === 'ocupado'"
                                 
                                 [class.bg-primary]="asiento.estado === 'seleccionado'"
                                 [class.border-primary]="asiento.estado === 'seleccionado'"
                                 [class.text-primary-foreground]="asiento.estado === 'seleccionado'"
-                                [class.shadow-[0_0_15px_rgba(var(--primary),0.5)]]="asiento.estado === 'seleccionado'"
+                                [class.shadow-[0_0_20px_rgba(var(--primary),0.6)]]="asiento.estado === 'seleccionado'"
+                                [class.scale-110]="asiento.estado === 'seleccionado'"
                                 
-                                [class.bg-background]="asiento.estado === 'libre'"
+                                [class.bg-background/80]="asiento.estado === 'libre'"
                                 [class.border-border]="asiento.estado === 'libre'"
+                                [class.text-muted-foreground]="asiento.estado === 'libre'"
                                 [class.hover:border-primary]="asiento.estado === 'libre'"
-                                [class.hover:bg-primary/10]="asiento.estado === 'libre'"
+                                [class.hover:bg-primary/20]="asiento.estado === 'libre'"
+                                [class.hover:shadow-[0_0_15px_rgba(var(--primary),0.3)]]="asiento.estado === 'libre'"
+                                [class.hover:-translate-y-1]="asiento.estado === 'libre'"
                                 
                                 [disabled]="asiento.estado === 'ocupado'"
                                 (click)="toggleAsiento(asiento.id)">
-                                {{ asiento.numero }}
+                                
+                                <!-- Forma de Asiento Frontal (Detalle Visual) -->
+                                <div class="absolute bottom-0 w-full h-[30%] bg-gradient-to-t from-black/60 to-transparent pointer-events-none rounded-b-md"></div>
+                                <div class="absolute inset-x-1 bottom-1 h-1 bg-white/10 rounded-full pointer-events-none" [class.bg-white/30]="asiento.estado === 'seleccionado'"></div>
+                                
+                                <span class="relative z-10">{{ asiento.numero }}</span>
                               </button>
                             }
                           </div>
-                          <span class="w-6 text-center font-bold text-muted-foreground">{{ fila.letra }}</span>
+                          <span class="w-6 text-center font-display text-lg text-muted-foreground">{{ fila.letra }}</span>
                         </div>
                       }
                     </div>
 
                     <!-- Leyenda -->
-                    <div class="flex gap-6 mt-12 text-sm text-muted-foreground border-t border-border pt-6 w-full justify-center">
-                      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-sm border border-border bg-background"></div> Disponible</div>
-                      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-sm bg-primary shadow-sm"></div> Seleccionado</div>
-                      <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-sm bg-muted border border-transparent"></div> Ocupado</div>
+                    <div class="flex gap-8 mt-16 text-sm font-display tracking-widest uppercase text-muted-foreground border-t border-border pt-8 w-full justify-center">
+                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm border border-border bg-background shadow-md"></div> Disponible</div>
+                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm bg-primary shadow-[0_0_15px_rgba(var(--primary),0.5)]"></div> Seleccionado</div>
+                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm bg-muted/20 border border-border/30"></div> Ocupado</div>
                     </div>
 
                   </div>
@@ -161,7 +173,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                     </div>
                     <div>
                       <p class="text-sm text-muted-foreground">Función</p>
-                      <p class="font-medium">{{ funcionSeleccionada()?.fechaInicio | date:'medium' }}</p>
+                      <p class="font-medium">{{ (funcionSeleccionada()?.inicio || funcionSeleccionada()?.fechaInicio) | date:'medium' }}</p>
                       <p class="text-sm">Sala {{ funcionSeleccionada()?.sala?.nombre }}</p>
                     </div>
                     <div>
@@ -208,6 +220,7 @@ export class PeliculaDetalleComponent implements OnInit {
   private peliculasService = inject(PeliculasService);
   private salasService = inject(SalasService);
   private entradasService = inject(EntradasService);
+  private toastService = inject(ToastService);
 
   pelicula = signal<any>(null);
   funciones = signal<any[]>([]);
@@ -218,6 +231,9 @@ export class PeliculaDetalleComponent implements OnInit {
   asientosSeleccionados = signal<string[]>([]);
   
   procesando = signal(false);
+
+  // Necesario para los cálculos en el template HTML
+  Math = Math;
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -240,9 +256,10 @@ export class PeliculaDetalleComponent implements OnInit {
           
           salas.forEach((sala: any) => {
             if (sala.funciones) {
-              const funcionesSala = sala.funciones.filter((f: any) => 
-                (f.peliculaId === id) || (typeof f.pelicula === 'object' && f.pelicula._id === id)
-              ).map((f: any) => ({...f, sala}));
+              const funcionesSala = sala.funciones.filter((f: any) => {
+                const peliculaMatchId = f.pelicula?.id || f.pelicula?._id || f.peliculaId;
+                return String(peliculaMatchId) === String(id);
+              }).map((f: any) => ({...f, sala}));
               allFunciones = [...allFunciones, ...funcionesSala];
             }
           });
@@ -261,7 +278,8 @@ export class PeliculaDetalleComponent implements OnInit {
     this.generarMatrizAsientos(funcion.sala);
     
     // Obtener asientos ocupados desde el backend
-    this.entradasService.disponibilidadFuncion(funcion._id).subscribe({
+    const funcionId = funcion._id || funcion.id;
+    this.entradasService.disponibilidadFuncion(funcionId).subscribe({
       next: (res) => {
         const ocupados = res?.ocupados || [];
         this.actualizarAsientosOcupados(ocupados);
@@ -316,7 +334,7 @@ export class PeliculaDetalleComponent implements OnInit {
     } else {
       // Límite de 8 asientos por compra
       if (nuevosSeleccionados.length >= 8) {
-        alert("Máximo 8 asientos por compra");
+        this.toastService.warning("Máximo 8 asientos por compra");
         return;
       }
       nuevosSeleccionados.push(id);
@@ -340,7 +358,7 @@ export class PeliculaDetalleComponent implements OnInit {
 
   confirmarCompra() {
     this.procesando.set(true);
-    const funcionId = this.funcionSeleccionada()._id;
+    const funcionId = this.funcionSeleccionada()._id || this.funcionSeleccionada().id;
     
     const payload = {
       asientos: this.asientosSeleccionados()
@@ -348,13 +366,13 @@ export class PeliculaDetalleComponent implements OnInit {
 
     this.entradasService.comprarFuncion(funcionId, payload).subscribe({
       next: () => {
-        alert("¡Compra exitosa! Revisa tus reservas en el perfil.");
+        this.toastService.success("¡Compra exitosa! Revisa tus reservas en el perfil.");
         this.procesando.set(false);
         // Podría redirigir a /user o limpiar
         this.seleccionarFuncion(this.funcionSeleccionada()); // Recargar
       },
       error: () => {
-        alert("Error al procesar el pago o asientos ya ocupados.");
+        this.toastService.error("Error al procesar el pago o asientos ya ocupados.");
         this.procesando.set(false);
       }
     });

@@ -4,12 +4,11 @@ import { EntradasService } from '../../../services/entradas.service';
 
 import { HlmTableImports } from '@spartan-ng/helm/table';
 import { HlmCardImports } from '@spartan-ng/helm/card';
-import { HlmBadge } from '@spartan-ng/helm/badge';
 
 @Component({
   selector: 'app-reservas',
   standalone: true,
-  imports: [CommonModule, HlmTableImports, HlmCardImports, HlmBadge],
+  imports: [CommonModule, HlmTableImports, HlmCardImports],
   template: `
     <div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-500 text-foreground">
       <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-border/40 pb-6">
@@ -60,9 +59,9 @@ import { HlmBadge } from '@spartan-ng/helm/badge';
                       <div class="text-xs text-muted-foreground">{{ reserva.usuario?.email }}</div>
                     </td>
                     <td class="font-body py-4 px-4">
-                      <div class="font-medium text-lg text-primary">{{ reserva.funcion?.pelicula?.titulo || 'Película Desconocida' }}</div>
-                      <div class="text-xs text-muted-foreground">
-                        Sala {{ reserva.funcion?.sala?.nombre || '-' }} | {{ reserva.funcion?.fechaInicio | date:'shortTime' }}
+                      <div class="font-medium text-lg text-red-500">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</div>
+                      <div class="text-xs text-neutral-400">
+                        Sala {{ reserva.salaNombre || '-' }} | {{ reserva.inicioFuncion | date:'shortTime' }}
                       </div>
                     </td>
                     <td class="py-4 px-4">
