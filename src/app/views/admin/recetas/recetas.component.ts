@@ -50,13 +50,13 @@ import { RecetaFormComponent } from '../../../components/receta-form/receta-form
                 @for (item of recetas(); track item._id || item.id) {
                   <tr class="hover:bg-muted/30 transition-colors border-b border-border group">
                     <td class="p-4">
-                      <span class="font-display tracking-wider text-xl text-primary">{{ item.menuId?.nombre || 'Producto Eliminado' }}</span>
+                      <span class="font-display tracking-wider text-xl text-primary">{{ item.menu?.nombre || 'Producto Eliminado' }}</span>
                     </td>
                     <td class="p-4">
                       <div class="flex flex-wrap gap-2">
                         @for (ing of item.ingredientes; track $index) {
                            <span class="inline-flex items-center rounded-sm bg-muted px-2 py-1 text-sm font-display tracking-wider text-muted-foreground uppercase border border-border">
-                             {{ ing.cantidadNecesaria }} {{ ing.ingredienteId?.unidad }} - {{ ing.ingredienteId?.nombre || '?' }}
+                             {{ ing.cantidadNecesaria }} {{ ing.ingrediente?.unidad }} - {{ ing.ingrediente?.nombre || '?' }}
                            </span>
                         }
                       </div>

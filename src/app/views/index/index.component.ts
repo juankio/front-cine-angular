@@ -153,25 +153,23 @@ export class IndexComponent implements OnInit {
     allSalas.forEach(sala => {
       if (sala.funciones && Array.isArray(sala.funciones)) {
         sala.funciones.forEach((f: any) => {
-          const peli = allPelis.find(p => (p._id || p.id) === f.peliculaId);
+          const peliId = f.peliculaId?._id || f.peliculaId?.id || f.peliculaId;
+          const peli = allPelis.find(p => (p._id || p.id) === peliId);
           vivas.push({
             ...f,
             salaNombre: sala.nombre,
-            peliculaTitulo: peli ? peli.titulo : 'Película Desconocida',
-            peliculaImg: peli ? peli.imagenUrl : null
+            peliculaTitulo: peli ? peli.titulo : f.tituloPelicula || 'Película Desconocida',
+            peliculaImg: peli ? peli.imagenUrl : f.pelicula?.imagenUrl || null
           });
         });
       }
     });
 
-    // Filtrar próximas o actuales (desde -1h aprox para considerar "vivas" o simplemente ahora en adelante)
-    const limitDate = new Date(now.getTime() - 60 * 60 * 1000); // 1 hr atrás
+    const limitDate = new Date(now.getTime() - 60 * 60 * 1000); 
     vivas = vivas.filter(f => new Date(f.inicio) >= limitDate);
 
-    // Ordenar por cercanía de fecha
     vivas.sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
 
-    // Limitar a 4 para diseño premium en fila de 4 (lg:grid-cols-4)
     return vivas.slice(0, 4);
   });
 

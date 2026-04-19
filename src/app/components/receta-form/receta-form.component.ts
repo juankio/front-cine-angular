@@ -41,8 +41,8 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                   class="flex h-12 w-full rounded-md border border-border bg-secondary px-3 py-2 text-base font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 >
                   <option value="" disabled class="text-muted-foreground bg-background">Selecciona un combo/producto...</option>
-                  @for (menu of menus; track menu._id) {
-                    <option [value]="menu._id" class="bg-background">{{ menu.nombre }}</option>
+                  @for (menu of menus; track $index) {
+                    <option [value]="menu._id || menu.id" class="bg-background">{{ menu.nombre }}</option>
                   }
                 </select>
               </div>
@@ -70,8 +70,8 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                         class="flex h-10 w-full rounded-sm border border-border bg-input px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                       >
                         <option value="" disabled class="bg-background">Seleccionar...</option>
-                        @for (ingrediente of ingredientesDb; track ingrediente._id) {
-                          <option [value]="ingrediente._id" class="bg-background">{{ ingrediente.nombre }} ({{ ingrediente.unidad }})</option>
+                        @for (ingrediente of ingredientesDb; track $index) {
+                          <option [value]="ingrediente._id || ingrediente.id" class="bg-background">{{ ingrediente.nombre }} ({{ ingrediente.unidad }})</option>
                         }
                       </select>
                     </div>
@@ -139,9 +139,9 @@ export class RecetaFormComponent implements OnInit, OnChanges {
     if (changes['recetaEditar']) {
       if (this.recetaEditar) {
         this.formData = {
-          menuId: this.recetaEditar.menuId?._id || this.recetaEditar.menuId || '',
+          menuId: this.recetaEditar.menu?._id || this.recetaEditar.menu?.id || this.recetaEditar.menu || '',
           ingredientes: (this.recetaEditar.ingredientes || []).map((i: any) => ({
-            ingredienteId: i.ingredienteId?._id || i.ingredienteId || '',
+            ingredienteId: i.ingrediente?._id || i.ingrediente?.id || i.ingrediente || '',
             cantidadNecesaria: i.cantidadNecesaria
           }))
         };
