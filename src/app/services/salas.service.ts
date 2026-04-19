@@ -18,8 +18,12 @@ export class SalasService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  crear(payload: any): Observable<any> {
+  crear(payload: { nombre: string, filas: number, asientosPorFila: number }): Observable<any> {
     return this.http.post(this.apiUrl, payload);
+  }
+
+  eliminar(id: string | number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
   listarFunciones(salaId: string | number): Observable<any> {

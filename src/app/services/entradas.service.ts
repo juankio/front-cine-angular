@@ -21,4 +21,8 @@ export class EntradasService {
   misEntradas(): Observable<any> {
     return this.http.get(`${this.apiUrl}/mis-entradas`);
   }
+
+  todasLasReservas(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/reservas/todas`);
+  }
 }

@@ -1,14 +1,17 @@
 import { Component, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 
 @Component({
   selector: 'app-peli-cartelera',
   standalone: true,
-  imports: [CommonModule, HlmCardImports, HlmBadge],
+  imports: [CommonModule, RouterLink, HlmCardImports, HlmBadge],
   template: `
-    <hlm-card class="group cursor-pointer rounded-none border-border bg-card shadow-md aspect-[2/3] relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+    <hlm-card 
+      [routerLink]="['/pelicula', peliIdc]"
+      class="group cursor-pointer rounded-none border-border bg-card shadow-md aspect-[2/3] relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
       <!-- Imagen de Fondo (Poster) -->
       @if (urlImgc && !hasError()) {
         <img 
@@ -53,6 +56,7 @@ import { HlmBadge } from '@spartan-ng/helm/badge';
   `
 })
 export class PeliCarteleraComponent {
+  @Input() peliIdc: string = '';
   @Input() urlImgc: string = '';
   @Input() peliTituloc: string = '';
   @Input() peliDurationc: string = '';

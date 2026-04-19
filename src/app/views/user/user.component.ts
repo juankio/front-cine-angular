@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink, Router } from '@angular/router';
 import { UserLayoutComponent } from '../../layouts/user-layout/user-layout.component';
 import { RecuadroInformacionComponent } from '../../components/recuadro-informacion/recuadro-informacion.component';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmTableImports } from '@spartan-ng/helm/table';
+import { AuthStore } from '../../state/auth.store';
+import { EntradasService } from '../../services/entradas.service';
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [
+    CommonModule,
     UserLayoutComponent,
     RecuadroInformacionComponent,
     RouterLink,
@@ -31,87 +35,92 @@ import { HlmTableImports } from '@spartan-ng/helm/table';
             </div>
           </div>
           <div class="flex items-start gap-3 mt-6 md:mt-0">
-            <button class="px-4 py-2 border border-border hover:bg-muted text-foreground rounded-lg text-sm font-medium transition-colors">
-              Actualizar
-            </button>
-            <button class="px-4 py-2 border border-destructive hover:bg-destructive/10 text-destructive rounded-lg text-sm font-medium transition-colors">
+            <button class="px-4 py-2 border border-destructive hover:bg-destructive/10 text-destructive rounded-lg text-sm font-medium transition-colors" (click)="cerrarSesion()">
               Cerrar sesión
             </button>
           </div>
         </div>
 
-        <hlm-card class="mb-8">
+        <hlm-card class="mb-8 bg-card/50 backdrop-blur-xl border border-border/50">
           <hlm-card-header>
-            <h3 hlmCardTitle>Información del Usuario</h3>
+            <h3 hlmCardTitle class="font-display tracking-widest uppercase">Información del Usuario</h3>
             <p hlmCardDescription>Tus datos personales de la cuenta.</p>
           </hlm-card-header>
           <div hlmCardContent class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <p class="text-sm text-muted-foreground">Nombre completo</p>
-              <p class="font-medium text-foreground">Juan Pérez</p>
+              <p class="font-medium text-foreground">{{ authStore.user()?.nombre || 'Usuario' }}</p>
             </div>
             <div>
               <p class="text-sm text-muted-foreground">Correo electrónico</p>
-              <p class="font-medium text-foreground">juan.perez@example.com</p>
+              <p class="font-medium text-foreground">{{ authStore.user()?.email }}</p>
             </div>
             <div>
-              <p class="text-sm text-muted-foreground">Teléfono</p>
-              <p class="font-medium text-foreground">+54 11 1234-5678</p>
+              <p class="text-sm text-muted-foreground">Rol</p>
+              <p class="font-medium text-foreground uppercase tracking-widest">{{ authStore.user()?.rol || authStore.user()?.role || 'Cliente' }}</p>
             </div>
             <div>
               <p class="text-sm text-muted-foreground">Miembro desde</p>
-              <p class="font-medium text-foreground">Enero 2024</p>
+              <p class="font-medium text-foreground">2026</p>
             </div>
           </div>
         </hlm-card>
 
         <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
-          <app-recuadro-informacion label="Total de reservas" valor="3" />
-          <app-recuadro-informacion label="Reservas activas" valor="1" />
-          <app-recuadro-informacion label="Combos adquiridos" valor="2" />
+          <app-recuadro-informacion label="Total de reservas" [valor]="reservas().length.toString()" />
         </div>
 
         <div class="mb-4">
-          <h2 class="text-xl font-bold text-foreground">Mis Entradas</h2>
-          <p class="text-sm text-muted-foreground">Historial de tus últimas funciones reservadas.</p>
+          <h2 class="text-2xl font-display tracking-widest uppercase text-foreground">Mis Entradas</h2>
+          <p class="text-sm text-muted-foreground">Historial de tus últimas compras en Cine POOR.</p>
         </div>
 
-        <div hlmTableContainer class="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
+        <div hlmTableContainer class="rounded-xl border border-border bg-card/40 backdrop-blur-xl overflow-hidden shadow-sm">
           <table hlmTable class="w-full">
-            <thead hlmTHead>
+            <thead hlmTHead class="bg-muted/20">
               <tr hlmTr>
-                <th hlmTh>ID Reserva</th>
-                <th hlmTh>Película</th>
-                <th hlmTh>Fecha y Hora</th>
-                <th hlmTh>Sala</th>
-                <th hlmTh>Asientos</th>
-                <th hlmTh>Estado</th>
+                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Fecha Compra</th>
+                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Película & Función</th>
+                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Asientos</th>
+                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4 text-right">Total</th>
               </tr>
             </thead>
             <tbody hlmTBody>
-              @for (reserva of reservas; track reserva.id) {
+              @if (loading()) {
                 <tr hlmTr>
-                  <td hlmTd class="font-medium">{{reserva.id}}</td>
-                  <td hlmTd>{{reserva.pelicula}}</td>
-                  <td hlmTd>{{reserva.fecha}} - {{reserva.hora}}</td>
-                  <td hlmTd>{{reserva.sala}}</td>
-                  <td hlmTd>{{reserva.asientos}}</td>
-                  <td hlmTd>
-                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium" 
-                          [class]="reserva.estado === 'Activa' ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-900/30 dark:text-green-400' : 'bg-muted text-muted-foreground ring-1 ring-inset ring-border'">
-                      {{reserva.estado}}
-                    </span>
+                  <td hlmTd colspan="4" class="py-12 text-center text-muted-foreground animate-pulse">
+                    Cargando historial de compras...
                   </td>
                 </tr>
-              } @empty {
+              } @else if (reservas().length === 0) {
                 <tr hlmTr>
-                  <td hlmTd colspan="6" class="text-center py-12 text-muted-foreground">
-                    <div class="flex flex-col items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-2 opacity-50"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                      <p>Aún no hay reservas confirmadas.</p>
+                  <td hlmTd colspan="4" class="text-center py-12 text-muted-foreground">
+                    <div class="flex flex-col items-center gap-2 opacity-50">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
+                      <p class="font-display tracking-widest uppercase text-lg">Aún no hay reservas confirmadas.</p>
                     </div>
                   </td>
                 </tr>
+              } @else {
+                @for (reserva of reservas(); track reserva._id || reserva.id) {
+                  <tr hlmTr class="hover:bg-primary/5 transition-colors">
+                    <td hlmTd class="text-sm font-body py-4">{{ reserva.createdAt | date:'short' }}</td>
+                    <td hlmTd class="font-body py-4">
+                      <div class="font-medium text-lg text-primary">{{ reserva.funcion?.pelicula?.titulo || 'Película Desconocida' }}</div>
+                      <div class="text-xs text-muted-foreground">Sala {{ reserva.funcion?.sala?.nombre || '-' }} | {{ reserva.funcion?.fechaInicio | date:'shortTime' }}</div>
+                    </td>
+                    <td hlmTd class="py-4">
+                      <div class="flex flex-wrap gap-1">
+                        @for (asiento of reserva.asientos; track asiento) {
+                           <span class="inline-flex items-center rounded-sm bg-primary/10 border border-primary/20 px-2 py-0 text-xs font-display tracking-widest text-primary shadow-sm">{{ asiento }}</span>
+                        }
+                      </div>
+                    </td>
+                    <td hlmTd class="text-right font-display tracking-widest text-xl text-primary py-4">
+                      \${{ reserva.totalPagado | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                }
               }
             </tbody>
           </table>
@@ -120,10 +129,35 @@ import { HlmTableImports } from '@spartan-ng/helm/table';
     </app-user-layout>
   `
 })
-export class UserComponent {
-  public reservas = [
-    { id: 'RES-001', pelicula: 'Dune: Part Two', fecha: '18 Abr 2026', hora: '19:30', sala: 'Sala 4', asientos: 'E12, E13', estado: 'Activa' },
-    { id: 'RES-002', pelicula: 'Kung Fu Panda 4', fecha: '10 Abr 2026', hora: '16:00', sala: 'Sala 2', asientos: 'J5, J6, J7', estado: 'Completada' },
-    { id: 'RES-003', pelicula: 'Godzilla x Kong', fecha: '05 Abr 2026', hora: '20:15', sala: 'Sala 1', asientos: 'H8, H9', estado: 'Completada' }
-  ];
+export class UserComponent implements OnInit {
+  authStore = inject(AuthStore);
+  private entradasService = inject(EntradasService);
+  private router = inject(Router);
+
+  reservas = signal<any[]>([]);
+  loading = signal(false);
+
+  ngOnInit() {
+    this.cargarReservas();
+  }
+
+  cargarReservas() {
+    this.loading.set(true);
+    this.entradasService.misEntradas().subscribe({
+      next: (res) => {
+        const data = res?.data || res;
+        this.reservas.set(Array.isArray(data) ? data : []);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Error cargando historial de reservas', err);
+        this.loading.set(false);
+      }
+    });
+  }
+
+  cerrarSesion() {
+    this.authStore.logout();
+    this.router.navigate(['/']);
+  }
 }

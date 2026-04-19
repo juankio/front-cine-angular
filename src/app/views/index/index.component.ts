@@ -77,6 +77,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
               @for (pelicula of peliculas(); track pelicula._id || pelicula.id) {
                 <app-peli-cartelera
+                  [peliIdc]="pelicula._id || pelicula.id"
                   [peliTituloc]="pelicula.titulo"
                   [peliDurationc]="pelicula.duracionMinutos?.toString() || '0'"
                   [urlImgc]="pelicula.imagenUrl"

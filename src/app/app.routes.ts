@@ -9,6 +9,11 @@ export const routes: Routes = [
     loadComponent: () => import('./views/index/index.component').then(m => m.IndexComponent)
   },
   {
+    path: 'pelicula/:id',
+    title: 'Comprar Entradas',
+    loadComponent: () => import('./views/pelicula-detalle/pelicula-detalle.component').then(m => m.PeliculaDetalleComponent)
+  },
+  {
     path: 'user',
     title: 'User',
     canActivate: [authGuard],
@@ -39,6 +44,21 @@ export const routes: Routes = [
         path: 'recetas',
         title: 'Admin - Recetas',
         loadComponent: () => import('./views/admin/recetas/recetas.component').then(m => m.RecetasComponent)
+      },
+      {
+        path: 'salas',
+        title: 'Admin - Salas',
+        loadComponent: () => import('./views/admin/salas/salas.component').then(m => m.SalasComponent)
+      },
+      {
+        path: 'reservas',
+        title: 'Admin - Reservas',
+        loadComponent: () => import('./views/admin/reservas/reservas.component').then(m => m.ReservasComponent)
+      },
+      {
+        path: 'pos',
+        title: 'Admin - Punto de Venta',
+        loadComponent: () => import('./views/admin/pos/pos.component').then(m => m.PosComponent)
       }
     ]
   },

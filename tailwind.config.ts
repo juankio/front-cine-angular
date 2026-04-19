@@ -1,6 +1,8 @@
+import hlmPreset from '@spartan-ng/ui-core/hlm-tailwind-preset';
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  presets: [require('@spartan-ng/ui-core/hlm-tailwind-preset')],
+export default {
+  presets: [hlmPreset],
   content: [
     "./src/**/*.{html,ts}",
     "./components/**/*.{html,ts}",
