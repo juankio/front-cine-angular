@@ -23,6 +23,6 @@ export class EntradasService {
   }
 
   todasLasReservas(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/reservas/todas`);
+    return this.http.get(`${this.apiUrl}/entradas/todas`);
   }
 }

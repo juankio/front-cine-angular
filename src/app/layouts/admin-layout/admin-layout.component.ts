@@ -60,7 +60,7 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
         </aside>
 
         <!-- Contenido Central -->
-        <main class="flex-1 min-w-0 h-full overflow-y-auto bg-background/30 rounded-tl-2xl border-t border-l border-border/40 shadow-sm relative z-10">
+        <main class="flex-1 min-w-0 h-full overflow-y-auto bg-background/30 rounded-tl-2xl border-t border-l border-border/40 shadow-sm relative z-[5]">
           <div class="h-full w-full relative z-10">
             <ng-content></ng-content>
           </div>

@@ -59,7 +59,7 @@ interface CartItem {
       </div>
 
       <!-- Carrito / Ticket -->
-      <aside class="w-full md:w-[400px] shrink-0 flex flex-col h-[calc(100vh-120px)]">
+      <aside class="w-full md:w-[400px] shrink-0 flex flex-col h-[calc(100vh-120px)] relative z-20">
         <div class="flex-1 flex flex-col h-full bg-card/60 backdrop-blur-xl shadow-lg border border-border/50 rounded-xl overflow-hidden relative">
           <!-- Borde superior decorativo -->
           <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50"></div>
