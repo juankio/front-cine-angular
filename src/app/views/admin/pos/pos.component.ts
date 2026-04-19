@@ -22,10 +22,10 @@ export interface CartItem {
   standalone: true,
   imports: [CommonModule, HlmCardImports, HlmButtonImports],
   template: `
-    <div class="h-full min-h-screen flex flex-col md:flex-row bg-background text-foreground gap-6 p-6 font-body">
+    <div class="h-[calc(100vh-64px)] w-full flex flex-col md:flex-row text-foreground gap-6 p-6 font-body overflow-hidden animate-in fade-in zoom-in-95 duration-500">
       
       <!-- Zona Principal (Tabs + Grid) -->
-      <div class="flex-1 flex flex-col h-[calc(100vh-48px)]">
+      <div class="flex-1 flex flex-col h-full overflow-hidden">
         
         <div class="flex gap-4 mb-6 shrink-0">
           <button 
@@ -66,20 +66,26 @@ export interface CartItem {
             } @else {
               <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 @for (funcion of funciones(); track funcion._id || funcion.id) {
-                  <div class="cursor-pointer group hover:border-primary transition-all bg-card border border-border flex flex-col p-4 relative overflow-hidden shadow-sm hover:shadow-md" (click)="agregarEntrada(funcion)">
+                  <div class="cursor-pointer group hover:border-primary/50 transition-all bg-card/60 backdrop-blur-md shadow-sm border border-border/50 rounded-xl flex flex-col p-4 relative overflow-hidden hover:shadow-md hover:-translate-y-1" (click)="agregarEntrada(funcion)">
                     <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative z-10 flex flex-col h-full justify-between gap-4">
-                      <div>
-                        <div class="text-primary font-display tracking-widest text-sm mb-1">
-                          SALA {{ funcion.sala?.nombre || '?' }}
+                      <div class="flex items-start justify-between">
+                        <div>
+                          <p class="text-xs text-primary font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            {{ funcion.inicio | date:'shortTime' }}
+                          </p>
+                          <h3 class="font-display text-xl uppercase font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">{{ funcion.pelicula?.titulo || funcion.tituloPelicula || 'Película Desconocida' }}</h3>
                         </div>
-                        <h3 class="font-display uppercase text-xl leading-tight text-foreground group-hover:text-primary transition-colors">
-                          {{ funcion.pelicula?.titulo || 'Película' }}
-                        </h3>
+                        <div class="text-right">
+                          <div class="font-display tracking-widest text-primary text-xl">\${{ funcion.precio | number:'1.2-2' }}</div>
+                        </div>
                       </div>
-                      <div class="flex justify-between items-end border-t border-border pt-3">
-                        <span class="text-muted-foreground text-sm font-bold">{{ (funcion.fechaInicio || funcion.inicio) | date:'shortTime' }}</span>
-                        <span class="text-primary font-display tracking-widest text-lg">\${{ (funcion.precio || 1500) | number:'1.2-2' }}</span>
+                      
+                      <div class="flex items-center gap-2 mt-auto">
+                        <span class="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-muted/50 text-muted-foreground uppercase tracking-widest border border-border/50">{{ funcion.formato }}</span>
+                        <span class="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-muted/50 text-muted-foreground uppercase tracking-widest border border-border/50">{{ funcion.idioma }}</span>
+                        <span class="text-xs text-muted-foreground truncate ml-auto font-medium">{{ funcion.salaNombre }}</span>
                       </div>
                     </div>
                   </div>
@@ -102,18 +108,18 @@ export interface CartItem {
             } @else {
               <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 @for (item of productos(); track item._id || item.id) {
-                  <div class="cursor-pointer group hover:border-primary transition-all bg-card border border-border flex flex-col overflow-hidden shadow-sm hover:shadow-md" (click)="agregarProducto(item)">
-                    <div class="relative h-32 overflow-hidden bg-muted flex items-center justify-center">
+                  <div class="cursor-pointer group hover:border-primary/50 transition-all bg-card/60 backdrop-blur-md shadow-sm border border-border/50 rounded-xl flex flex-col overflow-hidden hover:shadow-md hover:-translate-y-1" (click)="agregarProducto(item)">
+                    <div class="relative h-32 overflow-hidden bg-muted/50 flex items-center justify-center">
                       <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
                       @if (item.imagenUrl) {
-                        <img [src]="item.imagenUrl" alt="Producto" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0" />
+                        <img [src]="item.imagenUrl" alt="Producto" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                       } @else {
-                        <span class="font-display text-muted-foreground tracking-widest">S/I</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30 transition-transform duration-500 group-hover:scale-110"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="1" y2="3"/><line x1="10" x2="10" y1="1" y2="3"/><line x1="14" x2="14" y1="1" y2="3"/></svg>
                       }
                     </div>
-                    <div class="p-4 flex-1 flex flex-col justify-between bg-card border-t border-border">
-                      <h3 class="font-display uppercase text-lg leading-tight text-foreground mb-2 group-hover:text-primary">{{ item.nombre }}</h3>
-                      <div class="font-display tracking-widest text-primary text-xl">\${{ item.precio | number:'1.2-2' }}</div>
+                    <div class="p-4 flex-1 flex flex-col justify-between bg-card/80 backdrop-blur-sm border-t border-border/50 relative z-20">
+                      <h3 class="font-body font-medium text-lg text-foreground leading-tight mb-2 group-hover:text-primary transition-colors">{{ item.nombre }}</h3>
+                      <div class="font-display tracking-widest text-primary text-2xl">\${{ item.precio | number:'1.2-2' }}</div>
                     </div>
                   </div>
                 }
@@ -124,7 +130,7 @@ export interface CartItem {
       </div>
 
       <!-- TICKET -->
-      <aside class="w-full md:w-[450px] shrink-0 flex flex-col h-[calc(100vh-48px)]">
+      <aside class="w-full md:w-[450px] shrink-0 flex flex-col h-full overflow-hidden relative z-20">
         <div class="flex-1 flex flex-col h-full bg-card border-2 border-border rounded-none overflow-hidden relative shadow-lg">
           
           <div class="absolute top-0 inset-x-0 h-1 bg-primary"></div>
@@ -137,15 +143,16 @@ export interface CartItem {
           
           <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
             @if (carrito().length === 0) {
-              <div class="h-full flex flex-col items-center justify-center text-muted-foreground">
-                <p class="font-display tracking-widest uppercase text-xl">Vacio</p>
+              <div class="h-full flex flex-col items-center justify-center text-muted-foreground opacity-40">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-4"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                <p class="font-display tracking-widest uppercase text-lg">No hay productos</p>
               </div>
             } @else {
               @for (item of carrito(); track item.id) {
-                <div class="flex items-center justify-between p-3 bg-background border border-border hover:border-primary transition-colors group">
+                <div class="flex items-center justify-between p-3 bg-background border border-border/50 hover:border-primary/30 rounded-lg transition-colors group">
                   <div class="flex-1 min-w-0 pr-3">
-                    <div class="text-xs text-primary font-display tracking-widest mb-1">{{ item.tipo === 'entrada' ? 'TICKET' : 'SNACK' }}</div>
-                    <div class="font-body font-medium text-base text-foreground truncate uppercase">{{ item.nombre }}</div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider mb-1 text-primary">{{ item.tipo }}</div>
+                    <div class="font-body font-medium text-base text-foreground leading-tight truncate">{{ item.nombre }}</div>
                     <div class="text-xs text-muted-foreground font-display tracking-wider mt-1">\${{ item.precio | number:'1.2-2' }} C/U</div>
                   </div>
                   
@@ -153,10 +160,10 @@ export interface CartItem {
                     <div class="font-display tracking-widest text-xl text-primary">
                       \${{ (item.precio * item.cantidad) | number:'1.2-2' }}
                     </div>
-                    <div class="flex items-center bg-muted border border-border">
-                      <button class="w-8 h-8 flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all font-bold" (click)="restar(item)">-</button>
+                    <div class="flex items-center bg-muted/50 rounded-md border border-border/50 overflow-hidden">
+                      <button class="w-8 h-8 flex items-center justify-center text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive transition-all font-bold" (click)="restar(item)">-</button>
                       <span class="w-8 text-center text-sm font-bold bg-background h-8 flex items-center justify-center text-foreground">{{ item.cantidad }}</span>
-                      <button class="w-8 h-8 flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all font-bold" (click)="sumar(item)">+</button>
+                      <button class="w-8 h-8 flex items-center justify-center text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary transition-all font-bold" (click)="sumar(item)">+</button>
                     </div>
                   </div>
                 </div>
@@ -165,21 +172,21 @@ export interface CartItem {
           </div>
 
           <!-- Total y Botones -->
-          <div class="p-6 border-t border-border bg-background">
+          <div class="p-6 border-t border-border/50 bg-card/80 backdrop-blur-xl">
             <div class="flex justify-between items-center mb-2 text-muted-foreground">
-              <span class="font-display tracking-widest uppercase text-sm">Artículos</span>
-              <span class="font-bold text-lg text-foreground">{{ totalArticulos() }}</span>
+              <span class="font-display tracking-wider uppercase text-sm">Artículos</span>
+              <span class="font-bold font-body text-lg text-foreground">{{ totalArticulos() }}</span>
             </div>
             <div class="flex justify-between items-end mb-6">
-              <span class="text-2xl font-display tracking-widest uppercase text-muted-foreground">Total</span>
-              <span class="text-5xl font-display tracking-widest text-primary">\${{ totalPrecio() | number:'1.2-2' }}</span>
+              <span class="text-xl font-display tracking-widest uppercase text-muted-foreground">Total:</span>
+              <span class="text-5xl font-display tracking-widest text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.3)]">\${{ totalPrecio() | number:'1.2-2' }}</span>
             </div>
             
-            <div class="grid grid-cols-[1fr_2fr] gap-4">
-              <button class="w-full h-16 font-display tracking-widest uppercase border border-border text-muted-foreground bg-muted hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-colors" (click)="limpiarCarrito()" [disabled]="carrito().length === 0">
+            <div class="grid grid-cols-[1fr_2fr] gap-3">
+              <button class="w-full h-16 font-display tracking-widest uppercase border border-border text-foreground bg-card rounded-sm hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-colors" (click)="limpiarCarrito()" [disabled]="carrito().length === 0">
                 Anular
               </button>
-              <button class="w-full h-16 font-display tracking-[0.2em] uppercase text-2xl text-primary-foreground bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:shadow-none transition-all" (click)="cobrar()" [disabled]="carrito().length === 0 || procesando()">
+              <button class="w-full h-16 font-display tracking-[0.2em] uppercase text-2xl text-primary-foreground bg-primary rounded-sm shadow-[0_0_20px_rgba(var(--primary),0.4)] hover:shadow-[0_0_30px_rgba(var(--primary),0.6)] disabled:opacity-50 disabled:shadow-none transition-all" (click)="cobrar()" [disabled]="carrito().length === 0 || procesando()">
                 {{ procesando() ? 'PROCESANDO...' : 'COBRAR' }}
               </button>
             </div>
@@ -273,7 +280,7 @@ export class PosComponent implements OnInit {
 
   agregarEntrada(funcion: any) {
     const id = `entrada-${funcion._id || funcion.id}`;
-    const peliculaTitulo = funcion.pelicula?.titulo || 'Película Sin Título';
+    const peliculaTitulo = funcion.pelicula?.titulo || funcion.tituloPelicula || 'Película Sin Título';
     const salaNombre = funcion.sala?.nombre || '?';
     const precio = funcion.precio || 1500;
 

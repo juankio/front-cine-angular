@@ -32,18 +32,18 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
             <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
           </div>
           
-          <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pb-10 flex flex-col md:flex-row gap-8 items-end md:items-start pt-20">
+          <div class="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6 pb-10 flex flex-col md:flex-row gap-8 items-center md:items-start pt-20">
             <!-- Poster -->
             @if (pelicula().imagenUrl) {
-              <img [src]="pelicula().imagenUrl" [alt]="pelicula().titulo" class="w-48 md:w-64 aspect-[2/3] object-cover rounded-md shadow-2xl border border-border/50 hidden md:block -mt-32" />
+              <img [src]="pelicula().imagenUrl" [alt]="pelicula().titulo" class="w-40 md:w-64 aspect-[2/3] object-cover rounded-md shadow-2xl border border-border/50 md:-mt-32" />
             }
             
             <!-- Info Text -->
-            <div class="flex-1 flex flex-col">
-              <div class="flex flex-wrap gap-2 mb-4">
+            <div class="flex-1 flex flex-col text-center md:text-left">
+              <div class="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
                 <hlm-badge variant="default">{{ pelicula().duracionMinutos }} MIN</hlm-badge>
               </div>
-              <h1 class="text-5xl md:text-7xl font-display uppercase tracking-wider text-white drop-shadow-md mb-2">
+              <h1 class="text-4xl md:text-7xl font-display uppercase tracking-wider text-white drop-shadow-md mb-2">
                 {{ pelicula().titulo }}
               </h1>
               <p class="text-lg text-muted-foreground max-w-3xl line-clamp-3">
@@ -53,7 +53,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
           </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col gap-12">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12 flex flex-col gap-12">
           
           <!-- SECCIÓN: Elegir Función -->
           <section>
@@ -114,34 +114,46 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                           <div class="flex gap-2">
                             @for (asiento of fila.asientos; track asiento.id; let j = $index) {
                               <button 
-                                class="relative w-8 h-8 md:w-10 md:h-10 rounded-t-xl rounded-b-md border transition-all text-xs font-display tracking-widest flex items-center justify-center overflow-hidden group shadow-lg"
+                                class="relative w-8 h-8 md:w-10 md:h-10 rounded-t-xl rounded-b-md border transition-all text-xs font-display tracking-widest flex items-center justify-center overflow-hidden group shadow-sm"
                                 [style.transform]="'translateY(' + (Math.abs((fila.asientos.length / 2) - j) * 2) + 'px)'"
-                                [class.bg-muted/20]="asiento.estado === 'ocupado'"
-                                [class.border-border/30]="asiento.estado === 'ocupado'"
-                                [class.text-muted-foreground/20]="asiento.estado === 'ocupado'"
+                                
+                                [class.bg-muted]="asiento.estado === 'ocupado'"
+                                [class.border-border/50]="asiento.estado === 'ocupado'"
+                                [class.text-muted-foreground]="asiento.estado === 'ocupado'"
+                                [class.opacity-50]="asiento.estado === 'ocupado'"
                                 [class.cursor-not-allowed]="asiento.estado === 'ocupado'"
                                 [class.shadow-none]="asiento.estado === 'ocupado'"
                                 
-                                [class.bg-primary]="asiento.estado === 'seleccionado'"
+                                [class.bg-card]="asiento.estado === 'seleccionado'"
                                 [class.border-primary]="asiento.estado === 'seleccionado'"
-                                [class.text-primary-foreground]="asiento.estado === 'seleccionado'"
-                                [class.shadow-[0_0_20px_rgba(var(--primary),0.6)]]="asiento.estado === 'seleccionado'"
+                                [class.text-primary]="asiento.estado === 'seleccionado'"
+                                [class.shadow-md]="asiento.estado === 'seleccionado'"
+                                [class.shadow-primary/40]="asiento.estado === 'seleccionado'"
                                 [class.scale-110]="asiento.estado === 'seleccionado'"
+                                [class.z-10]="asiento.estado === 'seleccionado'"
                                 
-                                [class.bg-background/80]="asiento.estado === 'libre'"
+                                [class.bg-card]="asiento.estado === 'libre'"
                                 [class.border-border]="asiento.estado === 'libre'"
-                                [class.text-muted-foreground]="asiento.estado === 'libre'"
+                                [class.text-foreground]="asiento.estado === 'libre'"
                                 [class.hover:border-primary]="asiento.estado === 'libre'"
-                                [class.hover:bg-primary/20]="asiento.estado === 'libre'"
-                                [class.hover:shadow-[0_0_15px_rgba(var(--primary),0.3)]]="asiento.estado === 'libre'"
+                                [class.hover:bg-primary/10]="asiento.estado === 'libre'"
+                                [class.hover:text-primary]="asiento.estado === 'libre'"
+                                [class.hover:shadow-md]="asiento.estado === 'libre'"
+                                [class.hover:shadow-primary/20]="asiento.estado === 'libre'"
                                 [class.hover:-translate-y-1]="asiento.estado === 'libre'"
                                 
                                 [disabled]="asiento.estado === 'ocupado'"
                                 (click)="toggleAsiento(asiento.id)">
                                 
-                                <!-- Forma de Asiento Frontal (Detalle Visual) -->
-                                <div class="absolute bottom-0 w-full h-[30%] bg-gradient-to-t from-black/60 to-transparent pointer-events-none rounded-b-md"></div>
-                                <div class="absolute inset-x-1 bottom-1 h-1 bg-white/10 rounded-full pointer-events-none" [class.bg-white/30]="asiento.estado === 'seleccionado'"></div>
+                                <!-- Forma de Asiento Frontal (Detalle Visual adaptativo) -->
+                                <div class="absolute bottom-0 w-full h-[30%] bg-gradient-to-t from-black/5 dark:from-black/40 to-transparent pointer-events-none rounded-b-md"></div>
+                                <div class="absolute inset-x-1 bottom-1 h-1 rounded-full pointer-events-none transition-all duration-300" 
+                                     [class.bg-neutral-600]="asiento.estado === 'libre'" 
+                                     [class.dark:bg-neutral-600]="asiento.estado === 'libre'"
+                                     [class.bg-primary]="asiento.estado === 'seleccionado'"
+                                     [class.shadow-[0_0_8px_rgba(var(--primary),0.8)]]="asiento.estado === 'seleccionado'"
+                                     [class.bg-neutral-300]="asiento.estado === 'ocupado'"
+                                     [class.dark:bg-neutral-800]="asiento.estado === 'ocupado'"></div>
                                 
                                 <span class="relative z-10">{{ asiento.numero }}</span>
                               </button>
@@ -154,9 +166,9 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 
                     <!-- Leyenda -->
                     <div class="flex gap-8 mt-16 text-sm font-display tracking-widest uppercase text-muted-foreground border-t border-border pt-8 w-full justify-center">
-                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm border border-border bg-background shadow-md"></div> Disponible</div>
-                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm bg-primary shadow-[0_0_15px_rgba(var(--primary),0.5)]"></div> Seleccionado</div>
-                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm bg-muted/20 border border-border/30"></div> Ocupado</div>
+                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm border border-border bg-card shadow-sm relative overflow-hidden"><div class="absolute inset-x-1 bottom-1 h-1 rounded-full bg-neutral-600"></div></div> Disponible</div>
+                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm border border-primary bg-card shadow-md shadow-primary/30 relative overflow-hidden"><div class="absolute inset-x-1 bottom-1 h-1 rounded-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.8)]"></div></div> Seleccionado</div>
+                      <div class="flex items-center gap-3"><div class="w-5 h-5 rounded-t-md rounded-b-sm bg-muted border border-border/50 opacity-50 relative overflow-hidden"><div class="absolute inset-x-1 bottom-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-800"></div></div> Ocupado</div>
                     </div>
 
                   </div>

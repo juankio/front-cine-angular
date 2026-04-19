@@ -99,19 +99,25 @@ import { EntradasService } from '../../services/entradas.service';
                       <div class="flex gap-1.5">
                         @for (asiento of fila.asientos; track asiento.id; let j = $index) {
                           <div 
-                            class="relative w-6 h-6 sm:w-8 sm:h-8 rounded-t-lg rounded-b-sm border transition-all text-[0.6rem] font-display flex items-center justify-center overflow-hidden"
+                            class="relative w-6 h-6 sm:w-8 sm:h-8 rounded-t-lg rounded-b-sm border transition-all text-[0.6rem] font-display flex items-center justify-center overflow-hidden shadow-sm"
                             [style.transform]="'translateY(' + (Math.abs((fila.asientos.length / 2) - j) * 1.5) + 'px)'"
-                            [class.bg-primary/30]="asiento.estado === 'ocupado'"
-                            [class.border-primary/50]="asiento.estado === 'ocupado'"
-                            [class.text-primary/30]="asiento.estado === 'ocupado'"
-                            [class.shadow-md shadow-primary/30]="asiento.estado === 'ocupado'"
                             
-                            [class.bg-secondary]="asiento.estado === 'libre'"
+                            [class.bg-card]="asiento.estado === 'ocupado'"
+                            [class.border-primary]="asiento.estado === 'ocupado'"
+                            [class.text-primary]="asiento.estado === 'ocupado'"
+                            [class.shadow-primary/20]="asiento.estado === 'ocupado'"
+                            
+                            [class.bg-card]="asiento.estado === 'libre'"
                             [class.border-border]="asiento.estado === 'libre'"
-                            [class.text-neutral-500]="asiento.estado === 'libre'">
+                            [class.text-foreground]="asiento.estado === 'libre'">
                             
-                            <!-- Forma de Asiento Frontal (Detalle Visual) -->
-                            <div class="absolute bottom-0 w-full h-[25%] bg-gradient-to-t from-background/80 to-transparent pointer-events-none rounded-b-sm"></div>
+                            <!-- Forma de Asiento Frontal (Detalle Visual adaptativo) -->
+                            <div class="absolute bottom-0 w-full h-[25%] bg-gradient-to-t from-black/5 dark:from-black/40 to-transparent pointer-events-none rounded-b-sm"></div>
+                            <div class="absolute inset-x-1 bottom-0.5 h-[2px] rounded-full pointer-events-none transition-all duration-300" 
+                                 [class.bg-neutral-300]="asiento.estado === 'libre'" 
+                                 [class.dark:bg-neutral-600]="asiento.estado === 'libre'"
+                                 [class.bg-primary]="asiento.estado === 'ocupado'"
+                                 [class.shadow-[0_0_5px_rgba(var(--primary),0.8)]]="asiento.estado === 'ocupado'"></div>
                             <span class="relative z-10">{{ asiento.numero }}</span>
                           </div>
                         }
@@ -121,10 +127,9 @@ import { EntradasService } from '../../services/entradas.service';
                   }
                 </div>
 
-                <!-- Leyenda Admin -->
-                <div class="flex gap-8 mt-auto text-sm font-display tracking-widest uppercase text-neutral-500 border-t border-border pt-6 w-full justify-center">
-                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm border border-border bg-secondary"></div> Libre</div>
-                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm bg-primary/30 border border-primary/50 shadow-md shadow-primary/40"></div> Ocupado / Vendido</div>
+                <div class="flex gap-8 mt-auto text-sm font-display tracking-widest uppercase text-muted-foreground border-t border-border/50 pt-6 w-full justify-center">
+                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm border border-border bg-card shadow-sm relative overflow-hidden"><div class="absolute inset-x-1 bottom-0.5 h-[2px] rounded-full bg-neutral-300 dark:bg-neutral-600"></div></div> Libre</div>
+                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm border border-primary bg-card shadow-sm shadow-primary/20 relative overflow-hidden"><div class="absolute inset-x-1 bottom-0.5 h-[2px] rounded-full bg-primary shadow-[0_0_5px_rgba(var(--primary),0.8)]"></div></div> Ocupado / Vendido</div>
                 </div>
               }
             </div>

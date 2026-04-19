@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { DefaultLayoutComponent } from '../../layouts/default-layout/default-layout.component';
 import { CombosComidaComponent } from '../../components/combos-comida/combos-comida.component';
 import { PeliCarteleraComponent } from '../../components/peli-cartelera/peli-cartelera.component';
@@ -16,20 +17,20 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
   imports: [CommonModule, DefaultLayoutComponent, CombosComidaComponent, PeliCarteleraComponent, HlmCardImports, HlmInput, HlmIconImports],
   template: `
     <app-default-layout>
-      <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-10">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 flex flex-col gap-10">
 
         <!-- Nuevo Hero Limpio y Minimalista -->
-        <hlm-card class="relative flex flex-col p-10 md:p-14 w-full shadow-sm border-border bg-card overflow-hidden">
+        <hlm-card class="relative flex flex-col p-8 md:p-14 w-full shadow-sm border-border bg-card overflow-hidden">
           
           <!-- Gradiente radial sutil de fondo -->
           <div class="absolute top-0 inset-x-0 h-full bg-gradient-to-b from-primary/5 via-primary/[0.02] to-transparent pointer-events-none"></div>
 
           <div class="relative z-10 flex flex-col md:flex-row gap-8 w-full items-center justify-between">
             <div class="text-center md:text-left flex-1">
-              <h1 class="text-6xl md:text-8xl font-display tracking-widest text-foreground uppercase drop-shadow-sm">
+              <h1 class="text-5xl md:text-8xl font-display tracking-widest text-foreground uppercase drop-shadow-sm">
                 Cine POOR
               </h1>
-              <p class="text-muted-foreground mt-4 text-lg md:text-xl font-medium max-w-lg mx-auto md:mx-0">
+              <p class="text-muted-foreground mt-4 text-base md:text-xl font-medium max-w-lg mx-auto md:mx-0">
                 Compra tu combo, elige función y reserva tu mesa en minutos.
               </p>
             </div>
@@ -50,7 +51,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
           @if (funcionesVivas().length > 0) {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               @for (funcion of funcionesVivas(); track funcion._id || funcion.id) {
-                <hlm-card class="group flex items-center p-4 gap-4 bg-background border border-border shadow-sm hover:shadow-primary/20 hover:border-primary/50 transition-all cursor-pointer rounded-xl overflow-hidden">
+                <div class="group flex items-center p-3 sm:p-4 gap-3 sm:gap-4 bg-card border border-border shadow-sm hover:shadow-primary/20 hover:border-primary/50 transition-all cursor-pointer rounded-xl overflow-hidden" (click)="irADetalle(funcion.peliculaId)">
                   <div class="w-16 h-20 flex-shrink-0 bg-muted rounded-md overflow-hidden relative">
                     @if (funcion.peliculaImg) {
                       <img [src]="funcion.peliculaImg" class="w-full h-full object-cover transition-transform group-hover:scale-105" alt="Poster">
@@ -71,7 +72,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
                       <span class="text-xs text-muted-foreground truncate">{{ funcion.salaNombre }}</span>
                     </div>
                   </div>
-                </hlm-card>
+                </div>
               }
             </div>
           } @else {
@@ -138,6 +139,7 @@ export class IndexComponent implements OnInit {
   private peliculasService = inject(PeliculasService);
   private menuService = inject(MenuService);
   private salasService = inject(SalasService);
+  private router = inject(Router);
   
   peliculas = signal<any[]>([]);
   menus = signal<any[]>([]);
@@ -209,5 +211,12 @@ export class IndexComponent implements OnInit {
       },
       error: (err) => console.error('Error al obtener salas:', err)
     });
+  }
+
+  irADetalle(id: string) {
+    const peliId = id || (this.peliculas().find(p => p._id === id || p.id === id)?._id);
+    if(peliId) {
+      this.router.navigate(['/pelicula', peliId]);
+    }
   }
 }

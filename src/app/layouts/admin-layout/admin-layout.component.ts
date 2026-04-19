@@ -18,9 +18,9 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
         <app-barra-navegacion />
       </div>
 
-      <div class="relative z-10 flex w-full h-[calc(100vh-64px)] overflow-hidden">
+      <div class="relative z-10 flex flex-col md:flex-row w-full h-[calc(100vh-64px)] overflow-hidden">
         <!-- Sidebar Limpio -->
-        <aside class="w-64 shrink-0 border-r border-border/50 bg-card/40 backdrop-blur-xl flex flex-col z-0 relative">
+        <aside class="hidden md:flex w-64 shrink-0 border-r border-border/50 bg-card/40 backdrop-blur-xl flex-col z-0 relative">
           <div class="p-6 pb-2">
             <p class="font-display tracking-[0.1em] uppercase text-primary text-sm font-semibold">Panel de Control</p>
           </div>
@@ -59,8 +59,41 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
           </ul>
         </aside>
 
+        <!-- Mobile Nav -->
+        <nav class="flex md:hidden w-full border-b border-border/50 bg-card/40 backdrop-blur-xl overflow-x-auto whitespace-nowrap shrink-0 p-2 gap-2 z-10 custom-scrollbar-hide">
+            @for (item of navItems; track item.to) {
+                <a
+                  [routerLink]="item.to"
+                  routerLinkActive="bg-primary/10 text-primary font-medium"
+                  [routerLinkActiveOptions]="{exact: item.exact}"
+                  class="inline-flex items-center gap-2 px-4 py-3 rounded-lg text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                >
+                  <span class="opacity-70 group-[.active]:opacity-100 group-hover:opacity-100 transition-opacity">
+                    @if (item.icon === 'home') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    } @else if (item.icon === 'movie') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
+                    } @else if (item.icon === 'salas') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/><path d="M7 12h10"/></svg>
+                    } @else if (item.icon === 'menu') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+                    } @else if (item.icon === 'ingredients') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    } @else if (item.icon === 'reservas') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                    } @else if (item.icon === 'pos') {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    } @else {
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    }
+                  </span>
+                  <span>{{ item.label }}</span>
+                </a>
+            }
+        </nav>
+
         <!-- Contenido Central -->
-        <main class="flex-1 min-w-0 h-full overflow-y-auto bg-background/30 rounded-tl-2xl border-t border-l border-border/40 shadow-sm relative z-[5]">
+        <main class="flex-1 min-w-0 h-full overflow-y-auto bg-background/30 md:rounded-tl-2xl md:border-t border-l-0 md:border-l border-border/40 shadow-sm relative z-[5]">
           <div class="h-full w-full relative z-10">
             <ng-content></ng-content>
           </div>
