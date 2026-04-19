@@ -11,13 +11,13 @@ import { ToastService, Toast } from '../../services/toast.service';
       @for (toast of toastService.toasts(); track toast.id) {
         <div class="pointer-events-auto overflow-hidden rounded-md border shadow-2xl backdrop-blur-xl animate-in slide-in-from-right-8 fade-in duration-300 transform transition-all group"
              [ngClass]="{
-               'bg-black/90 border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.2)] text-white': toast.type === 'error',
-               'bg-black/90 border-green-500/50 shadow-[0_0_20px_rgba(34,197,94,0.2)] text-white': toast.type === 'success',
-               'bg-black/90 border-yellow-500/50 shadow-[0_0_20px_rgba(234,179,8,0.2)] text-white': toast.type === 'warning',
-               'bg-black/90 border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.2)] text-white': toast.type === 'info'
+               'bg-card border-destructive/50 shadow-lg shadow-destructive/20 text-foreground': toast.type === 'error',
+               'bg-card border-green-500/50 shadow-lg shadow-green-500/20 text-foreground': toast.type === 'success',
+               'bg-card border-yellow-500/50 shadow-lg shadow-yellow-500/20 text-foreground': toast.type === 'warning',
+               'bg-card border-blue-500/50 shadow-lg shadow-blue-500/20 text-foreground': toast.type === 'info'
              }">
           <!-- Barrita superior de progreso visual (decorativa) -->
-          <div class="absolute top-0 left-0 h-[2px] w-full bg-white/20 origin-left animate-progress" [ngStyle]="{'animation-duration': '4s', 'animation-fill-mode': 'forwards'}"></div>
+          <div class="absolute top-0 left-0 h-[2px] w-full bg-secondary/80 origin-left animate-progress" [ngStyle]="{'animation-duration': '4s', 'animation-fill-mode': 'forwards'}"></div>
 
           <div class="p-4 flex items-start gap-3 relative z-10">
             <!-- Iconos según tipo -->
@@ -25,7 +25,7 @@ import { ToastService, Toast } from '../../services/toast.service';
               @if (toast.type === 'success') {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
               } @else if (toast.type === 'error') {
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-destructive"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
               } @else if (toast.type === 'warning') {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
               } @else {
@@ -42,7 +42,7 @@ import { ToastService, Toast } from '../../services/toast.service';
             </div>
 
             <!-- Boton Cerrar -->
-            <button (click)="toastService.remove(toast.id)" class="absolute top-4 right-4 text-white/50 hover:text-white transition-colors">
+            <button (click)="toastService.remove(toast.id)" class="absolute top-4 right-4 text-foreground/50 hover:text-foreground transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
           </div>

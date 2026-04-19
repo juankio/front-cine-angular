@@ -16,11 +16,11 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
   template: `
     @if (visible) {
       <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="bg-black/90 text-white border border-white/10 shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-xl w-full max-w-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div class="bg-card text-foreground border border-border shadow-2xl shadow-primary/15 rounded-xl w-full max-w-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           <div class="p-6">
-            <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
-              <h2 class="text-2xl font-display tracking-widest uppercase text-white">Nueva Receta de Menú</h2>
-              <button class="text-neutral-500 hover:text-white transition-colors" (click)="cerrar()">
+            <div class="flex items-center justify-between mb-6 border-b border-border pb-4">
+              <h2 class="text-2xl font-display tracking-widest uppercase text-foreground">Nueva Receta de Menú</h2>
+              <button class="text-neutral-500 hover:text-foreground transition-colors" (click)="cerrar()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                 <span class="sr-only">Cerrar</span>
               </button>
@@ -36,7 +36,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                   name="menuId" 
                   [(ngModel)]="formData.menuId" 
                   required 
-                  class="flex h-12 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-base font-body text-white focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500"
+                  class="flex h-12 w-full rounded-md border border-border bg-secondary px-3 py-2 text-base font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 >
                   <option value="" disabled class="bg-neutral-900 text-neutral-500">Selecciona un combo/producto...</option>
                   @for (menu of menus; track menu._id) {
@@ -46,10 +46,10 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
               </div>
 
               <!-- Lista de Ingredientes Dinámica -->
-              <div class="space-y-4 border border-white/10 rounded-md p-4 bg-white/5">
+              <div class="space-y-4 border border-border rounded-md p-4 bg-secondary">
                 <div class="flex items-center justify-between mb-2">
                   <label class="font-display tracking-wider text-neutral-400 text-sm">Insumos Necesarios</label>
-                  <button type="button" (click)="agregarIngredienteFila()" class="text-xs font-display tracking-widest uppercase text-red-500 hover:text-red-400 bg-red-500/10 px-2 py-1 rounded border border-red-500/20">
+                  <button type="button" (click)="agregarIngredienteFila()" class="text-xs font-display tracking-widest uppercase text-primary hover:text-primary/80 bg-primary/10 px-2 py-1 rounded border border-primary/20">
                     + Añadir Insumo
                   </button>
                 </div>
@@ -65,7 +65,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                         [name]="'ingredienteId_' + i" 
                         [(ngModel)]="item.ingredienteId" 
                         required 
-                        class="flex h-10 w-full rounded-sm border border-white/10 bg-black px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-red-500"
+                        class="flex h-10 w-full rounded-sm border border-border bg-input px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                       >
                         <option value="" disabled>Seleccionar...</option>
                         @for (ingrediente of ingredientesDb; track ingrediente._id) {
@@ -81,11 +81,11 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                         required 
                         min="0.01"
                         step="0.01"
-                        class="flex h-10 w-full rounded-sm border border-white/10 bg-black px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-red-500"
+                        class="flex h-10 w-full rounded-sm border border-border bg-input px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                         placeholder="Cant."
                       />
                     </div>
-                    <button type="button" class="h-10 w-10 bg-white/5 hover:bg-red-500/20 text-neutral-500 hover:text-red-500 rounded-sm flex items-center justify-center border border-white/10 transition-colors" (click)="removerIngredienteFila(i)">
+                    <button type="button" class="h-10 w-10 bg-secondary hover:bg-primary/20 text-neutral-500 hover:text-primary rounded-sm flex items-center justify-center border border-border transition-colors" (click)="removerIngredienteFila(i)">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                     </button>
                   </div>
@@ -94,10 +94,10 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 
               <!-- Acciones -->
               <div class="flex justify-end gap-3 pt-6 mt-6">
-                <button type="button" class="px-4 py-2 border border-white/20 text-neutral-300 font-display tracking-wider uppercase rounded-sm hover:bg-white/5 transition-colors" (click)="cerrar()">
+                <button type="button" class="px-4 py-2 border border-border text-neutral-300 font-display tracking-wider uppercase rounded-sm hover:bg-secondary transition-colors" (click)="cerrar()">
                   Cancelar
                 </button>
-                <button type="submit" class="px-6 py-2 bg-red-600 text-white font-display tracking-widest uppercase rounded-sm shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] disabled:opacity-50 disabled:shadow-none transition-all" [disabled]="!form.valid || guardando || formData.ingredientes.length === 0">
+                <button type="submit" class="px-6 py-2 bg-primary text-foreground font-display tracking-widest uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all" [disabled]="!form.valid || guardando || formData.ingredientes.length === 0">
                   {{ guardando ? 'Guardando...' : 'Guardar Receta' }}
                 </button>
               </div>

@@ -10,19 +10,19 @@ import { EntradasService } from '../../services/entradas.service';
     @if (visible) {
       <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" (click)="cerrar()"></div>
+        <div class="fixed inset-0 bg-background/80 backdrop-blur-sm" (click)="cerrar()"></div>
         
         <!-- Modal Content -->
-        <div class="relative z-10 w-full max-w-4xl bg-black/90 text-white border border-white/10 shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div class="relative z-10 w-full max-w-4xl bg-card text-foreground border border-border shadow-2xl shadow-primary/15 rounded-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           
-          <div class="flex flex-row items-center justify-between p-6 border-b border-white/10 bg-white/5">
+          <div class="flex flex-row items-center justify-between p-6 border-b border-border bg-secondary">
             <div>
-              <h3 class="text-2xl font-display tracking-widest uppercase text-white drop-shadow-sm">
+              <h3 class="text-2xl font-display tracking-widest uppercase text-foreground drop-shadow-sm">
                 Monitor de Sala: {{ sala?.nombre }}
               </h3>
               <p class="text-sm font-display tracking-wider text-neutral-400 mt-1">Selecciona una función programada para ver el estado de los asientos en tiempo real.</p>
             </div>
-            <button (click)="cerrar()" class="text-neutral-500 hover:text-white transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
+            <button (click)="cerrar()" class="text-neutral-500 hover:text-foreground transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
           </div>
@@ -30,8 +30,8 @@ import { EntradasService } from '../../services/entradas.service';
           <div class="flex flex-col md:flex-row h-[70vh] md:h-[60vh] overflow-hidden">
             
             <!-- Barra Lateral: Funciones de la sala -->
-            <div class="w-full md:w-1/3 border-r border-white/10 overflow-y-auto bg-black/40">
-              <div class="p-4 border-b border-white/10 font-display tracking-widest uppercase text-neutral-500 sticky top-0 bg-black/90 z-10 backdrop-blur-sm">
+            <div class="w-full md:w-1/3 border-r border-border overflow-y-auto bg-background/40">
+              <div class="p-4 border-b border-border font-display tracking-widest uppercase text-neutral-500 sticky top-0 bg-card z-10 backdrop-blur-sm">
                 Funciones Asignadas
               </div>
               <div class="flex flex-col">
@@ -40,21 +40,21 @@ import { EntradasService } from '../../services/entradas.service';
                 } @else {
                   @for (funcion of sala.funciones; track funcion._id || funcion.id) {
                     <button 
-                      class="text-left p-4 border-b border-white/5 hover:bg-white/5 transition-colors group"
-                      [class.bg-red-500/10]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
+                      class="text-left p-4 border-b border-border/50 hover:bg-secondary transition-colors group"
+                      [class.bg-primary/10]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
                       [class.border-l-4]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
-                      [class.border-l-red-500]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
+                      [class.border-l-primary]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)"
                       (click)="verFuncion(funcion)"
                     >
-                      <div class="font-body font-medium text-lg mb-1 group-hover:text-red-400 transition-colors" [class.text-red-500]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)">
+                      <div class="font-body font-medium text-lg mb-1 group-hover:text-primary/80 transition-colors" [class.text-primary]="(funcionSeleccionada()?._id || funcionSeleccionada()?.id) === (funcion._id || funcion.id)">
                         {{ funcion.pelicula?.titulo || 'Película ID: ' + (funcion.peliculaId?._id || funcion.peliculaId) }}
                       </div>
                       <div class="font-display tracking-wider text-neutral-400 text-sm">
                         {{ funcion.inicio | date:'short' }}
                       </div>
                       <div class="mt-2 flex gap-2">
-                        <span class="text-xs border border-white/20 bg-white/5 px-2 rounded-sm text-neutral-300 font-display">{{ funcion.formato }}</span>
-                        <span class="text-xs border border-white/20 bg-white/5 px-2 rounded-sm text-neutral-300 font-display">{{ funcion.idioma }}</span>
+                        <span class="text-xs border border-border bg-secondary px-2 rounded-sm text-neutral-300 font-display">{{ funcion.formato }}</span>
+                        <span class="text-xs border border-border bg-secondary px-2 rounded-sm text-neutral-300 font-display">{{ funcion.idioma }}</span>
                       </div>
                     </button>
                   }
@@ -63,7 +63,7 @@ import { EntradasService } from '../../services/entradas.service';
             </div>
 
             <!-- Panel Principal: Mapa de Asientos -->
-            <div class="w-full md:w-2/3 p-6 overflow-y-auto relative flex flex-col items-center bg-black/60">
+            <div class="w-full md:w-2/3 p-6 overflow-y-auto relative flex flex-col items-center bg-background/60">
               @if (!funcionSeleccionada()) {
                 <div class="h-full flex flex-col items-center justify-center opacity-50 absolute inset-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-4"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
@@ -71,24 +71,24 @@ import { EntradasService } from '../../services/entradas.service';
                 </div>
               } @else {
                 <!-- Stats de Ocupacion -->
-                <div class="w-full flex items-center justify-between mb-10 bg-white/5 p-4 rounded-xl border border-white/10">
+                <div class="w-full flex items-center justify-between mb-10 bg-secondary p-4 rounded-xl border border-border">
                   <div>
                     <p class="text-xs font-display tracking-widest text-neutral-500 uppercase">Disponibilidad</p>
-                    <p class="font-display text-3xl mt-1 text-white">
+                    <p class="font-display text-3xl mt-1 text-foreground">
                       {{ statusFuncion().sillasDisponibles }} <span class="text-lg text-neutral-500">libres</span>
                     </p>
                   </div>
                   <div class="text-right">
                     <p class="text-xs font-display tracking-widest text-neutral-500 uppercase">Ocupadas</p>
-                    <p class="font-display text-3xl mt-1 text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                    <p class="font-display text-3xl mt-1 text-primary drop-shadow-md shadow-primary/50">
                       {{ statusFuncion().sillasOcupadas }} <span class="text-lg text-neutral-500">/ {{ statusFuncion().capacidadTotal }}</span>
                     </p>
                   </div>
                 </div>
 
                 <!-- Pantalla -->
-                <div class="w-2/3 h-2 bg-gradient-to-b from-red-500/50 to-transparent rounded-t-full mb-12 relative shadow-[0_0_30px_rgba(239,68,68,0.2)]">
-                  <div class="absolute -top-6 w-full text-center text-xs font-display tracking-[0.5em] text-red-500 uppercase">Pantalla</div>
+                <div class="w-2/3 h-2 bg-gradient-to-b from-primary/50 to-transparent rounded-t-full mb-12 relative shadow-xl shadow-primary/20">
+                  <div class="absolute -top-6 w-full text-center text-xs font-display tracking-[0.5em] text-primary uppercase">Pantalla</div>
                 </div>
 
                 <!-- Grilla Curved Admin -->
@@ -101,17 +101,17 @@ import { EntradasService } from '../../services/entradas.service';
                           <div 
                             class="relative w-6 h-6 sm:w-8 sm:h-8 rounded-t-lg rounded-b-sm border transition-all text-[0.6rem] font-display flex items-center justify-center overflow-hidden"
                             [style.transform]="'translateY(' + (Math.abs((fila.asientos.length / 2) - j) * 1.5) + 'px)'"
-                            [class.bg-red-500/30]="asiento.estado === 'ocupado'"
-                            [class.border-red-500/50]="asiento.estado === 'ocupado'"
-                            [class.text-red-200]="asiento.estado === 'ocupado'"
-                            [class.shadow-[0_0_10px_rgba(239,68,68,0.3)]]="asiento.estado === 'ocupado'"
+                            [class.bg-primary/30]="asiento.estado === 'ocupado'"
+                            [class.border-primary/50]="asiento.estado === 'ocupado'"
+                            [class.text-primary/30]="asiento.estado === 'ocupado'"
+                            [class.shadow-md shadow-primary/30]="asiento.estado === 'ocupado'"
                             
-                            [class.bg-white/10]="asiento.estado === 'libre'"
-                            [class.border-white/20]="asiento.estado === 'libre'"
+                            [class.bg-secondary]="asiento.estado === 'libre'"
+                            [class.border-border]="asiento.estado === 'libre'"
                             [class.text-neutral-500]="asiento.estado === 'libre'">
                             
                             <!-- Forma de Asiento Frontal (Detalle Visual) -->
-                            <div class="absolute bottom-0 w-full h-[25%] bg-gradient-to-t from-black/80 to-transparent pointer-events-none rounded-b-sm"></div>
+                            <div class="absolute bottom-0 w-full h-[25%] bg-gradient-to-t from-background/80 to-transparent pointer-events-none rounded-b-sm"></div>
                             <span class="relative z-10">{{ asiento.numero }}</span>
                           </div>
                         }
@@ -122,9 +122,9 @@ import { EntradasService } from '../../services/entradas.service';
                 </div>
 
                 <!-- Leyenda Admin -->
-                <div class="flex gap-8 mt-auto text-sm font-display tracking-widest uppercase text-neutral-500 border-t border-white/10 pt-6 w-full justify-center">
-                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm border border-white/20 bg-white/10"></div> Libre</div>
-                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm bg-red-500/30 border border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.4)]"></div> Ocupado / Vendido</div>
+                <div class="flex gap-8 mt-auto text-sm font-display tracking-widest uppercase text-neutral-500 border-t border-border pt-6 w-full justify-center">
+                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm border border-border bg-secondary"></div> Libre</div>
+                  <div class="flex items-center gap-3"><div class="w-4 h-4 rounded-sm bg-primary/30 border border-primary/50 shadow-md shadow-primary/40"></div> Ocupado / Vendido</div>
                 </div>
               }
             </div>

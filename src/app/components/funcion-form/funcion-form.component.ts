@@ -13,16 +13,16 @@ import { ToastService } from '../../services/toast.service';
     @if (visible) {
       <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" (click)="cerrar()"></div>
+        <div class="fixed inset-0 bg-background/80 backdrop-blur-sm" (click)="cerrar()"></div>
         
         <!-- Modal Content -->
-        <div class="relative z-10 w-full max-w-lg bg-black/90 text-white border border-white/10 shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div class="relative z-10 w-full max-w-lg bg-card text-foreground border border-border shadow-2xl shadow-primary/15 rounded-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           
-          <div class="flex flex-row items-center justify-between p-6 border-b border-white/10 bg-white/5">
-            <h3 class="text-2xl font-display tracking-widest uppercase text-white drop-shadow-sm">
+          <div class="flex flex-row items-center justify-between p-6 border-b border-border bg-secondary">
+            <h3 class="text-2xl font-display tracking-widest uppercase text-foreground drop-shadow-sm">
               Programar Función en {{ sala?.nombre }}
             </h3>
-            <button (click)="cerrar()" class="text-neutral-500 hover:text-white transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
+            <button (click)="cerrar()" class="text-neutral-500 hover:text-foreground transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
           </div>
@@ -34,7 +34,7 @@ import { ToastService } from '../../services/toast.service';
               <div class="space-y-1.5">
                 <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Película a proyectar</label>
                 <select [(ngModel)]="form.peliculaId" name="peliculaId" required 
-                       class="flex h-12 w-full rounded-sm border border-white/10 bg-black px-4 py-2 text-base font-body text-white transition-colors focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500">
+                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                   <option value="" disabled selected class="text-neutral-500">Seleccione una película...</option>
                   @for (pelicula of peliculas(); track pelicula.id) {
                     <option [value]="pelicula.id">{{ pelicula.titulo }} ({{ pelicula.duracionMinutos }} min)</option>
@@ -46,7 +46,7 @@ import { ToastService } from '../../services/toast.service';
               <div class="space-y-1.5">
                 <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Fecha y Hora de Inicio</label>
                 <input [(ngModel)]="form.inicio" name="inicio" type="datetime-local" required
-                       class="flex h-12 w-full rounded-sm border border-white/10 bg-black px-4 py-2 text-base font-body text-white transition-colors placeholder:text-neutral-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500" />
+                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors placeholder:text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
               </div>
 
               <!-- Opciones de Proyección -->
@@ -54,7 +54,7 @@ import { ToastService } from '../../services/toast.service';
                 <div class="space-y-1.5">
                   <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Idioma</label>
                   <select [(ngModel)]="form.idioma" name="idioma" required 
-                         class="flex h-12 w-full rounded-sm border border-white/10 bg-black px-4 py-2 text-base font-body text-white transition-colors focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500">
+                         class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                     <option value="doblada">Doblada (Esp)</option>
                     <option value="subtitulada">Subtitulada</option>
                   </select>
@@ -63,7 +63,7 @@ import { ToastService } from '../../services/toast.service';
                 <div class="space-y-1.5">
                   <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Formato</label>
                   <select [(ngModel)]="form.formato" name="formato" required 
-                         class="flex h-12 w-full rounded-sm border border-white/10 bg-black px-4 py-2 text-base font-body text-white transition-colors focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500">
+                         class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
                     <option value="2D">2D Estandar</option>
                     <option value="3D">3D</option>
                     <option value="IMAX">IMAX</option>
@@ -76,15 +76,15 @@ import { ToastService } from '../../services/toast.service';
               <div class="space-y-1.5">
                 <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Precio Base Ticket ($)</label>
                 <input [(ngModel)]="form.precio" name="precio" type="number" required min="0" step="0.01"
-                       class="flex h-12 w-full rounded-sm border border-white/10 bg-black px-4 py-2 text-base font-body text-white transition-colors focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500" />
+                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
               </div>
 
               <!-- Actions -->
-              <div class="flex justify-end gap-3 pt-4 border-t border-white/10 mt-6">
-                <button type="button" class="px-6 py-3 border border-white/20 text-neutral-300 font-display tracking-widest uppercase rounded-sm hover:bg-white/5 transition-colors text-sm" (click)="cerrar()">
+              <div class="flex justify-end gap-3 pt-4 border-t border-border mt-6">
+                <button type="button" class="px-6 py-3 border border-border text-neutral-300 font-display tracking-widest uppercase rounded-sm hover:bg-secondary transition-colors text-sm" (click)="cerrar()">
                   Cancelar
                 </button>
-                <button type="submit" class="px-8 py-3 bg-red-600 text-white font-display tracking-[0.2em] uppercase rounded-sm shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!formEl.valid || guardando()">
+                <button type="submit" class="px-8 py-3 bg-primary text-foreground font-display tracking-[0.2em] uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!formEl.valid || guardando()">
                   {{ guardando() ? 'Agendando...' : 'Agendar Función' }}
                 </button>
               </div>
