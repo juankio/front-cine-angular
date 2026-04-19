@@ -78,9 +78,21 @@ import { ToastService } from '../../services/toast.service';
                   id="imagenUrl" 
                   name="imagenUrl" 
                   [(ngModel)]="formData.imagenUrl" 
-                  class="flex h-12 w-full rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                  class="flex h-12 w-full rounded-sm bg-input border border-input px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="https://ejemplo.com/imagen.jpg"
                 />
+              </div>
+
+              <!-- Recomendado -->
+              <div class="flex items-center justify-between border border-border bg-secondary/30 rounded-md p-4">
+                <div class="space-y-0.5">
+                  <label for="recomendado" class="font-display tracking-wider text-foreground uppercase">Destacar Combo</label>
+                  <p class="text-xs text-muted-foreground font-body">Muestra la etiqueta 'Recomendado' en el catálogo.</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="recomendado" name="recomendado" [(ngModel)]="formData.recomendado" class="sr-only peer">
+                  <div class="w-11 h-6 bg-muted peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
               </div>
 
               <!-- Acciones -->
@@ -114,7 +126,8 @@ export class MenuFormComponent implements OnChanges {
     nombre: '',
     descripcion: '',
     precio: 0,
-    imagenUrl: ''
+    imagenUrl: '',
+    recomendado: false
   };
 
   ngOnChanges(changes: SimpleChanges) {
@@ -123,7 +136,8 @@ export class MenuFormComponent implements OnChanges {
         nombre: this.menuEditar.nombre || '',
         descripcion: this.menuEditar.descripcion || '',
         precio: this.menuEditar.precio || 0,
-        imagenUrl: this.menuEditar.imagenUrl || ''
+        imagenUrl: this.menuEditar.imagenUrl || '',
+        recomendado: this.menuEditar.recomendado || false
       };
     }
   }
@@ -177,7 +191,8 @@ export class MenuFormComponent implements OnChanges {
       nombre: '',
       descripcion: '',
       precio: 0,
-      imagenUrl: ''
+      imagenUrl: '',
+      recomendado: false
     };
   }
 }

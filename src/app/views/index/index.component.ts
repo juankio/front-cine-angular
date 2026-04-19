@@ -97,6 +97,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
                   [precioProducto]="combo.precio?.toString() || '0'"
                   [infoProducto]="combo.descripcion"
                   [imagenUrl]="combo.imagenUrl"
+                  [recomendado]="combo.recomendado"
                 />
               }
             </div>

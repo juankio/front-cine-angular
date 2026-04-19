@@ -20,8 +20,10 @@ import { HlmCardImports } from '@spartan-ng/helm/card';
       </div>
       <hlm-card-header class="pt-4">
         <div class="flex justify-between items-start mb-2">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center rounded-sm bg-primary/10 px-2 py-0.5 text-[10px] font-display tracking-widest text-primary uppercase border border-primary/20">Recomendado</span>
+          <div class="flex items-center gap-2 min-h-[20px]">
+            @if (recomendado) {
+              <span class="inline-flex items-center rounded-sm bg-primary/10 px-2 py-0.5 text-[10px] font-display tracking-widest text-primary uppercase border border-primary/20">Recomendado</span>
+            }
           </div>
           <span class="text-muted-foreground text-[10px] font-display tracking-widest uppercase font-semibold">Desde</span>
         </div>
@@ -72,7 +74,9 @@ import { HlmCardImports } from '@spartan-ng/helm/card';
               </div>
             }
             <div class="absolute bottom-4 left-4 z-20">
-              <span class="inline-flex items-center rounded-sm bg-primary/90 px-3 py-1 text-xs font-display tracking-widest text-primary-foreground uppercase shadow-lg border border-primary/50">Recomendado</span>
+              @if (recomendado) {
+                <span class="inline-flex items-center rounded-sm bg-primary/90 px-3 py-1 text-xs font-display tracking-widest text-primary-foreground uppercase shadow-lg border border-primary/50">Recomendado</span>
+              }
             </div>
           </div>
 
@@ -126,6 +130,7 @@ export class CombosComidaComponent {
   @Input() precioProducto: string = '';
   @Input() infoProducto: string = '';
   @Input() imagenUrl?: string;
+  @Input() recomendado: boolean = false;
 
   modalAbierto = signal(false);
 
