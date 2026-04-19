@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecetasService } from '../../services/recetas.service';
@@ -19,8 +19,10 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
         <div class="bg-card text-foreground border border-border shadow-2xl shadow-primary/15 rounded-xl w-full max-w-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           <div class="p-6">
             <div class="flex items-center justify-between mb-6 border-b border-border pb-4">
-              <h2 class="text-2xl font-display tracking-widest uppercase text-foreground">Nueva Receta de Menú</h2>
-              <button class="text-neutral-500 hover:text-foreground transition-colors" (click)="cerrar()">
+              <h2 class="text-2xl font-display tracking-widest uppercase text-foreground">
+                {{ recetaEditar ? 'Editar Receta' : 'Nueva Receta de Menú' }}
+              </h2>
+              <button class="text-muted-foreground hover:text-foreground transition-colors" (click)="cerrar()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                 <span class="sr-only">Cerrar</span>
               </button>
@@ -30,7 +32,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
               
               <!-- Seleccionar Producto del Menú -->
               <div class="space-y-1">
-                <label hlmLabel for="menuId" class="font-display tracking-wider text-neutral-400 text-sm">Producto del Menú</label>
+                <label hlmLabel for="menuId" class="font-display tracking-wider text-muted-foreground text-sm">Producto del Menú</label>
                 <select 
                   id="menuId" 
                   name="menuId" 
@@ -38,9 +40,9 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                   required 
                   class="flex h-12 w-full rounded-md border border-border bg-secondary px-3 py-2 text-base font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 >
-                  <option value="" disabled class="bg-neutral-900 text-neutral-500">Selecciona un combo/producto...</option>
+                  <option value="" disabled class="text-muted-foreground bg-background">Selecciona un combo/producto...</option>
                   @for (menu of menus; track menu._id) {
-                    <option [value]="menu._id" class="bg-neutral-900">{{ menu.nombre }}</option>
+                    <option [value]="menu._id" class="bg-background">{{ menu.nombre }}</option>
                   }
                 </select>
               </div>
@@ -48,14 +50,14 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
               <!-- Lista de Ingredientes Dinámica -->
               <div class="space-y-4 border border-border rounded-md p-4 bg-secondary">
                 <div class="flex items-center justify-between mb-2">
-                  <label class="font-display tracking-wider text-neutral-400 text-sm">Insumos Necesarios</label>
+                  <label class="font-display tracking-wider text-muted-foreground text-sm">Insumos Necesarios</label>
                   <button type="button" (click)="agregarIngredienteFila()" class="text-xs font-display tracking-widest uppercase text-primary hover:text-primary/80 bg-primary/10 px-2 py-1 rounded border border-primary/20">
                     + Añadir Insumo
                   </button>
                 </div>
 
                 @if (formData.ingredientes.length === 0) {
-                  <p class="text-sm text-neutral-500 italic text-center py-4">No has agregado ningún ingrediente a la receta.</p>
+                  <p class="text-sm text-muted-foreground italic text-center py-4">No has agregado ningún ingrediente a la receta.</p>
                 }
 
                 @for (item of formData.ingredientes; track $index; let i = $index) {
@@ -67,9 +69,9 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                         required 
                         class="flex h-10 w-full rounded-sm border border-border bg-input px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                       >
-                        <option value="" disabled>Seleccionar...</option>
+                        <option value="" disabled class="bg-background">Seleccionar...</option>
                         @for (ingrediente of ingredientesDb; track ingrediente._id) {
-                          <option [value]="ingrediente._id">{{ ingrediente.nombre }} ({{ ingrediente.unidad }})</option>
+                          <option [value]="ingrediente._id" class="bg-background">{{ ingrediente.nombre }} ({{ ingrediente.unidad }})</option>
                         }
                       </select>
                     </div>
@@ -85,7 +87,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
                         placeholder="Cant."
                       />
                     </div>
-                    <button type="button" class="h-10 w-10 bg-secondary hover:bg-primary/20 text-neutral-500 hover:text-primary rounded-sm flex items-center justify-center border border-border transition-colors" (click)="removerIngredienteFila(i)">
+                    <button type="button" class="h-10 w-10 bg-secondary hover:bg-primary/20 text-muted-foreground hover:text-primary rounded-sm flex items-center justify-center border border-border transition-colors" (click)="removerIngredienteFila(i)">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                     </button>
                   </div>
@@ -94,11 +96,11 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 
               <!-- Acciones -->
               <div class="flex justify-end gap-3 pt-6 mt-6">
-                <button type="button" class="px-4 py-2 border border-border text-neutral-300 font-display tracking-wider uppercase rounded-sm hover:bg-secondary transition-colors" (click)="cerrar()">
+                <button type="button" class="px-4 py-2 border border-border text-muted-foreground font-display tracking-wider uppercase rounded-sm hover:bg-secondary transition-colors" (click)="cerrar()">
                   Cancelar
                 </button>
-                <button type="submit" class="px-6 py-2 bg-primary text-foreground font-display tracking-widest uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all" [disabled]="!form.valid || guardando || formData.ingredientes.length === 0">
-                  {{ guardando ? 'Guardando...' : 'Guardar Receta' }}
+                <button type="submit" class="px-6 py-2 bg-primary text-primary-foreground font-display tracking-widest uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all" [disabled]="!form.valid || guardando || formData.ingredientes.length === 0">
+                  {{ guardando ? 'Guardando...' : (recetaEditar ? 'Actualizar Receta' : 'Guardar Receta') }}
                 </button>
               </div>
             </form>
@@ -108,8 +110,9 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
     }
   `
 })
-export class RecetaFormComponent implements OnInit {
+export class RecetaFormComponent implements OnInit, OnChanges {
   @Input() visible = false;
+  @Input() recetaEditar: any = null;
   @Output() closed = new EventEmitter<void>();
   @Output() saved = new EventEmitter<void>();
 
@@ -130,6 +133,22 @@ export class RecetaFormComponent implements OnInit {
 
   ngOnInit() {
     this.cargarSelects();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['recetaEditar']) {
+      if (this.recetaEditar) {
+        this.formData = {
+          menuId: this.recetaEditar.menuId?._id || this.recetaEditar.menuId || '',
+          ingredientes: (this.recetaEditar.ingredientes || []).map((i: any) => ({
+            ingredienteId: i.ingredienteId?._id || i.ingredienteId || '',
+            cantidadNecesaria: i.cantidadNecesaria
+          }))
+        };
+      } else {
+        this.resetForm();
+      }
+    }
   }
 
   cargarSelects() {
@@ -157,7 +176,6 @@ export class RecetaFormComponent implements OnInit {
   guardar() {
     this.guardando = true;
     
-    // Parsear numeros
     const payload = {
       menuId: this.formData.menuId,
       ingredientes: this.formData.ingredientes.map(i => ({
@@ -166,18 +184,35 @@ export class RecetaFormComponent implements OnInit {
       }))
     };
 
-    this.recetasService.crear(payload).subscribe({
-      next: () => {
-        this.guardando = false;
-        this.resetForm();
-        this.saved.emit();
-      },
-      error: (err) => {
-        console.error('Error guardando receta:', err);
-        this.guardando = false;
-        this.toastService.error('Hubo un error al guardar la receta. Puede que este producto ya tenga una receta.');
-      }
-    });
+    if (this.recetaEditar) {
+      this.recetasService.actualizar(this.recetaEditar._id, payload).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.toastService.success('Receta actualizada correctamente');
+          this.resetForm();
+          this.saved.emit();
+        },
+        error: (err) => {
+          console.error('Error actualizando receta:', err);
+          this.guardando = false;
+          this.toastService.error('Hubo un error al actualizar la receta.');
+        }
+      });
+    } else {
+      this.recetasService.crear(payload).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.toastService.success('Receta creada correctamente');
+          this.resetForm();
+          this.saved.emit();
+        },
+        error: (err) => {
+          console.error('Error guardando receta:', err);
+          this.guardando = false;
+          this.toastService.error('Hubo un error al guardar la receta. Puede que este producto ya tenga una receta.');
+        }
+      });
+    }
   }
 
   resetForm() {

@@ -22,7 +22,7 @@ import { ToastService } from '../../services/toast.service';
             <h3 class="text-2xl font-display tracking-widest uppercase text-foreground drop-shadow-sm">
               Programar Función en {{ sala?.nombre }}
             </h3>
-            <button (click)="cerrar()" class="text-neutral-500 hover:text-foreground transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
+            <button (click)="cerrar()" class="text-muted-foreground hover:text-foreground transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
           </div>
@@ -32,59 +32,59 @@ import { ToastService } from '../../services/toast.service';
               
               <!-- Película -->
               <div class="space-y-1.5">
-                <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Película a proyectar</label>
+                <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Película a proyectar</label>
                 <select [(ngModel)]="form.peliculaId" name="peliculaId" required 
                        class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
-                  <option value="" disabled selected class="text-neutral-500">Seleccione una película...</option>
+                  <option value="" disabled selected class="text-muted-foreground bg-background">Seleccione una película...</option>
                   @for (pelicula of peliculas(); track pelicula.id) {
-                    <option [value]="pelicula.id">{{ pelicula.titulo }} ({{ pelicula.duracionMinutos }} min)</option>
+                    <option [value]="pelicula.id" class="bg-background">{{ pelicula.titulo }} ({{ pelicula.duracionMinutos }} min)</option>
                   }
                 </select>
               </div>
 
               <!-- Fecha y Hora de Inicio -->
               <div class="space-y-1.5">
-                <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Fecha y Hora de Inicio</label>
+                <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Fecha y Hora de Inicio</label>
                 <input [(ngModel)]="form.inicio" name="inicio" type="datetime-local" required
-                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors placeholder:text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
               </div>
 
               <!-- Opciones de Proyección -->
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-1.5">
-                  <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Idioma</label>
+                  <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Idioma</label>
                   <select [(ngModel)]="form.idioma" name="idioma" required 
                          class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
-                    <option value="doblada">Doblada (Esp)</option>
-                    <option value="subtitulada">Subtitulada</option>
+                    <option value="doblada" class="bg-background">Doblada (Esp)</option>
+                    <option value="subtitulada" class="bg-background">Subtitulada</option>
                   </select>
                 </div>
 
                 <div class="space-y-1.5">
-                  <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Formato</label>
+                  <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Formato</label>
                   <select [(ngModel)]="form.formato" name="formato" required 
                          class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
-                    <option value="2D">2D Estandar</option>
-                    <option value="3D">3D</option>
-                    <option value="IMAX">IMAX</option>
-                    <option value="4DX">4DX</option>
+                    <option value="2D" class="bg-background">2D Estandar</option>
+                    <option value="3D" class="bg-background">3D</option>
+                    <option value="IMAX" class="bg-background">IMAX</option>
+                    <option value="4DX" class="bg-background">4DX</option>
                   </select>
                 </div>
               </div>
 
               <!-- Precio Base -->
               <div class="space-y-1.5">
-                <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Precio Base Ticket ($)</label>
+                <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Precio Base Ticket ($)</label>
                 <input [(ngModel)]="form.precio" name="precio" type="number" required min="0" step="0.01"
                        class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
               </div>
 
               <!-- Actions -->
               <div class="flex justify-end gap-3 pt-4 border-t border-border mt-6">
-                <button type="button" class="px-6 py-3 border border-border text-neutral-300 font-display tracking-widest uppercase rounded-sm hover:bg-secondary transition-colors text-sm" (click)="cerrar()">
+                <button type="button" class="px-6 py-3 border border-border text-muted-foreground font-display tracking-widest uppercase rounded-sm hover:bg-secondary transition-colors text-sm" (click)="cerrar()">
                   Cancelar
                 </button>
-                <button type="submit" class="px-8 py-3 bg-primary text-foreground font-display tracking-[0.2em] uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!formEl.valid || guardando()">
+                <button type="submit" class="px-8 py-3 bg-primary text-primary-foreground font-display tracking-[0.2em] uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!formEl.valid || guardando()">
                   {{ guardando() ? 'Agendando...' : 'Agendar Función' }}
                 </button>
               </div>

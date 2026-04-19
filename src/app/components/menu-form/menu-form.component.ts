@@ -1,98 +1,95 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuService } from '../../services/menu.service';
 import { ToastService } from '../../services/toast.service';
 
-import { HlmLabel } from '@spartan-ng/helm/label';
-import { HlmInput } from '@spartan-ng/helm/input';
-import { HlmButtonImports } from '@spartan-ng/helm/button';
-
 @Component({
   selector: 'app-menu-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, HlmLabel, HlmInput, HlmButtonImports],
+  imports: [CommonModule, FormsModule],
   template: `
     @if (visible) {
-      <!-- Backdrop -->
       <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-background/80 backdrop-blur-sm" (click)="cerrar()"></div>
+        
         <!-- Modal -->
-        <div class="bg-card text-card-foreground border border-border shadow-lg rounded-lg w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-xl font-bold tracking-tight">Nuevo Combo/Snack</h2>
-              <button hlmBtn variant="ghost" size="icon" (click)="cerrar()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                <span class="sr-only">Cerrar</span>
-              </button>
-            </div>
+        <div class="relative z-10 bg-card text-foreground border border-border shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          
+          <div class="flex items-center justify-between p-6 border-b border-border">
+            <h2 class="text-xl font-display tracking-widest uppercase font-bold">
+              {{ menuEditar ? 'Editar Combo/Snack' : 'Nuevo Combo/Snack' }}
+            </h2>
+            <button class="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center rounded-sm" (click)="cerrar()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              <span class="sr-only">Cerrar</span>
+            </button>
+          </div>
 
-            <form (ngSubmit)="guardar()" #form="ngForm" class="space-y-4">
+          <div class="p-6">
+            <form (ngSubmit)="guardar()" #form="ngForm" class="space-y-5">
               <!-- Nombre -->
-              <div class="space-y-1">
-                <label hlmLabel for="nombre">Nombre</label>
+              <div class="space-y-1.5">
+                <label for="nombre" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Nombre</label>
                 <input 
-                  hlmInput 
                   id="nombre" 
                   name="nombre" 
                   [(ngModel)]="formData.nombre" 
                   required 
-                  class="w-full"
+                  class="flex h-12 w-full rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="Ej: Combo Pareja"
                 />
               </div>
 
               <!-- Descripción -->
-              <div class="space-y-1">
-                <label hlmLabel for="descripcion">Descripción</label>
+              <div class="space-y-1.5">
+                <label for="descripcion" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Descripción</label>
                 <textarea 
-                  hlmInput 
                   id="descripcion" 
                   name="descripcion" 
                   [(ngModel)]="formData.descripcion" 
                   required 
-                  class="w-full min-h-[80px]"
+                  class="flex w-full min-h-[80px] rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="Ej: 2 Entradas + Palomitas Grandes + 2 Refrescos"
                 ></textarea>
               </div>
 
               <!-- Precio -->
-              <div class="space-y-1">
-                <label hlmLabel for="precio">Precio ($)</label>
+              <div class="space-y-1.5">
+                <label for="precio" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Precio ($)</label>
                 <input 
-                  hlmInput 
                   type="number"
                   id="precio" 
                   name="precio" 
                   [(ngModel)]="formData.precio" 
                   required 
-                  class="w-full"
+                  class="flex h-12 w-full rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="0.00"
                   step="0.01"
                 />
               </div>
 
               <!-- Imagen URL -->
-              <div class="space-y-1">
-                <label hlmLabel for="imagenUrl">URL de la Imagen</label>
+              <div class="space-y-1.5">
+                <label for="imagenUrl" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">URL de la Imagen</label>
                 <input 
-                  hlmInput 
                   type="url"
                   id="imagenUrl" 
                   name="imagenUrl" 
                   [(ngModel)]="formData.imagenUrl" 
-                  class="w-full"
+                  class="flex h-12 w-full rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="https://ejemplo.com/imagen.jpg"
                 />
               </div>
 
               <!-- Acciones -->
-              <div class="flex justify-end gap-2 pt-4">
-                <button type="button" hlmBtn variant="outline" (click)="cerrar()">
+              <div class="flex justify-end gap-3 pt-4 border-t border-border mt-6">
+                <button type="button" class="px-6 py-3 border border-border text-muted-foreground font-display tracking-widest uppercase rounded-sm hover:bg-secondary transition-colors text-sm" (click)="cerrar()">
                   Cancelar
                 </button>
-                <button type="submit" hlmBtn [disabled]="!form.valid || guardando">
-                  {{ guardando ? 'Guardando...' : 'Guardar Producto' }}
+                <button type="submit" class="px-8 py-3 bg-primary text-primary-foreground font-display tracking-[0.2em] uppercase rounded-sm shadow-lg shadow-primary/40 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!form.valid || guardando">
+                  {{ guardando ? 'Guardando...' : (menuEditar ? 'Actualizar' : 'Guardar Producto') }}
                 </button>
               </div>
             </form>
@@ -102,8 +99,9 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
     }
   `
 })
-export class MenuFormComponent {
+export class MenuFormComponent implements OnChanges {
   @Input() visible = false;
+  @Input() menuEditar: any = null;
   @Output() closed = new EventEmitter<void>();
   @Output() saved = new EventEmitter<void>();
 
@@ -119,6 +117,17 @@ export class MenuFormComponent {
     imagenUrl: ''
   };
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['menuEditar'] && this.menuEditar) {
+      this.formData = {
+        nombre: this.menuEditar.nombre || '',
+        descripcion: this.menuEditar.descripcion || '',
+        precio: this.menuEditar.precio || 0,
+        imagenUrl: this.menuEditar.imagenUrl || ''
+      };
+    }
+  }
+
   cerrar() {
     this.resetForm();
     this.closed.emit();
@@ -133,18 +142,34 @@ export class MenuFormComponent {
       precio: Number(this.formData.precio)
     };
 
-    this.menuService.crear(payload).subscribe({
-      next: () => {
-        this.guardando = false;
-        this.resetForm();
-        this.saved.emit();
-      },
-      error: (err) => {
-        console.error('Error guardando ítem del menú:', err);
-        this.guardando = false;
-        this.toastService.error('Hubo un error al guardar el producto.');
-      }
-    });
+    if (this.menuEditar && (this.menuEditar._id || this.menuEditar.id)) {
+      const id = this.menuEditar._id || this.menuEditar.id;
+      this.menuService.actualizar(id, payload).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.resetForm();
+          this.saved.emit();
+        },
+        error: (err) => {
+          console.error('Error actualizando ítem del menú:', err);
+          this.guardando = false;
+          this.toastService.error('Hubo un error al actualizar el producto.');
+        }
+      });
+    } else {
+      this.menuService.crear(payload).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.resetForm();
+          this.saved.emit();
+        },
+        error: (err) => {
+          console.error('Error guardando ítem del menú:', err);
+          this.guardando = false;
+          this.toastService.error('Hubo un error al guardar el producto.');
+        }
+      });
+    }
   }
 
   resetForm() {

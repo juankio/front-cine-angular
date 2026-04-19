@@ -1,8 +1,11 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DefaultLayoutComponent } from '../../layouts/default-layout/default-layout.component';
 import { CombosComidaComponent } from '../../components/combos-comida/combos-comida.component';
 import { PeliCarteleraComponent } from '../../components/peli-cartelera/peli-cartelera.component';
 import { PeliculasService } from '../../services/peliculas.service';
+import { MenuService } from '../../services/menu.service';
+import { SalasService } from '../../services/salas.service';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
@@ -10,7 +13,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [DefaultLayoutComponent, CombosComidaComponent, PeliCarteleraComponent, HlmCardImports, HlmInput, HlmIconImports],
+  imports: [CommonModule, DefaultLayoutComponent, CombosComidaComponent, PeliCarteleraComponent, HlmCardImports, HlmInput, HlmIconImports],
   template: `
     <app-default-layout>
       <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-10">
@@ -41,26 +44,57 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
         <div>
           <div class="flex items-center gap-2 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <p class="text-lg font-semibold">En vivo hoy</p>
+            <p class="text-lg font-semibold uppercase tracking-wider font-display">Próximas funciones</p>
           </div>
-          <hlm-card class="flex flex-col p-10 w-full items-center justify-center text-center shadow-sm bg-card/50 backdrop-blur-xl">
-            <p class="text-2xl font-medium">Sin resultados</p>
-            <p class="text-muted-foreground mt-2">No hay funciones próximas en las próximas 48 horas.</p>
-          </hlm-card>
+          
+          @if (funcionesVivas().length > 0) {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              @for (funcion of funcionesVivas(); track funcion._id || funcion.id) {
+                <hlm-card class="group flex items-center p-4 gap-4 bg-background border border-border shadow-sm hover:shadow-primary/20 hover:border-primary/50 transition-all cursor-pointer rounded-xl overflow-hidden">
+                  <div class="w-16 h-20 flex-shrink-0 bg-muted rounded-md overflow-hidden relative">
+                    @if (funcion.peliculaImg) {
+                      <img [src]="funcion.peliculaImg" class="w-full h-full object-cover transition-transform group-hover:scale-105" alt="Poster">
+                    } @else {
+                      <div class="w-full h-full flex items-center justify-center bg-secondary/50">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/50"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                      </div>
+                    }
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-primary font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      {{ funcion.inicio | date:'shortTime' }}
+                    </p>
+                    <h4 class="font-display text-lg uppercase truncate font-semibold text-foreground">{{ funcion.peliculaTitulo }}</h4>
+                    <div class="flex items-center gap-2 mt-1">
+                      <span class="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-secondary text-secondary-foreground uppercase tracking-widest">{{ funcion.formato }}</span>
+                      <span class="text-xs text-muted-foreground truncate">{{ funcion.salaNombre }}</span>
+                    </div>
+                  </div>
+                </hlm-card>
+              }
+            </div>
+          } @else {
+            <hlm-card class="flex flex-col p-10 w-full items-center justify-center text-center shadow-sm bg-card/50 backdrop-blur-xl">
+              <p class="text-2xl font-medium font-display uppercase tracking-widest text-muted-foreground">Sin resultados</p>
+              <p class="text-muted-foreground mt-2">No hay funciones próximas.</p>
+            </hlm-card>
+          }
         </div>
 
         <!-- Combos para hoy -->
         <div>
           <div class="flex items-center gap-2 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <p class="text-lg font-semibold">Combos para hoy</p>
+            <p class="text-lg font-semibold uppercase tracking-wider font-display">Combos para hoy</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @for (combo of combos; track combo.nomProducto) {
+            @for (combo of menus(); track combo._id || combo.id) {
               <app-combos-comida
-                [nomProducto]="combo.nomProducto"
-                [precioProducto]="combo.precioProducto"
-                [infoProducto]="combo.infoProducto"
+                [nomProducto]="combo.nombre"
+                [precioProducto]="combo.precio?.toString() || '0'"
+                [infoProducto]="combo.descripcion"
+                [imagenUrl]="combo.imagenUrl"
               />
             }
           </div>
@@ -70,7 +104,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
         <div class="mb-6">
           <div class="flex items-center gap-2 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <p class="text-lg font-semibold">En cartelera</p>
+            <p class="text-lg font-semibold uppercase tracking-wider font-display">En cartelera</p>
           </div>
           
           @if (peliculas().length > 0) {
@@ -90,7 +124,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
                 <div class="absolute inset-0 animate-pulse bg-gradient-to-tr from-transparent via-primary/20 to-transparent rounded-full mix-blend-overlay"></div>
               </div>
-              <p class="text-xl font-medium">Buscando estrenos...</p>
+              <p class="text-xl font-medium font-display uppercase tracking-widest text-muted-foreground">Buscando estrenos...</p>
               <p class="text-muted-foreground mt-2 text-sm">Cargando cartelera o no hay películas disponibles por el momento.</p>
             </hlm-card>
           }
@@ -102,17 +136,49 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
 })
 export class IndexComponent implements OnInit {
   private peliculasService = inject(PeliculasService);
+  private menuService = inject(MenuService);
+  private salasService = inject(SalasService);
   
   peliculas = signal<any[]>([]);
+  menus = signal<any[]>([]);
+  salas = signal<any[]>([]);
 
-  combos = [
-    { nomProducto: 'Pizza en combo', precioProducto: '50.000', infoProducto: 'Pizza familiar con papas' },
-    { nomProducto: 'Combo de nachos', precioProducto: '30.000', infoProducto: 'Nachos con queso y guacamole' },
-    { nomProducto: 'Combo de hot dogs', precioProducto: '40.000', infoProducto: '2 hot dogs con papas' },
-  ];
+  funcionesVivas = computed(() => {
+    const allSalas = this.salas();
+    const allPelis = this.peliculas();
+    const now = new Date();
+    
+    let vivas: any[] = [];
+    
+    allSalas.forEach(sala => {
+      if (sala.funciones && Array.isArray(sala.funciones)) {
+        sala.funciones.forEach((f: any) => {
+          const peli = allPelis.find(p => (p._id || p.id) === f.peliculaId);
+          vivas.push({
+            ...f,
+            salaNombre: sala.nombre,
+            peliculaTitulo: peli ? peli.titulo : 'Película Desconocida',
+            peliculaImg: peli ? peli.imagenUrl : null
+          });
+        });
+      }
+    });
+
+    // Filtrar próximas o actuales (desde -1h aprox para considerar "vivas" o simplemente ahora en adelante)
+    const limitDate = new Date(now.getTime() - 60 * 60 * 1000); // 1 hr atrás
+    vivas = vivas.filter(f => new Date(f.inicio) >= limitDate);
+
+    // Ordenar por cercanía de fecha
+    vivas.sort((a, b) => new Date(a.inicio).getTime() - new Date(b.inicio).getTime());
+
+    // Limitar a 4 para diseño premium en fila de 4 (lg:grid-cols-4)
+    return vivas.slice(0, 4);
+  });
 
   ngOnInit() {
     this.cargarPeliculas();
+    this.cargarMenus();
+    this.cargarSalas();
   }
 
   cargarPeliculas() {
@@ -122,6 +188,28 @@ export class IndexComponent implements OnInit {
         this.peliculas.set(Array.isArray(data) ? data : []);
       },
       error: (err) => console.error('Error al obtener peliculas:', err)
+    });
+  }
+
+  cargarMenus() {
+    this.menuService.listar().subscribe({
+      next: (response) => {
+        const data = response?.data || response;
+        // Limitar a los primeros 3 para mantener el diseño original si hay muchos
+        const items = Array.isArray(data) ? data : [];
+        this.menus.set(items.slice(0, 3));
+      },
+      error: (err) => console.error('Error al obtener menús:', err)
+    });
+  }
+
+  cargarSalas() {
+    this.salasService.listar().subscribe({
+      next: (response) => {
+        const data = response?.data || response;
+        this.salas.set(Array.isArray(data) ? data : []);
+      },
+      error: (err) => console.error('Error al obtener salas:', err)
     });
   }
 }

@@ -21,7 +21,7 @@ import { ToastService } from '../../services/toast.service';
             <h3 class="text-2xl font-display tracking-widest uppercase text-foreground drop-shadow-sm">
               {{ peliculaEditar ? 'Editar Película' : 'Nueva Película' }}
             </h3>
-            <button (click)="cerrar()" class="text-neutral-500 hover:text-foreground transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
+            <button (click)="cerrar()" class="text-muted-foreground hover:text-foreground transition-colors h-8 w-8 flex items-center justify-center rounded-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
           </div>
@@ -31,32 +31,32 @@ import { ToastService } from '../../services/toast.service';
               
               <!-- Título -->
               <div class="space-y-1.5">
-                <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Título</label>
+                <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Título</label>
                 <input [(ngModel)]="form.titulo" name="titulo" placeholder="Ej: Inception" required 
-                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-lg font-body text-foreground transition-colors placeholder:text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-lg font-body text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
               </div>
 
               <!-- Duración -->
               <div class="space-y-1.5">
-                <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase">Duración (minutos)</label>
+                <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Duración (minutos)</label>
                 <div class="relative">
                   <input [(ngModel)]="form.duracionMinutos" name="duracionMinutos" type="number" placeholder="120" required min="1"
-                         class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-lg font-body text-foreground transition-colors placeholder:text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary pr-12" />
-                  <span class="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 font-display tracking-wider uppercase text-sm pointer-events-none">MIN</span>
+                         class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-lg font-body text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary pr-12" />
+                  <span class="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-display tracking-wider uppercase text-sm pointer-events-none">MIN</span>
                 </div>
               </div>
 
               <!-- URL Imagen -->
               <div class="space-y-1.5">
-                <label class="block text-sm font-display tracking-wider text-neutral-400 uppercase flex justify-between">
+                <label class="block text-sm font-display tracking-wider text-muted-foreground uppercase flex justify-between">
                   URL de Imagen (Poster)
                   @if (form.imagenUrl && !imageError) {
                     <span class="text-green-500 text-xs flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> URL Válida</span>
                   }
                 </label>
                 <input [(ngModel)]="form.imagenUrl" name="imagenUrl" type="url" placeholder="https://..." required (input)="imageError = false"
-                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors placeholder:text-neutral-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
-                <p class="text-xs text-neutral-500 font-body">Pegue la URL directa de la imagen (formatos recomendados: JPG, PNG, WEBP).</p>
+                       class="flex h-12 w-full rounded-sm border border-border bg-input px-4 py-2 text-base font-body text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+                <p class="text-xs text-muted-foreground font-body">Pegue la URL directa de la imagen (formatos recomendados: JPG, PNG, WEBP).</p>
               </div>
 
               <!-- Vista previa (Si hay URL) -->
@@ -71,7 +71,7 @@ import { ToastService } from '../../services/toast.service';
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
                         La imagen no pudo cargar.
                       </p>
-                      <p class="text-xs text-neutral-400 mt-1">Intente con otra URL. Esta parece estar bloqueada o caída.</p>
+                      <p class="text-xs text-muted-foreground mt-1">Intente con otra URL. Esta parece estar bloqueada o caída.</p>
                     } @else {
                       <p class="text-green-500 font-medium text-sm flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
@@ -84,10 +84,10 @@ import { ToastService } from '../../services/toast.service';
 
               <!-- Actions -->
               <div class="flex justify-end gap-3 pt-4 border-t border-border mt-6">
-                <button type="button" class="px-6 py-3 border border-border text-neutral-300 font-display tracking-widest uppercase rounded-sm hover:bg-secondary transition-colors text-sm" (click)="cerrar()">
+                <button type="button" class="px-6 py-3 border border-border text-muted-foreground font-display tracking-widest uppercase rounded-sm hover:bg-secondary transition-colors text-sm" (click)="cerrar()">
                   Cancelar
                 </button>
-                <button type="submit" class="px-8 py-3 bg-primary text-foreground font-display tracking-[0.2em] uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!formEl.valid || guardando() || (form.imagenUrl && imageError)">
+                <button type="submit" class="px-8 py-3 bg-primary text-primary-foreground font-display tracking-[0.2em] uppercase rounded-sm shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!formEl.valid || guardando() || (form.imagenUrl && imageError)">
                   {{ guardando() ? 'Guardando...' : (peliculaEditar ? 'Actualizar' : 'Crear Película') }}
                 </button>
               </div>
