@@ -3,9 +3,9 @@ import { AuthApiService } from '../services/auth-api.service';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError, lastValueFrom } from 'rxjs';
 
-// Almacenamiento seguro en memoria, aislado del ciclo de inyección DI
-let memoryToken: string | null = null;
-export const getMemoryToken = () => memoryToken;
+// Usamos localStorage porque el backend no soporta cookies HttpOnly para el JWT.
+// Esto nos permite mantener la sesión al refrescar la página.
+const TOKEN_KEY = 'auth_token';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class AuthStore {
 
   // State
   private readonly _user = signal<any | null>(null);
-  private readonly _token = signal<string | null>(memoryToken);
+  private readonly _token = signal<string | null>(typeof localStorage !== 'undefined' ? localStorage.getItem(TOKEN_KEY) : null);
   private readonly _loading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
 
@@ -29,19 +29,17 @@ export class AuthStore {
   readonly isAuthenticated = computed(() => !!this._token());
   readonly isAdmin = computed(() => {
     const u = this._user();
-    return u?.rol === 'admin' || u?.role === 'admin';
+    return u?.rol === 'admin' || u?.role === 'admin' || u?.administrador === true;
   });
   readonly isClient = computed(() => {
     const u = this._user();
-    return u?.rol === 'cliente' || u?.role === 'cliente' || u?.rol === 'client';
+    return u?.rol === 'user' || u?.role === 'user' || u?.administrador === false || !u?.administrador;
   });
 
   constructor() {
-    // Al no usar localStorage, intentamos recuperar la sesión al iniciar la app.
-    // Esto es vital si el backend maneja la sesión con cookies HttpOnly.
-    this.fetchUser().catch(() => {
-      // Ignoramos el error si no hay sesión activa
-    });
+    if (this._token()) {
+      this.fetchUser();
+    }
   }
 
   setLoading(value: boolean) {
@@ -98,12 +96,12 @@ export class AuthStore {
   }
 
   private setToken(token: string): void {
-    memoryToken = token;
+    if (typeof localStorage !== 'undefined') localStorage.setItem(TOKEN_KEY, token);
     this._token.set(token);
   }
 
   private removeToken(): void {
-    memoryToken = null;
+    if (typeof localStorage !== 'undefined') localStorage.removeItem(TOKEN_KEY);
     this._token.set(null);
   }
 }
