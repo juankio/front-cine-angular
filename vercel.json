@@ -1,0 +1,12 @@
+{
+  "installCommand": "npm install -g bun && bun install",
+  "buildCommand": "bun run build",
+  "outputDirectory": "dist/front-cine-angular/browser",
+  "framework": "angular",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
