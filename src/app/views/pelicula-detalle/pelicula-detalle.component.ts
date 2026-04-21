@@ -46,8 +46,12 @@ export class PeliculaDetalleComponent implements OnInit {
       next: (res) => {
         this.pelicula.set(res?.data || res);
         this.ss.listar().subscribe(salasRes => {
+          const ahora = new Date();
           this.funciones.set((salasRes?.data || salasRes || []).flatMap((s: any) =>
-            (s.funciones || []).filter((f: any) => String(f.pelicula?.id || f.pelicula?._id || f.peliculaId) === String(id)).map((f: any) => ({ ...f, sala: s }))
+            (s.funciones || [])
+              .filter((f: any) => String(f.pelicula?.id || f.pelicula?._id || f.peliculaId) === String(id))
+              .filter((f: any) => new Date(f.fechaInicio || f.inicio) > ahora) // Filtrar funciones pasadas
+              .map((f: any) => ({ ...f, sala: s }))
           ));
           this.loading.set(false);
         });

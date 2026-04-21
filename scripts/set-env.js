@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-// En Vercel, process.env.API_URL vendrá del dashboard
-// En local, vendrá del archivo .env
+// En Vercel vendrán del dashboard. En local, del archivo .env
 const apiUrl = process.env.API_URL || 'http://localhost:3000/api';
+
 const isProd = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
 
 const targetPath = path.join(__dirname, '../src/environments/environment.ts');
@@ -17,4 +17,4 @@ export const environment = {
 `;
 
 fs.writeFileSync(targetPath, envConfigFile, { encoding: 'utf8' });
-console.log(`[Nami] 🍊 Archivo environment.ts generado con la API: ${apiUrl}`);
+console.log(`[Nami] 🍊 Archivo environment.ts generado con API: ${apiUrl}`);

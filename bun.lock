@@ -5,6 +5,7 @@
     "": {
       "name": "front-cine-angular",
       "dependencies": {
+        "@abacritt/angularx-social-login": "^2.6.0",
         "@angular/cdk": "21.0.0",
         "@angular/common": "^21.2.0",
         "@angular/compiler": "^21.2.0",
@@ -42,6 +43,8 @@
     },
   },
   "packages": {
+    "@abacritt/angularx-social-login": ["@abacritt/angularx-social-login@2.6.0", "", { "dependencies": { "tslib": ">=2.8.1" }, "peerDependencies": { "@angular/common": ">=21.2.6", "@angular/core": ">=21.2.6" } }, "sha512-zhG8NIRdffCEIwyr7EYy2/6khcGzkSVAgo3yhrrK64BS0IfrqTUNYDGp7xR62+a4nDgqnz7M5Lehd1LguDzqbw=="],
+
     "@acemir/cssom": ["@acemir/cssom@0.9.31", "", {}, ""],
 
     "@algolia/abtesting": ["@algolia/abtesting@1.14.1", "", { "dependencies": { "@algolia/client-common": "5.48.1", "@algolia/requester-browser-xhr": "5.48.1", "@algolia/requester-fetch": "5.48.1", "@algolia/requester-node-http": "5.48.1" } }, ""],
