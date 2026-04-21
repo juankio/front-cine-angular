@@ -1,0 +1,31 @@
+<div class="flex flex-col gap-2 border-t border-border py-4 md:hidden px-4">
+      @for (link of filteredLinks(); track link.to) {
+          <a
+            hlmBtn
+            variant="ghost"
+            [routerLink]="link.to"
+            routerLinkActive="bg-accent text-accent-foreground font-semibold"
+            [routerLinkActiveOptions]="{exact: link.exact}"
+            class="w-full justify-center px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
+            (click)="closeMenu.emit()"
+          >
+          {{ link.label }}
+        </a>
+      }
+
+      <div class="flex flex-col items-center gap-2 pt-2 border-t border-border mt-2">
+        <button hlmBtn variant="ghost" size="icon" (click)="toggleTheme.emit()" class="w-full flex justify-center mb-2">
+          @if (isDarkMode()) {
+            <ng-icon hlm name="lucideSun" size="sm"></ng-icon>
+          } @else {
+            <ng-icon hlm name="lucideMoon" size="sm"></ng-icon>
+          }
+        </button>
+        @if (authStore.isAuthenticated()) {
+          <span class="text-sm font-medium text-muted-foreground">{{ authStore.user()?.email || 'Usuario' }}</span>
+          <button hlmBtn variant="destructive" class="w-full" (click)="handleLogout()">Salir</button>
+        } @else {
+          <app-login-modal />
+        }
+      </div>
+    </div>

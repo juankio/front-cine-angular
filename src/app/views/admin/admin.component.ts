@@ -1,4 +1,5 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {  Component, inject, signal, OnInit , DestroyRef } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { AdminLayoutComponent } from '../../layouts/admin-layout/admin-layout.component';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -10,65 +11,9 @@ import { SalasService } from '../../services/salas.service';
   selector: 'app-admin',
   standalone: true,
   imports: [RouterOutlet, AdminLayoutComponent, HlmCardImports],
-  template: `
-    <app-admin-layout>
-      @if (isDashboard) {
-        <div class="w-full max-w-7xl mx-auto p-8 md:p-12 animate-in fade-in zoom-in-95 duration-500 text-foreground">
-          <div class="mb-10">
-            <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-foreground mb-2 drop-shadow-sm">Panel de Control</h1>
-            <p class="text-muted-foreground text-lg font-medium">Resumen general del estado del Cine POOR.</p>
-          </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-card/60 backdrop-blur-xl border border-border/50 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md rounded-xl overflow-hidden relative group p-6">
-              <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative z-10 flex justify-between items-start mb-6">
-                <div>
-                  <h3 class="font-display tracking-widest uppercase text-2xl text-foreground">Películas</h3>
-                  <p class="text-muted-foreground text-sm">Total en cartelera</p>
-                </div>
-                <div class="p-3 bg-primary/10 rounded-lg text-primary border border-primary/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                </div>
-              </div>
-              <p class="text-7xl font-display text-primary drop-shadow-sm relative z-10">{{ totalPeliculas() }}</p>
-            </div>
-            
-            <div class="bg-card/60 backdrop-blur-xl border border-border/50 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md rounded-xl overflow-hidden relative group p-6">
-              <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative z-10 flex justify-between items-start mb-6">
-                <div>
-                  <h3 class="font-display tracking-widest uppercase text-2xl text-foreground">Menús</h3>
-                  <p class="text-muted-foreground text-sm">Combos activos</p>
-                </div>
-                <div class="p-3 bg-primary/10 rounded-lg text-primary border border-primary/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
-                </div>
-              </div>
-              <p class="text-7xl font-display text-primary drop-shadow-sm relative z-10">{{ totalMenus() }}</p>
-            </div>
-
-            <div class="bg-card/60 backdrop-blur-xl border border-border/50 hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-md rounded-xl overflow-hidden relative group p-6">
-              <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative z-10 flex justify-between items-start mb-6">
-                <div>
-                  <h3 class="font-display tracking-widest uppercase text-2xl text-foreground">Salas</h3>
-                  <p class="text-muted-foreground text-sm">Salas configuradas</p>
-                </div>
-                <div class="p-3 bg-primary/10 rounded-lg text-primary border border-primary/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/><path d="M7 12h10"/></svg>
-                </div>
-              </div>
-              <p class="text-7xl font-display text-primary drop-shadow-sm relative z-10">{{ totalSalas() }}</p>
-            </div>
-          </div>
-        </div>
-      }
-      <router-outlet></router-outlet>
-    </app-admin-layout>
-  `
-})
+  templateUrl: './admin.component.html'})
 export class AdminComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   
   private peliculasService = inject(PeliculasService);
@@ -84,17 +29,17 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.peliculasService.listar().subscribe(res => {
+    this.peliculasService.listar().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
       const data = res?.data || res;
       this.totalPeliculas.set(Array.isArray(data) ? data.length : 0);
     });
 
-    this.menuService.listar().subscribe(res => {
+    this.menuService.listar().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
       const data = res?.data || res;
       this.totalMenus.set(Array.isArray(data) ? data.length : 0);
     });
 
-    this.salasService.listar().subscribe(res => {
+    this.salasService.listar().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(res => {
       const data = res?.data || res;
       this.totalSalas.set(Array.isArray(data) ? data.length : 0);
     });

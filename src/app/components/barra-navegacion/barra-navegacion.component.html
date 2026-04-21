@@ -1,0 +1,53 @@
+<nav class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <div class="font-display text-3xl tracking-widest uppercase text-primary drop-shadow-sm flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
+          Cine POOR
+        </div>
+
+        <app-nav-menu-desktop [filteredLinks]="filteredLinks()" />
+
+        <div class="flex items-center gap-2">
+            <button
+              hlmBtn
+              variant="ghost"
+              size="icon"
+              class="md:hidden text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              [attr.aria-expanded]="menuAbierto()"
+            aria-label="Abrir menu de navegacion"
+            (click)="toggleMenu()"
+          >
+            @if (menuAbierto()) {
+              <ng-icon hlm name="lucideX" size="sm"></ng-icon>
+            } @else {
+              <ng-icon hlm name="lucideMenu" size="sm"></ng-icon>
+            }
+          </button>
+
+          <div class="hidden md:flex items-center gap-2">
+            <button hlmBtn variant="ghost" size="icon" (click)="toggleTheme()">
+              @if (isDarkMode()) {
+                <ng-icon hlm name="lucideSun" size="sm"></ng-icon>
+              } @else {
+                <ng-icon hlm name="lucideMoon" size="sm"></ng-icon>
+              }
+            </button>
+            @if (authStore.isAuthenticated()) {
+              <span class="text-sm font-medium text-muted-foreground mr-2">{{ authStore.user()?.email || 'Usuario' }}</span>
+              <button hlmBtn variant="destructive" size="sm" (click)="handleLogout()">Salir</button>
+            } @else {
+              <app-login-modal />
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (menuAbierto()) {
+        <app-nav-menu-mobile
+          [filteredLinks]="filteredLinks()"
+          [isDarkMode]="isDarkMode()"
+          (closeMenu)="menuAbierto.set(false)"
+          (toggleTheme)="toggleTheme()"
+        />
+      }
+    </nav>

@@ -1,17 +1,21 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { getMemoryToken } from '../state/auth.store';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Leemos de localStorage para evitar dependencias circulares con AuthStore
-  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('auth_token') : null;
+  // Leemos de memoria para evitar XSS y dependencias circulares
+  const token = getMemoryToken();
+
+  // Aseguramos que se envíen las cookies HttpOnly (si el backend las envía)
+  let reqConfig: any = {
+    withCredentials: true,
+  };
 
   if (token) {
-    const clonedReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return next(clonedReq);
+    reqConfig.setHeaders = {
+      Authorization: `Bearer ${token}`,
+    };
   }
 
-  return next(req);
+  const clonedReq = req.clone(reqConfig);
+  return next(clonedReq);
 };

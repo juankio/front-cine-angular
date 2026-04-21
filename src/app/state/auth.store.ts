@@ -3,17 +3,19 @@ import { AuthApiService } from '../services/auth-api.service';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError, lastValueFrom } from 'rxjs';
 
-const TOKEN_KEY = 'auth_token';
+// Almacenamiento seguro en memoria, aislado del ciclo de inyección DI
+let memoryToken: string | null = null;
+export const getMemoryToken = () => memoryToken;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthStore {
   private authApi = inject(AuthApiService);
 
   // State
   private readonly _user = signal<any | null>(null);
-  private readonly _token = signal<string | null>(localStorage.getItem(TOKEN_KEY));
+  private readonly _token = signal<string | null>(memoryToken);
   private readonly _loading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
 
@@ -35,9 +37,11 @@ export class AuthStore {
   });
 
   constructor() {
-    if (this._token()) {
-      this.fetchUser();
-    }
+    // Al no usar localStorage, intentamos recuperar la sesión al iniciar la app.
+    // Esto es vital si el backend maneja la sesión con cookies HttpOnly.
+    this.fetchUser().catch(() => {
+      // Ignoramos el error si no hay sesión activa
+    });
   }
 
   setLoading(value: boolean) {
@@ -55,11 +59,11 @@ export class AuthStore {
     try {
       const response = await lastValueFrom(this.authApi.login(credentials));
       const token = response?.data?.token || response?.token;
-      
+
       if (token) {
         this.setToken(token);
       }
-      
+
       const user = response?.data?.user || response?.user;
       if (user) {
         this._user.set(user);
@@ -94,12 +98,12 @@ export class AuthStore {
   }
 
   private setToken(token: string): void {
-    localStorage.setItem(TOKEN_KEY, token);
+    memoryToken = token;
     this._token.set(token);
   }
 
   private removeToken(): void {
-    localStorage.removeItem(TOKEN_KEY);
+    memoryToken = null;
     this._token.set(null);
   }
 }

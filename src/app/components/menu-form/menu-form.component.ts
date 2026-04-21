@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {  Component, EventEmitter, Input, Output, inject, OnChanges, SimpleChanges , DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuService } from '../../services/menu.service';
@@ -8,110 +9,9 @@ import { ToastService } from '../../services/toast.service';
   selector: 'app-menu-form',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    @if (visible) {
-      <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-background/80 backdrop-blur-sm" (click)="cerrar()"></div>
-        
-        <!-- Modal -->
-        <div class="relative z-10 bg-card text-foreground border border-border shadow-[0_0_50px_rgba(239,68,68,0.15)] rounded-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-          
-          <div class="flex items-center justify-between p-6 border-b border-border">
-            <h2 class="text-xl font-display tracking-widest uppercase font-bold">
-              {{ menuEditar ? 'Editar Combo/Snack' : 'Nuevo Combo/Snack' }}
-            </h2>
-            <button class="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center rounded-sm" (click)="cerrar()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-              <span class="sr-only">Cerrar</span>
-            </button>
-          </div>
-
-          <div class="p-6">
-            <form (ngSubmit)="guardar()" #form="ngForm" class="space-y-5">
-              <!-- Nombre -->
-              <div class="space-y-1.5">
-                <label for="nombre" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Nombre</label>
-                <input 
-                  id="nombre" 
-                  name="nombre" 
-                  [(ngModel)]="formData.nombre" 
-                  required 
-                  class="flex h-12 w-full rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                  placeholder="Ej: Combo Pareja"
-                />
-              </div>
-
-              <!-- Descripción -->
-              <div class="space-y-1.5">
-                <label for="descripcion" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Descripción</label>
-                <textarea 
-                  id="descripcion" 
-                  name="descripcion" 
-                  [(ngModel)]="formData.descripcion" 
-                  required 
-                  class="flex w-full min-h-[80px] rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                  placeholder="Ej: 2 Entradas + Palomitas Grandes + 2 Refrescos"
-                ></textarea>
-              </div>
-
-              <!-- Precio -->
-              <div class="space-y-1.5">
-                <label for="precio" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">Precio ($)</label>
-                <input 
-                  type="number"
-                  id="precio" 
-                  name="precio" 
-                  [(ngModel)]="formData.precio" 
-                  required 
-                  class="flex h-12 w-full rounded-sm bg-background border border-border px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                  placeholder="0.00"
-                  step="0.01"
-                />
-              </div>
-
-              <!-- Imagen URL -->
-              <div class="space-y-1.5">
-                <label for="imagenUrl" class="block text-sm font-display tracking-wider text-muted-foreground uppercase">URL de la Imagen</label>
-                <input 
-                  type="url"
-                  id="imagenUrl" 
-                  name="imagenUrl" 
-                  [(ngModel)]="formData.imagenUrl" 
-                  class="flex h-12 w-full rounded-sm bg-input border border-input px-4 py-2 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                />
-              </div>
-
-              <!-- Recomendado -->
-              <div class="flex items-center justify-between border border-border bg-secondary/30 rounded-md p-4">
-                <div class="space-y-0.5">
-                  <label for="recomendado" class="font-display tracking-wider text-foreground uppercase">Destacar Combo</label>
-                  <p class="text-xs text-muted-foreground font-body">Muestra la etiqueta 'Recomendado' en el catálogo.</p>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" id="recomendado" name="recomendado" [(ngModel)]="formData.recomendado" class="sr-only peer">
-                  <div class="w-11 h-6 bg-muted peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-
-              <!-- Acciones -->
-              <div class="flex justify-end gap-3 pt-4 border-t border-border mt-6">
-                <button type="button" class="px-6 py-3 border border-border text-muted-foreground font-display tracking-widest uppercase rounded-sm hover:bg-secondary transition-colors text-sm" (click)="cerrar()">
-                  Cancelar
-                </button>
-                <button type="submit" class="px-8 py-3 bg-primary text-primary-foreground font-display tracking-[0.2em] uppercase rounded-sm shadow-lg shadow-primary/40 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/60 disabled:opacity-50 disabled:shadow-none transition-all text-base" [disabled]="!form.valid || guardando">
-                  {{ guardando ? 'Guardando...' : (menuEditar ? 'Actualizar' : 'Guardar Producto') }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    }
-  `
-})
+  templateUrl: './menu-form.component.html'})
 export class MenuFormComponent implements OnChanges {
+  private destroyRef = inject(DestroyRef);
   @Input() visible = false;
   @Input() menuEditar: any = null;
   @Output() closed = new EventEmitter<void>();
@@ -158,7 +58,7 @@ export class MenuFormComponent implements OnChanges {
 
     if (this.menuEditar && (this.menuEditar._id || this.menuEditar.id)) {
       const id = this.menuEditar._id || this.menuEditar.id;
-      this.menuService.actualizar(id, payload).subscribe({
+      this.menuService.actualizar(id, payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
           this.guardando = false;
           this.resetForm();
@@ -171,7 +71,7 @@ export class MenuFormComponent implements OnChanges {
         }
       });
     } else {
-      this.menuService.crear(payload).subscribe({
+      this.menuService.crear(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: () => {
           this.guardando = false;
           this.resetForm();

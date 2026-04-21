@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {  Component, OnInit, inject, signal , DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EntradasService } from '../../../services/entradas.service';
 
@@ -9,82 +10,9 @@ import { HlmCardImports } from '@spartan-ng/helm/card';
   selector: 'app-reservas',
   standalone: true,
   imports: [CommonModule, HlmTableImports, HlmCardImports],
-  template: `
-    <div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-500 text-foreground">
-      <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-border/40 pb-6">
-        <div>
-          <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-foreground drop-shadow-sm">Reservas y Ventas</h1>
-          <p class="text-muted-foreground mt-2 text-lg">Vista general de todas las entradas compradas.</p>
-        </div>
-      </div>
-
-      <!-- Tabla de Reservas -->
-      <div class="bg-card/60 border border-border shadow-sm overflow-hidden rounded-xl">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-border/50 bg-muted/20">
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4">Fecha Compra</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4">Usuario</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4">Película & Función</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4">Asientos</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4 text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              @if (loading()) {
-                <tr>
-                  <td colspan="5" class="py-16 text-center text-muted-foreground animate-pulse">
-                    <div class="w-12 h-12 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto mb-4"></div>
-                    <p class="font-display tracking-wider uppercase">Cargando reservas...</p>
-                  </td>
-                </tr>
-              } @else if (reservas().length === 0) {
-                <tr>
-                  <td colspan="5" class="py-20 text-center text-muted-foreground">
-                    <div class="flex flex-col items-center justify-center opacity-50">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-6"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-                      <p class="font-display tracking-wider uppercase text-xl">No se han registrado ventas aún</p>
-                    </div>
-                  </td>
-                </tr>
-              } @else {
-                @for (reserva of reservas(); track reserva._id || reserva.id) {
-                  <tr class="hover:bg-muted/30 transition-colors border-b border-border/30 group">
-                    <td class="text-muted-foreground text-sm font-body py-4 px-4">
-                      {{ reserva.createdAt | date:'short' }}
-                    </td>
-                    <td class="font-body py-4 px-4">
-                      <div class="font-medium text-lg text-foreground">{{ reserva.usuario?.nombre || 'Taquilla / Invitado' }}</div>
-                      <div class="text-xs text-muted-foreground">{{ reserva.usuario?.email }}</div>
-                    </td>
-                    <td class="font-body py-4 px-4">
-                      <div class="font-medium text-lg text-red-500">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</div>
-                      <div class="text-xs text-neutral-400">
-                        Sala {{ reserva.salaNombre || '-' }} | {{ reserva.inicioFuncion | date:'shortTime' }}
-                      </div>
-                    </td>
-                    <td class="py-4 px-4">
-                      <div class="flex flex-wrap gap-1">
-                        @for (asiento of reserva.asientos; track asiento) {
-                          <span class="font-display tracking-widest text-xs px-2 border border-primary/30 text-primary bg-primary/5 shadow-sm rounded-sm">{{ asiento }}</span>
-                        }
-                      </div>
-                    </td>
-                    <td class="text-right font-display tracking-widest text-2xl text-primary py-4 px-4">
-                      \${{ reserva.totalPagado | number:'1.2-2' }}
-                    </td>
-                  </tr>
-                }
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  `
-})
+  templateUrl: './reservas.component.html'})
 export class ReservasComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private entradasService = inject(EntradasService);
 
   reservas = signal<any[]>([]);
@@ -97,7 +25,7 @@ export class ReservasComponent implements OnInit {
   cargarReservas() {
     this.loading.set(true);
     // Asegurarse de que `todasLasReservas` está implementado en el backend
-    this.entradasService.todasLasReservas().subscribe({
+    this.entradasService.todasLasReservas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const data = res?.data || res;
         this.reservas.set(Array.isArray(data) ? data : []);

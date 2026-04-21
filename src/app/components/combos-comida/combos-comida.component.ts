@@ -1,131 +1,17 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HlmCardImports } from '@spartan-ng/helm/card';
+import { AuthStore } from '../../state/auth.store';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 
 @Component({
   selector: 'app-combos-comida',
   standalone: true,
-  imports: [CommonModule, HlmCardImports],
-  template: `
-    <!-- Card del Combo -->
-    <hlm-card (click)="abrirModal()" class="font-body group cursor-pointer transition-all duration-300 border border-border hover:shadow-md hover:shadow-primary/10 hover:border-primary/50 flex flex-col h-full overflow-hidden bg-card">
-      <div class="h-40 w-full bg-muted/30 relative overflow-hidden flex items-center justify-center">
-        @if (imagenUrl) {
-          <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
-          <img [src]="imagenUrl" [alt]="nomProducto" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-        } @else {
-          <!-- Imagen placeholder moderna -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30 transition-transform duration-500 group-hover:scale-110"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="1" y2="3"/><line x1="10" x2="10" y1="1" y2="3"/><line x1="14" x2="14" y1="1" y2="3"/></svg>
-        }
-      </div>
-      <hlm-card-header class="pt-4">
-        <div class="flex justify-between items-start mb-2">
-          <div class="flex items-center gap-2 min-h-[20px]">
-            @if (recomendado) {
-              <span class="inline-flex items-center rounded-sm bg-primary/10 px-2 py-0.5 text-[10px] font-display tracking-widest text-primary uppercase border border-primary/20">Recomendado</span>
-            }
-          </div>
-          <span class="text-muted-foreground text-[10px] font-display tracking-widest uppercase font-semibold">Desde</span>
-        </div>
-        <h3 hlmCardTitle class="font-display uppercase tracking-widest text-xl leading-tight group-hover:text-primary transition-colors">{{nomProducto}}</h3>
-        <p hlmCardDescription class="text-primary font-display text-2xl font-black mt-1">
-          $ {{precioProducto}}
-        </p>
-      </hlm-card-header>
-
-      <div hlmCardContent class="flex-grow">
-        <p class="text-muted-foreground text-sm line-clamp-2 leading-relaxed">{{infoProducto}}</p>
-      </div>
-
-      <div hlmCardFooter class="flex justify-between items-center border-t border-border/50 pt-4 mt-auto bg-muted/10">
-        <span class="text-muted-foreground text-xs font-medium flex items-center gap-1.5 font-display tracking-wider uppercase">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Listo en 5 min
-        </span>
-        <button class="bg-secondary text-secondary-foreground text-xs font-display tracking-widest uppercase rounded-sm px-4 py-2 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-[0_0_15px_rgba(var(--primary),0.4)] transition-all">
-          Ver detalles
-        </button>
-      </div>
-    </hlm-card>
-
-    <!-- Modal de Detalles del Combo -->
-    @if (modalAbierto()) {
-      <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity" (click)="cerrarModal()"></div>
-        
-        <!-- Contenido Modal -->
-        <div class="relative z-10 w-full max-w-3xl bg-card text-foreground border border-border shadow-2xl shadow-primary/10 rounded-xl overflow-hidden animate-in fade-in zoom-in-95 duration-300 flex flex-col md:flex-row">
-          
-          <!-- Botón Cerrar Flotante -->
-          <button (click)="cerrarModal()" class="absolute top-4 right-4 z-20 text-white bg-black/50 hover:bg-primary hover:text-white rounded-full p-2 backdrop-blur-md transition-colors shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            <span class="sr-only">Cerrar</span>
-          </button>
-
-          <!-- Imagen Left (o Top en mobile) -->
-          <div class="w-full md:w-2/5 h-64 md:h-auto bg-muted relative">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
-            @if (imagenUrl) {
-              <img [src]="imagenUrl" [alt]="nomProducto" class="w-full h-full object-cover" />
-            } @else {
-              <div class="w-full h-full flex items-center justify-center bg-secondary/50">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="1" y2="3"/><line x1="10" x2="10" y1="1" y2="3"/><line x1="14" x2="14" y1="1" y2="3"/></svg>
-              </div>
-            }
-            <div class="absolute bottom-4 left-4 z-20">
-              @if (recomendado) {
-                <span class="inline-flex items-center rounded-sm bg-primary/90 px-3 py-1 text-xs font-display tracking-widest text-primary-foreground uppercase shadow-lg border border-primary/50">Recomendado</span>
-              }
-            </div>
-          </div>
-
-          <!-- Detalles Right -->
-          <div class="w-full md:w-3/5 p-6 md:p-8 flex flex-col justify-between bg-card">
-            <div>
-              <div class="flex items-center gap-2 mb-3 text-primary font-display tracking-widest uppercase text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></svg>
-                Dulcería Cine POOR
-              </div>
-              
-              <h2 class="text-3xl md:text-4xl font-display tracking-widest uppercase text-foreground mb-4 leading-none">
-                {{ nomProducto }}
-              </h2>
-              
-              <p class="text-muted-foreground font-body text-base leading-relaxed mb-6">
-                {{ infoProducto }}
-              </p>
-
-              <div class="bg-muted/30 border border-border/50 rounded-lg p-4 mb-8 flex items-center gap-4">
-                <div class="bg-background rounded-full p-2 border border-border shadow-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                </div>
-                <div>
-                  <p class="text-sm font-display tracking-widest uppercase text-foreground">Preparación Rápida</p>
-                  <p class="text-xs text-muted-foreground font-body">Tu combo estará listo en 5 minutos o menos en mostrador.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between border-t border-border pt-6 mt-auto">
-              <div>
-                <p class="text-xs font-display tracking-widest uppercase text-muted-foreground mb-1">Precio Final</p>
-                <p class="text-4xl font-display text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.3)]">
-                  $ {{ precioProducto }}
-                </p>
-              </div>
-              <button class="bg-primary text-primary-foreground hover:bg-primary/90 font-display tracking-widest uppercase text-lg px-8 py-4 rounded-sm shadow-[0_0_20px_rgba(var(--primary),0.4)] hover:shadow-[0_0_30px_rgba(var(--primary),0.6)] transition-all transform hover:-translate-y-1" (click)="cerrarModal()">
-                Entendido
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    }
-  `
-})
+  imports: [CommonModule, HlmCardImports, LoginModalComponent],
+  templateUrl: './combos-comida.component.html'})
 export class CombosComidaComponent {
+  authStore = inject(AuthStore);
+
   @Input() nomProducto: string = '';
   @Input() precioProducto: string = '';
   @Input() infoProducto: string = '';

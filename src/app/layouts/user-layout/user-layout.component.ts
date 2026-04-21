@@ -5,11 +5,5 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
   selector: 'app-user-layout',
   standalone: true,
   imports: [BarraNavegacionComponent],
-  template: `
-    <app-barra-navegacion />
-    <main class="min-h-[calc(100vh-64px)] bg-background text-foreground">
-      <ng-content></ng-content>
-    </main>
-  `
-})
+  templateUrl: './user-layout.component.html'})
 export class UserLayoutComponent {}

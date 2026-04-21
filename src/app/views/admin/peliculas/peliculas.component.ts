@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {  Component, OnInit, inject, signal , DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PeliculasService } from '../../../services/peliculas.service';
@@ -12,92 +13,9 @@ import { PeliculaFormComponent } from '../../../components/pelicula-form/pelicul
   selector: 'app-peliculas',
   standalone: true,
   imports: [CommonModule, FormsModule, HlmTableImports, HlmCardImports, HlmButtonImports, PeliculaFormComponent],
-  template: `
-    <div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-500 text-foreground">
-      <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-border/40 pb-6">
-        <div>
-          <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-foreground drop-shadow-sm">Películas</h1>
-          <p class="text-muted-foreground mt-2 text-lg">Gestiona el catálogo de películas en cartelera.</p>
-        </div>
-        <button class="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-display tracking-wider uppercase text-lg h-12 px-6 flex items-center justify-center rounded-sm" (click)="abrirModal()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          Nueva Película
-        </button>
-      </div>
-
-      <!-- Lista de películas -->
-      <div class="bg-card/60 border border-border shadow-sm overflow-hidden rounded-xl">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-border/50 bg-muted/20">
-                <th class="font-display tracking-wider uppercase text-muted-foreground p-4">Poster</th>
-                <th class="font-display tracking-wider uppercase text-muted-foreground p-4">Título</th>
-                <th class="font-display tracking-wider uppercase text-muted-foreground p-4">Duración</th>
-                <th class="font-display tracking-wider uppercase text-muted-foreground p-4 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @if (loading()) {
-                <tr>
-                  <td colspan="4" class="py-16 text-center text-muted-foreground animate-pulse">
-                    <div class="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-                    <span class="font-display tracking-wider uppercase">Cargando cartelera...</span>
-                  </td>
-                </tr>
-              } @else if (peliculas().length === 0) {
-                <tr>
-                  <td colspan="4" class="py-20 text-center text-muted-foreground">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 opacity-50"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                    <span class="font-display tracking-wider uppercase text-xl">No hay películas registradas</span>
-                  </td>
-                </tr>
-              } @else {
-                @for (row of peliculas(); track row._id || row.id) {
-                  <tr class="hover:bg-muted/30 transition-colors border-b border-border/30 group">
-                    <td class="p-4">
-                      @if (row.imagenUrl) {
-                        <img [src]="row.imagenUrl" alt="Poster" class="h-20 w-14 object-cover shadow-sm border border-border/50" />
-                      } @else {
-                        <div class="h-20 w-14 bg-muted/50 border border-border/50 flex items-center justify-center">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                        </div>
-                      }
-                    </td>
-                    <td class="p-4">
-                      <span class="font-body font-medium text-xl text-foreground">{{ row.titulo }}</span>
-                    </td>
-                    <td class="p-4">
-                      <span class="inline-flex items-center rounded-sm bg-muted/50 px-2 py-1 text-sm font-display tracking-wider text-muted-foreground">
-                        {{ row.duracionMinutos }} MIN
-                      </span>
-                    </td>
-                    <td class="p-4 text-right">
-                      <button (click)="editar(row)" class="text-neutral-500 hover:text-blue-500 hover:bg-blue-500/10 p-2 rounded transition-colors mr-2" title="Editar película">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                      </button>
-                      <button (click)="eliminar(row._id || row.id)" class="text-neutral-500 hover:text-red-500 hover:bg-red-500/10 p-2 rounded transition-colors" title="Eliminar película">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                      </button>
-                    </td>
-                  </tr>
-                }
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <app-pelicula-form 
-        [visible]="modalAbierto()" 
-        [peliculaEditar]="peliculaEditar"
-        (closed)="cerrarModal()" 
-        (saved)="onPeliculaGuardada()">
-      </app-pelicula-form>
-    </div>
-  `
-})
+  templateUrl: './peliculas.component.html'})
 export class PeliculasComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   private peliculasService = inject(PeliculasService);
 
   peliculas = signal<any[]>([]);
@@ -111,7 +29,7 @@ export class PeliculasComponent implements OnInit {
 
   cargarPeliculas() {
     this.loading.set(true);
-    this.peliculasService.listar().subscribe({
+    this.peliculasService.listar().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const data = res?.data || res;
         this.peliculas.set(Array.isArray(data) ? data : []);
@@ -145,7 +63,7 @@ export class PeliculasComponent implements OnInit {
 
   eliminar(id: string) {
     if (!confirm('¿Seguro que deseas eliminar esta película?')) return;
-    this.peliculasService.eliminar(id).subscribe({
+    this.peliculasService.eliminar(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.cargarPeliculas();
       },

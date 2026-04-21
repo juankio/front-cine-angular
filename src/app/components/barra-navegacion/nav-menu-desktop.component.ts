@@ -6,25 +6,7 @@ import { HlmButton } from '@spartan-ng/helm/button';
   selector: 'app-nav-menu-desktop',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, HlmButton],
-  template: `
-    <ul class="hidden items-center gap-4 md:flex">
-      @for (link of filteredLinks(); track link.to) {
-        <li>
-          <a
-            hlmBtn
-            variant="ghost"
-            [routerLink]="link.to"
-            routerLinkActive="bg-accent text-accent-foreground font-semibold"
-            [routerLinkActiveOptions]="{exact: link.exact}"
-            class="px-4 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground"
-          >
-            {{ link.label }}
-          </a>
-        </li>
-      }
-    </ul>
-  `
-})
+  templateUrl: './nav-menu-desktop.component.html'})
 export class NavMenuDesktopComponent {
   filteredLinks = input.required<{ label: string; to: string; exact: boolean; auth: boolean; admin: boolean }[]>();
 }

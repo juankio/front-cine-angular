@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {  Component, EventEmitter, Input, Output, inject , DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SalasService } from '../../services/salas.service';
@@ -12,95 +13,9 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
   selector: 'app-sala-form',
   standalone: true,
   imports: [CommonModule, FormsModule, HlmLabel, HlmInput, HlmButtonImports],
-  template: `
-    @if (visible) {
-      <!-- Backdrop -->
-      <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <!-- Modal -->
-        <div class="bg-card text-card-foreground border border-border shadow-lg rounded-lg w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-xl font-bold tracking-tight">Configurar Nueva Sala</h2>
-              <button hlmBtn variant="ghost" size="icon" (click)="cerrar()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                <span class="sr-only">Cerrar</span>
-              </button>
-            </div>
-
-            <form (ngSubmit)="guardar()" #form="ngForm" class="space-y-4">
-              <!-- Nombre Sala -->
-              <div class="space-y-1">
-                <label hlmLabel for="nombre">Nombre o Número de Sala</label>
-                <input 
-                  hlmInput 
-                  id="nombre" 
-                  name="nombre" 
-                  [(ngModel)]="formData.nombre" 
-                  required 
-                  class="w-full"
-                  placeholder="Ej: Sala 1 VIP"
-                />
-              </div>
-
-              <div class="grid grid-cols-2 gap-4">
-                <!-- Filas -->
-                <div class="space-y-1">
-                  <label hlmLabel for="filas">Total de Filas</label>
-                  <input 
-                    hlmInput 
-                    type="number"
-                    id="filas" 
-                    name="filas" 
-                    [(ngModel)]="formData.filas" 
-                    required 
-                    min="1"
-                    max="26"
-                    class="w-full"
-                    placeholder="Ej: 10"
-                  />
-                  <p class="text-[0.8rem] text-muted-foreground mt-1">
-                    (Se asignarán letras A-Z)
-                  </p>
-                </div>
-
-                <!-- Asientos por fila -->
-                <div class="space-y-1">
-                  <label hlmLabel for="asientos">Asientos por Fila</label>
-                  <input 
-                    hlmInput 
-                    type="number"
-                    id="asientos" 
-                    name="asientosPorFila" 
-                    [(ngModel)]="formData.asientosPorFila" 
-                    required 
-                    min="1"
-                    max="50"
-                    class="w-full"
-                    placeholder="Ej: 12"
-                  />
-                  <p class="text-[0.8rem] text-muted-foreground mt-1">
-                    (Total: {{ totalAsientos }} asientos)
-                  </p>
-                </div>
-              </div>
-
-              <!-- Acciones -->
-              <div class="flex justify-end gap-2 pt-4 border-t border-border mt-6">
-                <button type="button" hlmBtn variant="outline" (click)="cerrar()">
-                  Cancelar
-                </button>
-                <button type="submit" hlmBtn [disabled]="!form.valid || guardando">
-                  {{ guardando ? 'Creando...' : 'Crear Sala' }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    }
-  `
-})
+  templateUrl: './sala-form.component.html'})
 export class SalaFormComponent {
+  private destroyRef = inject(DestroyRef);
   @Input() visible = false;
   @Output() closed = new EventEmitter<void>();
   @Output() saved = new EventEmitter<void>();
@@ -134,7 +49,7 @@ export class SalaFormComponent {
       asientosPorFila: Number(this.formData.asientosPorFila)
     };
 
-    this.salasService.crear(payload).subscribe({
+    this.salasService.crear(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.guardando = false;
         this.resetForm();

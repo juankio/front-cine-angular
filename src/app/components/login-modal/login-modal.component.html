@@ -1,0 +1,20 @@
+<hlm-dialog>
+      <button hlmBtn brnDialogTrigger variant="ghost" class="px-4 py-2 font-display tracking-widest text-lg text-muted-foreground hover:text-foreground transition-colors">
+        Entrar
+      </button>
+
+      <hlm-dialog-content class="w-[95vw] sm:max-w-[900px] h-auto max-h-[90vh] rounded-none border-[3px] border-border bg-background shadow-[8px_8px_0_0_rgba(0,0,0,0.1)] dark:shadow-[8px_8px_0_0_rgba(255,255,255,0.05)] p-0 overflow-y-auto overflow-x-hidden flex flex-col md:flex-row gap-0" *brnDialogContent="let ctx">
+        <button hlmBtn variant="ghost" size="icon" hlmDialogClose class="absolute right-4 top-4 z-20 rounded-none bg-background border-2 border-border text-foreground hover:bg-muted transition-all hover:-translate-y-0.5 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0_0_rgba(255,255,255,0.3)]">
+          <ng-icon hlm name="lucideX" size="sm"></ng-icon>
+        </button>
+
+        <app-login-marketing class="w-full md:w-5/12 flex-shrink-0"></app-login-marketing>
+
+        <app-login-form-content
+          class="w-full md:w-7/12"
+          [motar]="motar()"
+          (toggleMode)="toggleMode()"
+          (loginSubmit)="handleLogin($event)"
+        ></app-login-form-content>
+      </hlm-dialog-content>
+    </hlm-dialog>

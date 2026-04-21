@@ -5,10 +5,7 @@ import { ToastContainerComponent } from './components/toast/toast-container.comp
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, ToastContainerComponent],
-  template: `
-    <router-outlet></router-outlet>
-    <app-toast-container></app-toast-container>
-  `,
+  templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
