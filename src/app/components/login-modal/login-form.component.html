@@ -1,10 +1,10 @@
 <div class="w-full h-full bg-card p-10 md:p-14 text-foreground flex flex-col justify-center">
       <div class="mb-10 text-center">
         <h3 class="mt-4 text-5xl font-display uppercase tracking-widest text-foreground">
-          {{ motar ? 'Acceso a Sala' : 'Nuevo Registro' }}
+          {{ modoOlvidoPassword ? 'Recuperar Cuenta' : (motar ? 'Acceso a Sala' : 'Nuevo Registro') }}
         </h3>
         <p class="mt-2 text-lg text-muted-foreground font-body">
-          {{ motar ? 'Ingresa tus credenciales para continuar.' : 'Completa tus datos para crear tu cuenta.' }}
+          {{ modoOlvidoPassword ? 'Te enviaremos instrucciones a tu correo.' : (motar ? 'Ingresa tus credenciales para continuar.' : 'Completa tus datos para crear tu cuenta.') }}
         </p>
       </div>
 
@@ -17,71 +17,84 @@
             name="email"
             [(ngModel)]="email"
             type="email"
+            required
+            maxlength="120"
             placeholder="correo@ejemplo.com"
             class="rounded-none border-2 border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:border-primary focus-visible:ring-0 h-14 px-4 w-full font-body text-lg shadow-sm transition-colors"
           />
         </div>
 
-        @if (!motar) {
+        @if (!modoOlvidoPassword) {
+          @if (!motar) {
+            <div>
+              <label for="nombre" class="mb-2 block text-sm font-semibold text-muted-foreground uppercase tracking-wider">Nombre Completo</label>
+              <input
+                hlmInput
+                id="nombre"
+                name="nombre"
+                [(ngModel)]="nombre"
+                type="text"
+                required
+                maxlength="80"
+                placeholder="Ej: Ana López"
+                class="rounded-none border-2 border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:border-primary focus-visible:ring-0 h-14 px-4 w-full font-body text-lg shadow-sm transition-colors"
+              />
+            </div>
+          }
+
           <div>
-            <label for="nombre" class="mb-2 block text-sm font-semibold text-muted-foreground uppercase tracking-wider">Nombre Completo</label>
+            <label for="password" class="mb-2 block text-sm font-semibold text-muted-foreground uppercase tracking-wider">Contraseña</label>
             <input
               hlmInput
-              id="nombre"
-              name="nombre"
-              [(ngModel)]="nombre"
-              type="text"
-              placeholder="Ej: Ana López"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
+              type="password"
+              required
+              maxlength="72"
+              placeholder="******"
               class="rounded-none border-2 border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:border-primary focus-visible:ring-0 h-14 px-4 w-full font-body text-lg shadow-sm transition-colors"
             />
           </div>
-        }
 
-        <div>
-          <label for="password" class="mb-2 block text-sm font-semibold text-muted-foreground uppercase tracking-wider">Contraseña</label>
-          <input
-            hlmInput
-            id="password"
-            name="password"
-            [(ngModel)]="password"
-            type="password"
-            placeholder="******"
-            class="rounded-none border-2 border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:border-primary focus-visible:ring-0 h-14 px-4 w-full font-body text-lg shadow-sm transition-colors"
-          />
-        </div>
+          @if (!motar) {
+            <div>
+              <label for="genero" class="mb-2 block text-sm font-semibold text-muted-foreground uppercase tracking-wider">Género</label>
+              <select
+                id="genero"
+                name="genero"
+                [(ngModel)]="genero"
+                required
+                class="flex w-full rounded-none border-2 border-border bg-background text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0 h-14 px-4 font-body text-lg shadow-sm transition-colors"
+              >
+                <option value="" disabled selected>Selecciona tu género</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="No binario">No binario / Otro</option>
+                <option value="Prefiero no decirlo">Prefiero no decirlo</option>
+              </select>
+            </div>
+          }
 
-        @if (!motar) {
-          <div>
-            <label for="genero" class="mb-2 block text-sm font-semibold text-muted-foreground uppercase tracking-wider">Género</label>
-            <select
-              id="genero"
-              name="genero"
-              [(ngModel)]="genero"
-              class="flex w-full rounded-none border-2 border-border bg-background text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0 h-14 px-4 font-body text-lg shadow-sm transition-colors"
-            >
-              <option value="" disabled selected>Selecciona tu género</option>
-              <option value="Femenino">Femenino</option>
-              <option value="Masculino">Masculino</option>
-              <option value="No binario">No binario / Otro</option>
-              <option value="Prefiero no decirlo">Prefiero no decirlo</option>
-            </select>
+          <div class="flex items-center gap-3 mt-4">
+            <input type="checkbox" id="recordarme" name="recordarme" [(ngModel)]="recordarme" class="h-5 w-5 rounded-sm border-2 border-border bg-background text-primary focus:ring-primary focus:ring-offset-background" />
+            <label for="recordarme" class="text-sm font-medium text-foreground font-body">
+              {{ motar ? 'Recordarme en este equipo' : 'Acepto términos y condiciones' }}
+            </label>
           </div>
         }
-
-        <div class="flex items-center gap-3 mt-4">
-          <input type="checkbox" id="recordarme" name="recordarme" [(ngModel)]="recordarme" class="h-5 w-5 rounded-sm border-2 border-border bg-background text-primary focus:ring-primary focus:ring-offset-background" />
-          <label for="recordarme" class="text-sm font-medium text-foreground font-body">
-            {{ motar ? 'Recordarme en este equipo' : 'Acepto términos y condiciones' }}
-          </label>
-        </div>
 
         <button
           hlmBtn
           type="submit"
           class="mt-6 w-full bg-primary text-primary-foreground hover:bg-primary/90 h-14 rounded-none border-2 border-primary font-display text-2xl tracking-widest shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] dark:shadow-[4px_4px_0_0_rgba(255,255,255,0.1)] transition-all hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.2)] dark:hover:shadow-[2px_2px_0_0_rgba(255,255,255,0.1)]"
-          [disabled]="authStore.loading()"
+          [disabled]="authStore.loading() || enviandoLink"
         >
-          {{ authStore.loading() ? 'CARGANDO...' : (motar ? 'ENTRAR AHORA' : 'CREAR CUENTA') }}
+          @if (modoOlvidoPassword) {
+            {{ enviandoLink ? 'ENVIANDO...' : 'RECUPERAR CONTRASEÑA' }}
+          } @else {
+            {{ authStore.loading() ? 'CARGANDO...' : (motar ? 'ENTRAR AHORA' : 'CREAR CUENTA') }}
+          }
         </button>
         
         @if (authStore.error()) {
@@ -89,44 +102,54 @@
         }
       </form>
 
-      <!-- Botón de Google Personalizado (No usa la librería fallida) -->
-      <div class="relative mt-8 mb-6">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-border"></div>
+      @if (!modoOlvidoPassword) {
+        <!-- Botón de Google Personalizado -->
+        <div class="relative mt-8 mb-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-border"></div>
+          </div>
+          <div class="relative flex justify-center text-sm font-body">
+            <span class="bg-card px-2 text-muted-foreground uppercase tracking-wider text-xs font-semibold">O continuar con</span>
+          </div>
         </div>
-        <div class="relative flex justify-center text-sm font-body">
-          <span class="bg-card px-2 text-muted-foreground uppercase tracking-wider text-xs font-semibold">O continuar con</span>
-        </div>
-      </div>
 
-      <button
-        hlmBtn
-        variant="outline"
-        class="w-full h-14 rounded-none border-2 border-border hover:bg-muted font-body font-medium flex items-center justify-center gap-3 transition-colors"
-        type="button"
-        (click)="loginWithGoogle()"
-      >
-        <svg viewBox="0 0 24 24" class="h-6 w-6" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.1H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.9l3.66-2.81z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.1l3.66 2.81c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/><path d="M1 1h22v22H1z" fill="none"/></svg>
-        Entrar con Google
-      </button>
+        <div class="grid grid-cols-1 gap-4">
+          <button
+            hlmBtn
+            variant="outline"
+            class="w-full h-12 rounded-none border-2 border-border hover:bg-muted font-body font-medium flex items-center justify-center gap-2"
+            type="button"
+            (click)="loginWithGoogle()"
+          >
+            <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.1H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.9l3.66-2.81z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.1l3.66 2.81c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/><path d="M1 1h22v22H1z" fill="none"/></svg>
+            Google
+          </button>
+        </div>
+      }
 
       <div class="mt-10 flex flex-col items-center gap-4 text-center text-sm md:flex-row md:justify-between font-body">
-        @if (motar) {
-          <button hlmBtn variant="link" type="button" class="font-medium text-muted-foreground hover:text-foreground p-0 h-auto">
+        @if (modoOlvidoPassword) {
+          <button hlmBtn variant="link" type="button" class="font-medium text-muted-foreground hover:text-foreground p-0 h-auto" (click)="volverAlLogin()">
+            Volver al inicio de sesión
+          </button>
+        } @else if (motar) {
+          <button hlmBtn variant="link" type="button" class="font-medium text-muted-foreground hover:text-foreground p-0 h-auto" (click)="forgotPassword()">
             ¿Olvidaste tu contraseña?
           </button>
         } @else {
           <span class="font-medium text-muted-foreground">¿Ya tienes cuenta?</span>
         }
 
-        <button
-          hlmBtn
-          variant="link"
-          type="button"
-          class="font-bold text-primary hover:text-primary/80 p-0 h-auto uppercase tracking-wide"
-          (click)="onToggleMode()"
-        >
-          {{ motar ? 'Crear cuenta nueva' : 'Volver a iniciar sesión' }}
-        </button>
+        @if (!modoOlvidoPassword) {
+          <button
+            hlmBtn
+            variant="link"
+            type="button"
+            class="font-bold text-primary hover:text-primary/80 p-0 h-auto uppercase tracking-wide"
+            (click)="onToggleMode()"
+          >
+            {{ motar ? 'Crear cuenta nueva' : 'Volver a iniciar sesión' }}
+          </button>
+        }
       </div>
     </div>

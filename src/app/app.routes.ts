@@ -63,6 +63,11 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'reset-password',
+    title: 'Restablecer Contraseña',
+    loadComponent: () => import('./views/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

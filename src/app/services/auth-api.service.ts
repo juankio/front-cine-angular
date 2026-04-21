@@ -8,15 +8,10 @@ import { Observable } from 'rxjs';
 })
 export class AuthApiService {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  public apiUrl = environment.apiUrl; // Hecho publico para leerlo desde los componentes
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials);
-  }
-
-  // Método que conectará con Sanji para procesar el token de Google
-  loginGoogle(idToken: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/google`, { token: idToken });
   }
 
   register(userData: any): Observable<any> {
@@ -25,5 +20,13 @@ export class AuthApiService {
 
   me(): Observable<any> {
     return this.http.get(`${this.apiUrl}/auth/me`);
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(payload: { token: string, password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/reset-password`, payload);
   }
 }
