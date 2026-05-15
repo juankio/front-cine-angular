@@ -124,12 +124,18 @@
     position: relative;
     padding: 4px;
   }
-  .art-deco-border::before {
+  /* Skeleton Loaders (Art Deco) */
+  .skeleton-deco {
+    @apply relative overflow-hidden bg-[#111] border-2 border-[#332B1A];
+  }
+  .skeleton-deco::after {
     content: '';
-    position: absolute;
-    inset: 4px;
-    border: 1px solid theme('colors.primary.DEFAULT');
-    opacity: 0.5;
-    pointer-events: none;
+    @apply absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-[#C5A059]/10 to-transparent;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
   }
 }

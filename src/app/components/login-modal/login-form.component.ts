@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmIcon } from '@spartan-ng/helm/icon';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { lucideEye, lucideEyeOff } from '@ng-icons/lucide';
 import { AuthStore } from '../../state/auth.store';
 import { AuthApiService } from '../../services/auth-api.service';
 import { ToastService } from '../../services/toast.service';
@@ -10,7 +13,8 @@ import { ToastService } from '../../services/toast.service';
 @Component({
   selector: 'app-login-form-content',
   standalone: true,
-  imports: [CommonModule, FormsModule, HlmButton, HlmInput],
+  imports: [CommonModule, FormsModule, HlmButton, HlmInput, HlmIcon, NgIconComponent],
+  providers: [provideIcons({ lucideEye, lucideEyeOff })],
   templateUrl: './login-form.component.html'
 })
 export class LoginFormContentComponent {
@@ -30,6 +34,11 @@ export class LoginFormContentComponent {
   recordarme = false;
   enviandoLink = false;
   modoOlvidoPassword = false;
+  mostrarContrasena = signal(false);
+
+  toggleContrasena() {
+    this.mostrarContrasena.set(!this.mostrarContrasena());
+  }
 
   onSubmit() {
     if (this.modoOlvidoPassword) {

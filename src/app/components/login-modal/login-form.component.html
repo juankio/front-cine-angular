@@ -44,17 +44,29 @@
 
           <div>
             <label for="password" class="mb-2 block text-sm font-semibold text-muted-foreground uppercase tracking-wider">Contraseña</label>
-            <input
-              hlmInput
-              id="password"
-              name="password"
-              [(ngModel)]="password"
-              type="password"
-              required
-              maxlength="72"
-              placeholder="******"
-              class="rounded-none border-2 border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:border-primary focus-visible:ring-0 h-14 px-4 w-full font-body text-lg shadow-sm transition-colors"
-            />
+            <div class="relative">
+              <input
+                hlmInput
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                [type]="mostrarContrasena() ? 'text' : 'password'"
+                required
+                maxlength="72"
+                placeholder="******"
+                class="rounded-none border-2 border-border bg-background text-foreground placeholder:text-muted-foreground/50 focus-visible:border-primary focus-visible:ring-0 h-14 px-4 pr-12 w-full font-body text-lg shadow-sm transition-colors"
+              />
+              <button 
+                type="button" 
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors focus:outline-none"
+                (click)="toggleContrasena()">
+                @if (mostrarContrasena()) {
+                  <ng-icon hlm name="lucideEyeOff" size="sm"></ng-icon>
+                } @else {
+                  <ng-icon hlm name="lucideEye" size="sm"></ng-icon>
+                }
+              </button>
+            </div>
           </div>
 
           @if (!motar) {

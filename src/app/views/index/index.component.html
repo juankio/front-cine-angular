@@ -137,21 +137,21 @@
                 }
               </div>
             } @else {
-              <div class="flex flex-col p-10 w-full items-center justify-center text-center border border-border rounded-xl shadow-sm bg-card/50 backdrop-blur-xl min-h-[200px]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30 mb-4"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
-                <p class="text-xl font-medium font-display uppercase tracking-widest text-muted-foreground">Sin resultados</p>
-                <p class="text-muted-foreground mt-2 text-sm">No encontramos películas con el título "{{ searchTerm() }}".</p>
+              <div class="flex flex-col p-10 w-full items-center justify-center text-center border border-[#332B1A] bg-[#111] shadow-2xl min-h-[200px]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-4 opacity-50"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
+                <p class="text-xl font-display uppercase tracking-widest text-[#EAE6D7]">Sin resultados</p>
+                <p class="text-[#8C8775] mt-2 text-sm italic font-body">No encontramos películas con el título "{{ searchTerm() }}".</p>
               </div>
             }
           } @else {
-            <hlm-card class="flex flex-col p-10 w-full items-center justify-center text-center shadow-sm bg-card/50 backdrop-blur-xl min-h-[200px]">
-              <div class="relative mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                <div class="absolute inset-0 animate-pulse bg-gradient-to-tr from-transparent via-primary/20 to-transparent rounded-full mix-blend-overlay"></div>
-              </div>
-              <p class="text-xl font-medium font-display uppercase tracking-widest text-muted-foreground">Buscando estrenos...</p>
-              <p class="text-muted-foreground mt-2 text-sm">Cargando cartelera o no hay películas disponibles por el momento.</p>
-            </hlm-card>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              <!-- Skeletons Clásicos -->
+              @for (i of [1,2,3,4,5]; track i) {
+                <div class="aspect-[2/3] skeleton-deco p-2">
+                   <div class="w-full h-full border border-[#332B1A]/50 bg-black/50"></div>
+                </div>
+              }
+            </div>
           }
         </div>
 
