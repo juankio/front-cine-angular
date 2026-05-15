@@ -1,58 +1,105 @@
-<div class="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-5xl font-display uppercase tracking-widest text-primary">
-      Pago Seguro
-    </h2>
-    <p class="mt-2 text-center text-sm text-muted-foreground">
-      Estás a un paso de confirmar tu reserva.
-    </p>
-  </div>
+<div class="min-h-screen bg-background relative flex flex-col justify-center py-12 sm:px-6 lg:px-8 overflow-hidden">
+  
+  <!-- Efectos de fondo Shadcn Pro -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-primary/20 blur-[120px] rounded-full pointer-events-none"></div>
+  <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
-  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-    <hlm-card class="py-8 px-4 shadow sm:rounded-lg sm:px-10 border-border bg-card">
-      
-      @if (exito()) {
-        <div class="text-center">
-          <svg class="mx-auto h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <h3 class="text-2xl font-display text-foreground mb-2">¡Pago Exitoso!</h3>
-          <p class="text-muted-foreground text-sm">Tu entrada ha sido confirmada. Redirigiendo a tus entradas...</p>
-        </div>
-      } @else {
-        <div class="space-y-6">
-          <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
-              Número de Tarjeta (Simulada)
-            </label>
-            <input hlmInput type="text" value="4242 4242 4242 4242" disabled class="w-full bg-muted/50 text-muted-foreground" />
-          </div>
+  <div class="relative sm:mx-auto sm:w-full sm:max-w-lg z-10">
+    <div class="text-center mb-8">
+      <h2 class="text-5xl font-display uppercase tracking-widest text-foreground flex items-center justify-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+        Pago Seguro
+      </h2>
+      <p class="mt-2 text-muted-foreground font-medium">
+        Estás a un paso de confirmar tu reserva.
+      </p>
+    </div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-foreground mb-2">Expiración</label>
-              <input hlmInput type="text" value="12/28" disabled class="w-full bg-muted/50 text-muted-foreground" />
+    <hlm-card class="relative shadow-2xl shadow-primary/5 sm:rounded-2xl border border-white/10 bg-card/60 backdrop-blur-2xl overflow-hidden">
+      <!-- Borde superior con gradiente -->
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+
+      <div class="p-8 sm:p-10">
+        @if (exito()) {
+          <div class="text-center animate-in zoom-in duration-500 py-8">
+            <div class="mx-auto w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mb-6 ring-1 ring-green-500/30 shadow-[0_0_40px_rgba(34,197,94,0.2)]">
+              <svg class="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-foreground mb-2">CVC</label>
-              <input hlmInput type="text" value="123" disabled class="w-full bg-muted/50 text-muted-foreground" />
+            <h3 class="text-3xl font-display tracking-widest text-foreground mb-3">¡Pago Exitoso!</h3>
+            <p class="text-muted-foreground text-sm font-medium">Tu entrada ha sido confirmada. Generando ticket inteligente...</p>
+            
+            <div class="mt-8 p-4 bg-muted/50 rounded-xl border border-border">
+               <div class="flex items-center justify-between text-sm">
+                 <span class="text-muted-foreground">ID Transacción</span>
+                 <span class="font-mono text-foreground font-medium">#TXN-{{ entradaId() | slice:0:8 }}</span>
+               </div>
             </div>
           </div>
+        } @else {
+          <div class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            
+            <!-- Resumen de compra visual -->
+            <div class="flex items-center justify-between p-4 bg-background/80 rounded-xl border border-border shadow-inner">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+                </div>
+                <div>
+                  <p class="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Total a pagar</p>
+                  <p class="text-lg font-bold text-foreground">Procesando total...</p>
+                </div>
+              </div>
+            </div>
 
-          <button 
-            hlmBtn 
-            class="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-widest text-xl mt-6 py-6"
-            [disabled]="procesando()"
-            (click)="simularPago()"
-          >
-            {{ procesando() ? 'PROCESANDO...' : 'PAGAR Y CONFIRMAR' }}
-          </button>
-          
-          <p class="text-xs text-center text-muted-foreground mt-4">
-            *Esta es una pasarela simulada para desarrollo local. No se realizarán cobros reales.
-          </p>
-        </div>
-      }
+            <!-- Formulario de Tarjeta Estilizado -->
+            <div class="space-y-5">
+              <div class="group">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 group-focus-within:text-primary transition-colors">
+                  Número de Tarjeta (Simulada)
+                </label>
+                <div class="relative">
+                  <input hlmInput type="text" value="4242 4242 4242 4242" disabled class="w-full pl-10 bg-background/50 border-border text-foreground h-12 rounded-xl focus-visible:ring-primary opacity-70" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-5">
+                <div class="group">
+                  <label class="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 group-focus-within:text-primary transition-colors">Expiración</label>
+                  <input hlmInput type="text" value="12/28" disabled class="w-full bg-background/50 border-border text-foreground h-12 rounded-xl text-center opacity-70" />
+                </div>
+                <div class="group">
+                  <label class="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 group-focus-within:text-primary transition-colors">CVC</label>
+                  <input hlmInput type="password" value="***" disabled class="w-full bg-background/50 border-border text-foreground h-12 rounded-xl text-center opacity-70 tracking-[0.5em]" />
+                </div>
+              </div>
+            </div>
+
+            <button 
+              hlmBtn 
+              class="w-full bg-foreground hover:bg-foreground/90 text-background font-display tracking-widest text-xl mt-8 py-7 rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0 relative overflow-hidden"
+              [disabled]="procesando()"
+              (click)="simularPago()"
+            >
+              @if (procesando()) {
+                <span class="flex items-center gap-2">
+                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-background" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  PROCESANDO PAGO...
+                </span>
+              } @else {
+                <span>PAGAR Y CONFIRMAR</span>
+              }
+            </button>
+            
+            <p class="text-[11px] text-center text-muted-foreground/60 mt-6 flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Pasarela encriptada SSL de 256 bits (Modo Local)
+            </p>
+          </div>
+        }
+      </div>
     </hlm-card>
   </div>
 </div>

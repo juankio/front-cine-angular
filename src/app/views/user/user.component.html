@@ -47,55 +47,69 @@
           <p class="text-sm text-muted-foreground">Historial de tus últimas compras en Cine POOR.</p>
         </div>
 
-        <div hlmTableContainer class="rounded-xl border border-border bg-card/40 backdrop-blur-xl overflow-x-auto shadow-sm">
+        <div hlmTableContainer class="rounded-2xl border border-border/60 bg-card/60 backdrop-blur-2xl shadow-xl shadow-primary/5 overflow-hidden">
           <table hlmTable class="w-full min-w-[600px]">
-            <thead hlmTHead class="bg-muted/20">
-              <tr hlmTr>
-                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Fecha Compra</th>
-                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Película & Función</th>
-                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Asientos</th>
-                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4 text-right">Total</th>
-                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4 text-center">Ticket</th>
+            <thead hlmTHead class="bg-muted/40 border-b border-border/60">
+              <tr hlmTr class="hover:bg-transparent">
+                <th hlmTh class="font-display tracking-widest text-lg text-foreground py-5">Fecha Compra</th>
+                <th hlmTh class="font-display tracking-widest text-lg text-foreground py-5">Película & Función</th>
+                <th hlmTh class="font-display tracking-widest text-lg text-foreground py-5">Asientos</th>
+                <th hlmTh class="font-display tracking-widest text-lg text-foreground py-5 text-right">Total</th>
+                <th hlmTh class="font-display tracking-widest text-lg text-foreground py-5 text-center">Smart Ticket</th>
               </tr>
             </thead>
             <tbody hlmTBody>
               @if (loading()) {
                 <tr hlmTr>
-                  <td hlmTd colspan="5" class="py-12 text-center text-muted-foreground animate-pulse">
-                    Cargando historial de compras...
+                  <td hlmTd colspan="5" class="py-16 text-center">
+                    <div class="flex flex-col items-center justify-center space-y-4">
+                      <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                      <p class="text-sm font-medium text-muted-foreground uppercase tracking-widest">Sincronizando tickets...</p>
+                    </div>
                   </td>
                 </tr>
               } @else if (reservas().length === 0) {
                 <tr hlmTr>
-                  <td hlmTd colspan="5" class="text-center py-12 text-muted-foreground">
-                    <div class="flex flex-col items-center gap-2 opacity-50">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                      <p class="font-display tracking-widest uppercase text-lg">Aún no hay reservas confirmadas.</p>
+                  <td hlmTd colspan="5" class="text-center py-24 text-muted-foreground">
+                    <div class="flex flex-col items-center gap-4 opacity-40">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
+                      <p class="font-display tracking-widest uppercase text-2xl">Bóveda vacía</p>
+                      <p class="font-body text-sm max-w-sm text-center">Aún no has comprado entradas. Revisa la cartelera y ven a disfrutar la magia del cine.</p>
                     </div>
                   </td>
                 </tr>
               } @else {
                 @for (reserva of reservas(); track reserva._id || reserva.id) {
-                  <tr hlmTr class="hover:bg-primary/5 transition-colors">
-                    <td hlmTd class="text-sm font-body py-4">{{ reserva.createdAt | date:'short' }}</td>
-                    <td hlmTd class="font-body py-4">
-                      <div class="font-medium text-lg text-primary">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</div>
-                      <div class="text-xs text-muted-foreground">Sala {{ reserva.salaNombre || '-' }} | {{ reserva.inicioFuncion | date:'shortTime' }}</div>
+                  <tr hlmTr class="hover:bg-primary/5 transition-colors border-b border-border/40 group">
+                    <td hlmTd class="text-sm font-medium text-muted-foreground py-6">{{ reserva.createdAt | date:'short' }}</td>
+                    <td hlmTd class="py-6">
+                      <div class="font-display tracking-wider text-2xl text-foreground group-hover:text-primary transition-colors">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</div>
+                      <div class="flex items-center gap-2 mt-1">
+                        <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-[10px] font-medium text-secondary-foreground uppercase tracking-widest ring-1 ring-inset ring-secondary-foreground/10">{{ reserva.salaNombre || '-' }}</span>
+                        <span class="text-sm font-medium text-muted-foreground flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                          {{ reserva.inicioFuncion | date:'shortTime' }}
+                        </span>
+                      </div>
                     </td>
-                    <td hlmTd class="py-4">
-                      <div class="flex flex-wrap gap-1">
+                    <td hlmTd class="py-6">
+                      <div class="flex flex-wrap gap-2">
                         @for (asiento of reserva.asientos; track asiento) {
-                           <span class="inline-flex items-center rounded-sm bg-primary/10 border border-primary/20 px-2 py-0 text-xs font-display tracking-widest text-primary shadow-sm">{{ asiento }}</span>
+                           <span class="inline-flex items-center justify-center min-w-[28px] h-7 rounded bg-primary/10 border border-primary/20 text-xs font-bold text-primary shadow-sm">{{ asiento }}</span>
                         }
                       </div>
                     </td>
-                    <td hlmTd class="text-right font-display tracking-widest text-xl text-primary py-4">
+                    <td hlmTd class="text-right font-display tracking-widest text-2xl text-foreground py-6">
                       ${{ reserva.totalPagado | number:'1.2-2' }}
                     </td>
-                    <td hlmTd class="text-center py-4">
+                    <td hlmTd class="text-center py-6">
                       @if (reserva.codigo) {
-                        <div class="inline-block p-1 bg-white rounded shadow-sm hover:scale-[2] origin-right transition-transform">
-                          <qrcode [qrdata]="reserva.codigo" [width]="64" [errorCorrectionLevel]="'M'"></qrcode>
+                        <div class="inline-block p-1.5 bg-white rounded-xl shadow-md ring-1 ring-black/5 hover:scale-[2.5] hover:-translate-x-12 origin-right transition-all duration-300 cursor-zoom-in relative group/qr z-10 hover:z-50">
+                          <qrcode [qrdata]="reserva.codigo" [width]="72" [errorCorrectionLevel]="'M'"></qrcode>
+                          <!-- Tooltip al hacer hover en el QR -->
+                          <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white text-[8px] font-medium px-2 py-1 rounded opacity-0 group-hover/qr:opacity-100 transition-opacity whitespace-nowrap">
+                            Escanear en entrada
+                          </div>
                         </div>
                       }
                     </td>
