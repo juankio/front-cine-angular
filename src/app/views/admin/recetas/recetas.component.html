@@ -26,31 +26,30 @@
   } @else {
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       @for (receta of recetas(); track receta._id || receta.id) {
-        <div class="relative group bg-[#EAE6D7] border-2 border-[#8C8775]/50 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col overflow-hidden">
-          <!-- Textura de papel antiguo -->
-          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-80 pointer-events-none z-0"></div>
+        <div class="relative group bg-[#111] border-2 border-[#332B1A] hover:border-[#C5A059] transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col overflow-hidden">
+          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
           
           <div class="p-6 relative z-10 flex-1">
-            <div class="flex justify-between items-start border-b-2 border-black/10 pb-4 mb-4">
+            <div class="flex justify-between items-start border-b-2 border-dashed border-[#332B1A] pb-4 mb-4">
               <div>
-                <p class="text-[10px] font-display tracking-[0.3em] text-black/40 uppercase mb-1">Producto Menú</p>
-                <h3 class="font-display uppercase tracking-widest text-2xl text-black leading-tight">{{ receta.menu?.nombre || 'Desconocido' }}</h3>
+                <p class="text-[10px] font-display tracking-[0.3em] text-[#8C8775] uppercase mb-1">Fórmula Vinculada</p>
+                <h3 class="font-display uppercase tracking-widest text-2xl text-[#EAE6D7] group-hover:text-[#C5A059] transition-colors leading-tight">{{ receta.menu?.nombre || 'Desconocido' }}</h3>
               </div>
-              <button (click)="eliminar(receta._id || receta.id)" class="text-black/30 hover:text-[#7A0000] p-1 transition-colors" title="Descartar Ficha">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              <button (click)="eliminar(receta._id || receta.id)" class="text-[#8C8775] hover:text-[#7A0000] p-1 transition-colors" title="Desvincular Receta">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
               </button>
             </div>
 
             <div>
-               <p class="text-[10px] font-display tracking-[0.3em] text-black/40 uppercase mb-3">Ingredientes Requeridos</p>
-               <ul class="space-y-2">
+               <p class="text-[10px] font-display tracking-[0.3em] text-[#8C8775] uppercase mb-3">Insumos a descontar por unidad</p>
+               <ul class="space-y-3">
                  @for (item of receta.ingredientes; track $index) {
-                   <li class="flex justify-between items-center text-sm font-body text-black/80">
+                   <li class="flex justify-between items-center text-sm font-body text-[#EAE6D7] bg-black/40 border border-[#332B1A] p-2 rounded-none">
                      <span class="flex items-center gap-2">
                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
                        {{ item.ingrediente?.nombre || 'Desconocido' }}
                      </span>
-                     <span class="font-display tracking-widest">{{ item.cantidadNecesaria }} <span class="text-[10px] opacity-70">{{ item.ingrediente?.unidad }}</span></span>
+                     <span class="font-display tracking-widest text-[#C5A059] text-lg">{{ item.cantidadNecesaria }} <span class="text-[10px] text-[#8C8775]">{{ item.ingrediente?.unidad }}</span></span>
                    </li>
                  }
                </ul>
@@ -58,8 +57,8 @@
           </div>
           
           <!-- Sello inferior -->
-          <div class="bg-black/5 p-2 text-center border-t border-black/10 relative z-10">
-             <span class="font-display tracking-[0.3em] text-[9px] text-black/40 uppercase">Aprobado por Administración</span>
+          <div class="bg-black p-3 text-center border-t border-[#332B1A] relative z-10">
+             <span class="font-display tracking-[0.3em] text-[9px] text-[#8C8775] uppercase opacity-50">Auditoría de Insumos Activa</span>
           </div>
         </div>
       }
