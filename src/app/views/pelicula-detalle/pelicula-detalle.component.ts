@@ -77,7 +77,7 @@ export class PeliculaDetalleComponent implements OnInit {
   toggleAsiento(id: string) {
     const sel = this.asientosSeleccionados();
     const idx = sel.indexOf(id);
-    if (idx === -1 && sel.length >= 8) return this.ts.warning("Máximo 8 asientos por compra");
+    if (idx === -1 && sel.length >= 10) return this.ts.warning("Máximo 10 asientos por compra");
     this.asientosSeleccionados.set(idx > -1 ? sel.filter(s => s !== id) : [...sel, id]);
     this.matrizAsientos.update(m => m.map(f => ({ ...f, asientos: f.asientos.map((a: any) => a.id === id ? { ...a, estado: idx > -1 ? 'libre' : 'seleccionado' } : a) })));
   }

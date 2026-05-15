@@ -10,13 +10,12 @@ import { PeliculasService } from '../../services/peliculas.service';
 import { MenuService } from '../../services/menu.service';
 import { SalasService } from '../../services/salas.service';
 import { HlmCardImports } from '@spartan-ng/helm/card';
-import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [CommonModule, DefaultLayoutComponent, CombosComidaComponent, PeliCarteleraComponent, HlmCardImports, HlmInput, HlmIconImports],
+  imports: [CommonModule, DefaultLayoutComponent, CombosComidaComponent, PeliCarteleraComponent, HlmCardImports, HlmIconImports],
   templateUrl: './index.component.html'})
 export class IndexComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
