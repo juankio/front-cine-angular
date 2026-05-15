@@ -1,78 +1,66 @@
-<div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500 text-foreground">
-      <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-border pb-6">
-        <div>
-          <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-foreground drop-shadow-md">Ingredientes y Stock</h1>
-          <p class="text-muted-foreground mt-2 text-lg">Gestiona el inventario de insumos para las recetas del cine.</p>
-        </div>
-        <button class="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-display tracking-wider uppercase text-lg h-12 px-6 flex items-center justify-center rounded-sm" (click)="abrirModal()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          Nuevo Insumo
-        </button>
-      </div>
-
-      <!-- Tabla de Ingredientes -->
-      <div class="bg-card border border-border shadow-2xl overflow-hidden rounded-xl">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-border bg-muted/30">
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4">Nombre Insumo</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4 text-center">Unidad</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4 text-right">Stock Actual</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4 text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @if (loading()) {
-                <tr>
-                  <td colspan="4" class="py-16 text-center text-muted-foreground animate-pulse">
-                    <div class="w-8 h-8 border-2 border-muted border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-                    <span class="font-display tracking-wider uppercase">Cargando inventario...</span>
-                  </td>
-                </tr>
-              } @else if (ingredientes().length === 0) {
-                <tr>
-                  <td colspan="4" class="py-20 text-center text-muted-foreground">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 opacity-50"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                    <span class="font-display tracking-wider uppercase text-xl">No hay ingredientes registrados</span>
-                  </td>
-                </tr>
-              } @else {
-                @for (item of ingredientes(); track item._id || item.id) {
-                  <tr class="hover:bg-muted/30 transition-colors border-b border-border group">
-                    <td class="p-4">
-                      <span class="font-display tracking-wider text-xl text-foreground">{{ item.nombre }}</span>
-                    </td>
-                    <td class="p-4 text-center">
-                      <span class="inline-flex items-center rounded-sm bg-muted px-2 py-1 text-sm font-display tracking-wider text-muted-foreground uppercase">
-                        {{ item.unidad }}
-                      </span>
-                    </td>
-                    <td class="p-4 text-right">
-                      <span class="font-display tracking-widest text-2xl" [class.text-primary]="item.stock <= 5" [class.text-foreground]="item.stock > 5">
-                        {{ item.stock | number:'1.0-2' }}
-                      </span>
-                    </td>
-                    <td class="p-4 text-center">
-                      <button (click)="editar(item)" class="text-neutral-500 hover:text-blue-500 hover:bg-blue-500/10 p-2 rounded transition-colors mr-2" title="Editar ingrediente">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                      </button>
-                      <button (click)="eliminar(item._id || item.id)" class="text-neutral-500 hover:text-red-500 hover:bg-red-500/10 p-2 rounded transition-colors" title="Eliminar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                      </button>
-                    </td>
-                  </tr>
-                }
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <app-ingrediente-form 
-        [visible]="modalAbierto()" 
-        [ingredienteEditar]="itemEditar"
-        (closed)="cerrarModal()" 
-        (saved)="onGuardado()">
-      </app-ingrediente-form>
+<div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-500 text-foreground relative z-10">
+  <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b-2 border-dashed border-[#332B1A] pb-6">
+    <div>
+      <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-[#EAE6D7] drop-shadow-sm">Ingredientes</h1>
+      <p class="text-[#8C8775] mt-2 text-lg font-body italic">Insumos y materia prima de la dulcería.</p>
     </div>
+    <button class="bg-[#C5A059] text-black hover:bg-[#EAE6D7] transition-colors font-display tracking-[0.2em] uppercase text-sm h-12 px-8 flex items-center justify-center rounded-none shadow-[0_0_15px_rgba(197,160,89,0.3)]" (click)="abrirModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" class="mr-3"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Nuevo Insumo
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="py-24 flex flex-col items-center justify-center text-[#8C8775] bg-[#111] border-2 border-[#332B1A] shadow-2xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
+      <div class="w-12 h-12 border-4 border-[#C5A059]/20 border-t-[#C5A059] rounded-full animate-spin mb-6 relative z-10"></div>
+      <span class="font-display tracking-[0.2em] uppercase text-xl relative z-10">Revisando inventario...</span>
+    </div>
+  } @else if (ingredientes().length === 0) {
+    <div class="py-32 flex flex-col items-center justify-center text-[#8C8775] bg-[#111] border-2 border-[#332B1A] shadow-2xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-6 opacity-30 relative z-10"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/></svg>
+      <span class="font-display tracking-[0.2em] uppercase text-2xl relative z-10">Bodega vacía</span>
+      <p class="mt-2 font-body italic opacity-70 relative z-10">No hay insumos registrados en el almacén.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      @for (item of ingredientes(); track item._id || item.id) {
+        <div class="relative group bg-[#0A0A0A] border-2 border-[#332B1A] hover:border-[#C5A059] transition-all duration-300 shadow-xl flex flex-col overflow-hidden">
+          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
+          
+          <!-- Sello superior -->
+          <div class="bg-black border-b border-[#332B1A] p-3 text-center relative z-10 flex justify-between items-center">
+             <span class="text-[10px] font-display tracking-[0.3em] text-[#8C8775] uppercase">Ref. #{{ (item._id || item.id).slice(-4) }}</span>
+             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+
+          <div class="p-5 flex-1 relative z-10 flex flex-col justify-center text-center">
+            <h3 class="font-display uppercase tracking-widest text-lg text-[#EAE6D7] group-hover:text-[#C5A059] transition-colors leading-tight mb-4">{{ item.nombre }}</h3>
+            
+            <div class="flex items-end justify-center gap-1">
+               <span class="text-4xl font-display text-[#C5A059] leading-none">{{ item.stock }}</span>
+               <span class="text-[10px] font-display tracking-widest uppercase text-[#8C8775] pb-1">{{ item.unidad }}</span>
+            </div>
+          </div>
+
+          <div class="border-t border-[#332B1A] bg-[#111] flex relative z-10">
+            <button (click)="editar(item)" class="flex-1 text-[#8C8775] hover:text-[#C5A059] hover:bg-[#C5A059]/10 p-3 transition-colors border-r border-[#332B1A] flex items-center justify-center" title="Editar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </button>
+            <button (click)="eliminar(item._id || item.id)" class="flex-1 text-[#8C8775] hover:text-white hover:bg-[#7A0000] p-3 transition-colors flex items-center justify-center" title="Eliminar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <app-ingrediente-form
+    [visible]="modalAbierto()"
+    [ingredienteEditar]="itemEditar"
+    (closed)="cerrarModal()"
+    (saved)="onGuardado()"
+  ></app-ingrediente-form>
+</div>

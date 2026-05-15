@@ -1,76 +1,74 @@
-<div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500 text-foreground">
-      <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-border pb-6">
-        <div>
-          <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-foreground drop-shadow-md">Recetas de Menú</h1>
-          <p class="text-muted-foreground mt-2 text-lg">Asigna ingredientes a cada combo para descontar stock automáticamente al vender.</p>
-        </div>
-        <button class="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-display tracking-wider uppercase text-lg h-12 px-6 flex items-center justify-center rounded-sm" (click)="abrirModal()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          Vincular Receta
-        </button>
-      </div>
-
-      <!-- Tabla de Recetas -->
-      <div class="bg-card border border-border shadow-2xl overflow-hidden rounded-xl">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-border bg-muted/30">
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4">Producto del Menú</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4">Ingredientes Necesarios</th>
-                <th class="font-display tracking-widest uppercase text-muted-foreground text-sm py-4 px-4 text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @if (loading()) {
-                <tr>
-                  <td colspan="3" class="py-16 text-center text-muted-foreground animate-pulse">
-                    <div class="w-8 h-8 border-2 border-muted border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-                    <span class="font-display tracking-wider uppercase">Cargando recetas...</span>
-                  </td>
-                </tr>
-              } @else if (recetas().length === 0) {
-                <tr>
-                  <td colspan="3" class="py-20 text-center text-muted-foreground">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 opacity-50"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                    <span class="font-display tracking-wider uppercase text-xl">No hay recetas vinculadas</span>
-                  </td>
-                </tr>
-              } @else {
-                @for (item of recetas(); track item._id || item.id) {
-                  <tr class="hover:bg-muted/30 transition-colors border-b border-border group">
-                    <td class="p-4">
-                      <span class="font-display tracking-wider text-xl text-primary">{{ item.menu?.nombre || 'Producto Eliminado' }}</span>
-                    </td>
-                    <td class="p-4">
-                      <div class="flex flex-wrap gap-2">
-                        @for (ing of item.ingredientes; track $index) {
-                           <span class="inline-flex items-center rounded-sm bg-muted px-2 py-1 text-sm font-display tracking-wider text-muted-foreground uppercase border border-border">
-                             {{ ing.cantidadNecesaria }} {{ ing.ingrediente?.unidad }} - {{ ing.ingrediente?.nombre || '?' }}
-                           </span>
-                        }
-                      </div>
-                    </td>
-                    <td class="p-4 text-center">
-                      <button (click)="editar(item)" class="text-neutral-500 hover:text-blue-500 hover:bg-blue-500/10 p-2 rounded transition-colors mr-2" title="Editar receta">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                      </button>
-                      <button (click)="eliminar(item._id || item.id)" class="text-neutral-500 hover:text-red-500 hover:bg-red-500/10 p-2 rounded transition-colors" title="Eliminar receta">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                      </button>
-                    </td>
-                  </tr>
-                }
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <app-receta-form 
-        [visible]="modalAbierto()" 
-        [recetaEditar]="itemEditar"
-        (closed)="cerrarModal()" 
-        (saved)="onGuardado()">
-      </app-receta-form>
+<div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500 text-foreground relative z-10">
+  <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b-2 border-dashed border-[#332B1A] pb-6">
+    <div>
+      <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-[#EAE6D7] drop-shadow-sm">Fichas de Receta</h1>
+      <p class="text-[#8C8775] mt-2 text-lg font-body italic">Fórmulas de vinculación entre menú e insumos.</p>
     </div>
+    <button class="bg-[#C5A059] text-black hover:bg-[#EAE6D7] transition-colors font-display tracking-[0.2em] uppercase text-sm h-12 px-8 flex items-center justify-center rounded-none shadow-[0_0_15px_rgba(197,160,89,0.3)]" (click)="abrirModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" class="mr-3"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Vincular Fórmula
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="py-24 flex flex-col items-center justify-center text-[#8C8775] bg-[#111] border-2 border-[#332B1A] shadow-2xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
+      <div class="w-12 h-12 border-4 border-[#C5A059]/20 border-t-[#C5A059] rounded-full animate-spin mb-6 relative z-10"></div>
+      <span class="font-display tracking-[0.2em] uppercase text-xl relative z-10">Consultando archivos...</span>
+    </div>
+  } @else if (recetas().length === 0) {
+    <div class="py-32 flex flex-col items-center justify-center text-[#8C8775] bg-[#111] border-2 border-[#332B1A] shadow-2xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-6 opacity-30 relative z-10"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span class="font-display tracking-[0.2em] uppercase text-2xl relative z-10">Sin fórmulas</span>
+      <p class="mt-2 font-body italic opacity-70 relative z-10">No hay recetas vinculadas al menú en este momento.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      @for (receta of recetas(); track receta._id || receta.id) {
+        <div class="relative group bg-[#EAE6D7] border-2 border-[#8C8775]/50 transition-all duration-300 hover:-translate-y-1 shadow-xl flex flex-col overflow-hidden">
+          <!-- Textura de papel antiguo -->
+          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-80 pointer-events-none z-0"></div>
+          
+          <div class="p-6 relative z-10 flex-1">
+            <div class="flex justify-between items-start border-b-2 border-black/10 pb-4 mb-4">
+              <div>
+                <p class="text-[10px] font-display tracking-[0.3em] text-black/40 uppercase mb-1">Producto Menú</p>
+                <h3 class="font-display uppercase tracking-widest text-2xl text-black leading-tight">{{ receta.menu?.nombre || 'Desconocido' }}</h3>
+              </div>
+              <button (click)="eliminar(receta._id || receta.id)" class="text-black/30 hover:text-[#7A0000] p-1 transition-colors" title="Descartar Ficha">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <div>
+               <p class="text-[10px] font-display tracking-[0.3em] text-black/40 uppercase mb-3">Ingredientes Requeridos</p>
+               <ul class="space-y-2">
+                 @for (item of receta.ingredientes; track $index) {
+                   <li class="flex justify-between items-center text-sm font-body text-black/80">
+                     <span class="flex items-center gap-2">
+                       <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
+                       {{ item.ingrediente?.nombre || 'Desconocido' }}
+                     </span>
+                     <span class="font-display tracking-widest">{{ item.cantidadNecesaria }} <span class="text-[10px] opacity-70">{{ item.ingrediente?.unidad }}</span></span>
+                   </li>
+                 }
+               </ul>
+            </div>
+          </div>
+          
+          <!-- Sello inferior -->
+          <div class="bg-black/5 p-2 text-center border-t border-black/10 relative z-10">
+             <span class="font-display tracking-[0.3em] text-[9px] text-black/40 uppercase">Aprobado por Administración</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <app-receta-form
+    [visible]="modalAbierto()"
+    (closed)="cerrarModal()"
+    (saved)="onGuardado()">
+  </app-receta-form>
+</div>

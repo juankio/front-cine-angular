@@ -1,85 +1,80 @@
 <div class="w-full max-w-7xl mx-auto p-8 md:p-12 flex flex-col gap-8 animate-in fade-in zoom-in-95 duration-500 text-foreground relative z-10">
-      <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b-2 border-dashed border-[#332B1A] pb-6">
-        <div>
-          <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-[#EAE6D7] drop-shadow-sm">Películas</h1>
-          <p class="text-[#8C8775] mt-2 text-lg font-body italic">Gestiona el catálogo de obras en cartelera.</p>
-        </div>
-        <button class="bg-[#C5A059] text-black hover:bg-[#EAE6D7] transition-colors font-display tracking-[0.2em] uppercase text-sm h-12 px-8 flex items-center justify-center rounded-none shadow-[0_0_15px_rgba(197,160,89,0.3)]" (click)="abrirModal()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" class="mr-3"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          Nueva Película
-        </button>
-      </div>
-
-      <!-- Lista de películas (Estilo Bitácora) -->
-      <div class="bg-[#111] border-2 border-[#332B1A] shadow-2xl overflow-hidden relative">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
-        <div class="overflow-x-auto relative z-10">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b-2 border-[#332B1A] bg-black">
-                <th class="font-display tracking-[0.2em] uppercase text-[#C5A059] text-sm p-5">Póster</th>
-                <th class="font-display tracking-[0.2em] uppercase text-[#C5A059] text-sm p-5">Título</th>
-                <th class="font-display tracking-[0.2em] uppercase text-[#C5A059] text-sm p-5">Duración</th>
-                <th class="font-display tracking-[0.2em] uppercase text-[#C5A059] text-sm p-5 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @if (loading()) {
-                <tr>
-                  <td colspan="4" class="py-16 text-center text-[#8C8775] animate-pulse bg-[#1A1A1A]">
-                    <div class="w-8 h-8 border-2 border-[#C5A059]/20 border-t-[#C5A059] rounded-full animate-spin mx-auto mb-4"></div>
-                    <span class="font-display tracking-[0.2em] uppercase">Consultando archivos...</span>
-                  </td>
-                </tr>
-              } @else if (peliculas().length === 0) {
-                <tr>
-                  <td colspan="4" class="py-24 text-center text-[#8C8775] bg-[#1A1A1A]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 opacity-30"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                    <span class="font-display tracking-widest uppercase text-xl">Catálogo vacío</span>
-                  </td>
-                </tr>
-              } @else {
-                @for (row of peliculas(); track row._id || row.id) {
-                  <tr class="hover:bg-black transition-colors border-b border-dashed border-[#332B1A] group">
-                    <td class="p-5">
-                      @if (row.imagenUrl) {
-                        <div class="h-24 w-16 border border-[#332B1A] overflow-hidden group-hover:border-[#C5A059] transition-colors relative">
-                          <img [src]="row.imagenUrl" alt="Poster" class="h-full w-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500" />
-                        </div>
-                      } @else {
-                        <div class="h-24 w-16 bg-[#1A1A1A] border border-[#332B1A] flex items-center justify-center text-[#C5A059] group-hover:border-[#C5A059] transition-colors">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
-                        </div>
-                      }
-                    </td>
-                    <td class="p-5">
-                      <span class="font-display text-2xl tracking-wide text-[#EAE6D7] group-hover:text-[#C5A059] transition-colors">{{ row.titulo }}</span>
-                    </td>
-                    <td class="p-5">
-                      <span class="inline-flex items-center border border-[#332B1A] bg-black px-3 py-1 text-xs font-display tracking-[0.2em] text-[#8C8775] uppercase shadow-inner">
-                        {{ row.duracionMinutos }} MIN
-                      </span>
-                    </td>
-                    <td class="p-5 text-right space-x-2">
-                      <button (click)="editar(row)" class="text-[#8C8775] hover:text-[#C5A059] border border-transparent hover:border-[#C5A059] bg-transparent hover:bg-[#C5A059]/10 p-2 transition-all duration-300" title="Editar obra">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                      </button>
-                      <button (click)="eliminar(row._id || row.id)" class="text-[#8C8775] hover:text-white border border-transparent hover:border-[#7A0000] bg-transparent hover:bg-[#7A0000] p-2 transition-all duration-300" title="Eliminar obra">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                      </button>
-                    </td>
-                  </tr>
-                }
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <app-pelicula-form 
-        [visible]="modalAbierto()" 
-        [peliculaEditar]="peliculaEditar"
-        (closed)="cerrarModal()" 
-        (saved)="onPeliculaGuardada()">
-      </app-pelicula-form>
+  <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b-2 border-dashed border-[#332B1A] pb-6">
+    <div>
+      <h1 class="text-5xl md:text-6xl font-display tracking-widest uppercase text-[#EAE6D7] drop-shadow-sm">Películas</h1>
+      <p class="text-[#8C8775] mt-2 text-lg font-body italic">Gestiona el catálogo de obras en cartelera.</p>
     </div>
+    <button class="bg-[#C5A059] text-black hover:bg-[#EAE6D7] transition-colors font-display tracking-[0.2em] uppercase text-sm h-12 px-8 flex items-center justify-center rounded-none shadow-[0_0_15px_rgba(197,160,89,0.3)]" (click)="abrirModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" class="mr-3"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+      Nueva Obra
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="py-24 flex flex-col items-center justify-center text-[#8C8775] bg-[#111] border-2 border-[#332B1A] shadow-2xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
+      <div class="w-12 h-12 border-4 border-[#C5A059]/20 border-t-[#C5A059] rounded-full animate-spin mb-6 relative z-10"></div>
+      <span class="font-display tracking-[0.2em] uppercase text-xl relative z-10">Consultando archivos estelares...</span>
+    </div>
+  } @else if (peliculas().length === 0) {
+    <div class="py-32 flex flex-col items-center justify-center text-[#8C8775] bg-[#111] border-2 border-[#332B1A] shadow-2xl relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none z-0"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-6 opacity-30 relative z-10"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
+      <span class="font-display tracking-[0.2em] uppercase text-2xl relative z-10">Catálogo vacío</span>
+      <p class="mt-2 font-body italic opacity-70 relative z-10">No hay películas registradas en el sistema.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      @for (row of peliculas(); track row._id || row.id) {
+        <div class="relative group bg-[#0A0A0A] border-[3px] border-[#332B1A] hover:border-[#C5A059] transition-all duration-500 hover:-translate-y-2 shadow-2xl overflow-hidden flex flex-col">
+          <!-- Botones de Acción (Flotantes) -->
+          <div class="absolute top-2 right-2 z-30 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button (click)="editar(row)" class="bg-[#111] border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-black p-2 shadow-lg transition-colors" title="Editar obra">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </button>
+            <button (click)="eliminar(row._id || row.id)" class="bg-[#111] border border-[#7A0000] text-[#7A0000] hover:bg-[#7A0000] hover:text-white p-2 shadow-lg transition-colors" title="Eliminar obra">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+            </button>
+          </div>
+
+          <!-- Poster -->
+          <div class="relative w-full aspect-[2/3] bg-black border-b-2 border-[#332B1A] group-hover:border-[#C5A059] transition-colors">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 pointer-events-none z-10"></div>
+            <div class="absolute inset-0 bg-[#C5A059] mix-blend-color opacity-10 group-hover:opacity-0 transition-opacity z-10 pointer-events-none"></div>
+            @if (row.imagenUrl) {
+              <img [src]="row.imagenUrl" alt="Poster" class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+            } @else {
+              <div class="w-full h-full flex items-center justify-center text-[#C5A059] opacity-30">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
+              </div>
+            }
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 z-10 pointer-events-none"></div>
+            
+            <div class="absolute bottom-4 left-4 z-20 pointer-events-none">
+              <span class="inline-block border border-[#C5A059]/30 bg-black/80 px-2 py-0.5 text-xs font-display tracking-[0.2em] text-[#C5A059] uppercase shadow-inner mb-2">
+                {{ row.duracionMinutos }} MIN
+              </span>
+              <h3 class="font-display text-2xl leading-[0.9] tracking-wide text-[#EAE6D7] group-hover:text-[#C5A059] transition-colors drop-shadow-md line-clamp-3">
+                {{ row.titulo }}
+              </h3>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-[#111] flex flex-col justify-between flex-1">
+             <div class="flex items-center justify-between opacity-50">
+               <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#8C8775]">Catálogo</span>
+               <span class="text-[10px] font-display tracking-[0.2em] uppercase text-[#8C8775]">{{ row.anio }}</span>
+             </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <app-pelicula-form 
+    [visible]="modalAbierto()" 
+    [peliculaEditar]="peliculaEditar"
+    (closed)="cerrarModal()" 
+    (saved)="onPeliculaGuardada()">
+  </app-pelicula-form>
+</div>
