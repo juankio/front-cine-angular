@@ -1,32 +1,23 @@
-<div class="flex flex-col gap-2 border-t border-border py-4 md:hidden px-4">
+<div class="flex flex-col gap-2 border-t border-[#332B1A] py-4 md:hidden px-4 bg-[#0A0A0A]">
       @for (link of filteredLinks(); track link.to) {
           <a
-            hlmBtn
-            variant="ghost"
             [routerLink]="link.to"
             [fragment]="link.fragment"
-            routerLinkActive="bg-accent text-accent-foreground font-semibold"
-            [routerLinkActiveOptions]="{exact: link.exact}"
-            class="w-full justify-center px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
+            [class.bg-[#1A1A1A]]="isActive(link)"
+            [class.text-[#C5A059]]="isActive(link)"
+            class="w-full text-center px-4 py-3 font-display tracking-widest text-sm uppercase text-[#8C8775] hover:text-[#EAE6D7] transition-colors border border-transparent hover:border-[#332B1A]"
             (click)="closeMenu.emit()"
           >
           {{ link.label }}
         </a>
       }
 
-      <div class="flex flex-col items-center gap-2 pt-2 border-t border-border mt-2">
-        <button hlmBtn variant="ghost" size="icon" (click)="toggleTheme.emit()" class="w-full flex justify-center mb-2">
-          @if (isDarkMode()) {
-            <ng-icon hlm name="lucideSun" size="sm"></ng-icon>
-          } @else {
-            <ng-icon hlm name="lucideMoon" size="sm"></ng-icon>
-          }
-        </button>
+      <div class="flex flex-col items-center gap-4 pt-4 border-t border-[#332B1A] mt-2">
         @if (authStore.isAuthenticated()) {
-          <span class="text-sm font-medium text-muted-foreground">{{ authStore.user()?.email || 'Usuario' }}</span>
-          <button hlmBtn variant="destructive" class="w-full" (click)="handleLogout()">Salir</button>
+          <span class="text-xs font-display tracking-widest text-[#C5A059] uppercase">VIP: {{ authStore.user()?.email || 'Usuario' }}</span>
+          <button class="w-full text-xs font-display tracking-widest uppercase border border-[#7A0000] text-[#7A0000] hover:bg-[#7A0000] hover:text-white py-3 transition-colors" (click)="handleLogout()">Salir</button>
         } @else {
-          <app-login-modal />
+          <app-login-modal class="w-full [&>button]:w-full"></app-login-modal>
         }
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { Component, input, output, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterLink, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
 import { AuthStore } from '../../state/auth.store';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { HlmButton } from '@spartan-ng/helm/button';
@@ -10,7 +11,7 @@ import { lucideSun, lucideMoon } from '@ng-icons/lucide';
 @Component({
   selector: 'app-nav-menu-mobile',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, LoginModalComponent, HlmButton, HlmIcon, NgIconComponent],
+  imports: [RouterLink, LoginModalComponent, HlmButton, HlmIcon, NgIconComponent],
   providers: [provideIcons({ lucideSun, lucideMoon })],
   templateUrl: './nav-menu-mobile.component.html'})
 export class NavMenuMobileComponent {
@@ -22,6 +23,25 @@ export class NavMenuMobileComponent {
 
   closeMenu = output<void>();
   toggleTheme = output<void>();
+
+  currentUrl = '/';
+
+  constructor() {
+    this.currentUrl = this.router.url;
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: any) => {
+      this.currentUrl = e.urlAfterRedirects;
+    });
+  }
+
+  isActive(link: any): boolean {
+    if (link.to === '/' && link.fragment) {
+      return this.currentUrl.includes('#' + link.fragment);
+    }
+    if (link.to === '/' && !link.fragment) {
+      return this.currentUrl === '/' || this.currentUrl.startsWith('/?');
+    }
+    return this.currentUrl.startsWith(link.to);
+  }
 
   handleLogout() {
     this.authStore.logout();

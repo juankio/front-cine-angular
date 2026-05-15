@@ -4,9 +4,10 @@
           <a
             [routerLink]="link.to"
             [fragment]="link.fragment"
-            routerLinkActive="text-[#C5A059] border-b-2 border-[#C5A059]"
-            [routerLinkActiveOptions]="{exact: link.exact}"
-            class="font-display tracking-[0.15em] text-sm uppercase text-[#8C8775] hover:text-[#EAE6D7] pb-1 transition-colors"
+            [class.text-[#C5A059]]="isActive(link)"
+            [class.border-b-2]="isActive(link)"
+            [class.border-[#C5A059]]="isActive(link)"
+            class="font-display tracking-[0.15em] text-sm uppercase text-[#8C8775] hover:text-[#EAE6D7] pb-1 transition-colors block"
           >
             {{ link.label }}
           </a>
