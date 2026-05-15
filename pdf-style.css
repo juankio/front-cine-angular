@@ -1,0 +1,100 @@
+/* pdf-style.css */
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1f2937;
+  line-height: 1.6;
+  padding: 20px 40px;
+}
+
+h1 {
+  color: #e11d48; /* Rose 600 - Color Cine */
+  border-bottom: 3px solid #e11d48;
+  padding-bottom: 10px;
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #be123c;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h3 {
+  color: #374151;
+}
+
+.box {
+  background-color: #f3f4f6;
+  border-left: 4px solid #e11d48;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+}
+
+code {
+  background-color: #e5e7eb;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #be123c;
+  font-weight: bold;
+}
+
+pre {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+pre code {
+  background-color: transparent;
+  color: inherit;
+  font-weight: normal;
+}
+
+/* Estilos de Tabla tipo Excel */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 0.95em;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+th {
+  background-color: #e11d48;
+  color: white;
+  text-align: left;
+  padding: 12px 15px;
+  border: 1px solid #be123c;
+}
+
+td {
+  padding: 10px 15px;
+  border: 1px solid #d1d5db;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+tbody tr:hover {
+  background-color: #fee2e2;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: white;
+}
+.badge-ui { background-color: #3b82f6; }
+.badge-feature { background-color: #10b981; }
+.badge-layout { background-color: #8b5cf6; }

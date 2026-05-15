@@ -2,30 +2,30 @@
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 flex flex-col gap-10">
 
         <!-- Nuevo Hero Limpio y Minimalista -->
-        <hlm-card class="relative flex flex-col p-8 md:p-14 w-full shadow-sm border-border bg-card overflow-hidden">
+        <hlm-card class="hero-animate relative flex flex-col p-8 md:p-14 w-full shadow-lg border-border bg-card overflow-hidden">
           
           <!-- Gradiente radial sutil de fondo -->
-          <div class="absolute top-0 inset-x-0 h-full bg-gradient-to-b from-primary/5 via-primary/[0.02] to-transparent pointer-events-none"></div>
+          <div class="absolute top-0 inset-x-0 h-full bg-gradient-to-tr from-primary/5 via-primary/10 to-transparent pointer-events-none"></div>
 
           <div class="relative z-10 flex flex-col md:flex-row gap-8 w-full items-center justify-between">
             <div class="text-center md:text-left flex-1">
-              <h1 class="text-5xl md:text-8xl font-display tracking-widest text-foreground uppercase drop-shadow-sm">
+              <h1 class="text-6xl md:text-8xl font-display tracking-widest text-foreground uppercase drop-shadow-sm leading-none mb-2">
                 Cine POOR
               </h1>
               <p class="text-muted-foreground mt-4 text-base md:text-xl font-medium max-w-lg mx-auto md:mx-0">
-                Compra tu combo, elige función y reserva tu mesa en minutos.
+                Reserva tu butaca, elige tu combo y vive la magia del cine sin complicaciones.
               </p>
             </div>
-            <div class="relative w-full md:w-96 flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <input hlmInput type="text" placeholder="Buscar película..." [value]="searchTerm()" (input)="onSearchInput($event)" class="w-full pl-12 h-14 text-lg rounded-xl bg-background border-border shadow-sm focus-visible:ring-primary relative z-10 transition-all hover:border-primary/50" />
+            <div class="relative w-full md:w-[450px] flex-shrink-0 group">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors z-20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input hlmInput type="text" placeholder="¿Qué película quieres ver?..." [value]="searchTerm()" (input)="onSearchInput($event)" class="w-full pl-12 h-16 text-lg rounded-2xl bg-background border-border shadow-md focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:border-primary relative z-10 transition-all hover:border-primary/50" />
             </div>
           </div>
         </hlm-card>
 
         @if (!searchTerm()) {
           <!-- En vivo hoy (Oculto al buscar) -->
-          <div class="animate-in fade-in duration-500">
+          <div class="">
             <div class="flex items-center gap-2 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
               <p class="text-lg font-semibold uppercase tracking-wider font-display">Próximas funciones</p>
@@ -34,7 +34,7 @@
             @if (funcionesVivas().length > 0) {
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 @for (funcion of funcionesVivas(); track funcion._id || funcion.id) {
-                  <div class="group flex items-center p-3 sm:p-4 gap-3 sm:gap-4 bg-card border border-border shadow-sm hover:shadow-primary/20 hover:border-primary/50 transition-all cursor-pointer rounded-xl overflow-hidden" (click)="irADetalle(funcion.peliculaId)">
+                  <div class="stagger-animate group flex items-center p-3 sm:p-4 gap-3 sm:gap-4 bg-card border border-border shadow-sm hover:shadow-primary/20 hover:border-primary/50 transition-all cursor-pointer rounded-xl overflow-hidden" (click)="irADetalle(funcion.peliculaId)">
                     <div class="w-16 h-20 flex-shrink-0 bg-muted rounded-md overflow-hidden relative">
                       @if (funcion.peliculaImg) {
                         <img [src]="funcion.peliculaImg" class="w-full h-full object-cover transition-transform group-hover:scale-105" alt="Poster">
@@ -59,35 +59,41 @@
                 }
               </div>
             } @else {
-              <hlm-card class="flex flex-col p-10 w-full items-center justify-center text-center shadow-sm bg-card/50 backdrop-blur-xl">
-                <p class="text-2xl font-medium font-display uppercase tracking-widest text-muted-foreground">Sin resultados</p>
-                <p class="text-muted-foreground mt-2">No hay funciones próximas.</p>
+              <hlm-card class="stagger-animate flex flex-col py-16 w-full items-center justify-center text-center shadow-none border-dashed bg-card/30 backdrop-blur-xl">
+                <div class="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <p class="text-2xl font-medium font-display uppercase tracking-widest text-foreground">Aún no hay funciones</p>
+                <p class="text-muted-foreground mt-2 max-w-sm">No tenemos funciones programadas en este momento. Revisa la cartelera para ver los próximos estrenos.</p>
               </hlm-card>
             }
           </div>
 
           <!-- Combos para hoy (Oculto al buscar) -->
-          <div class="animate-in fade-in duration-500 delay-100 fill-mode-both">
+          <div class="">
             <div class="flex items-center gap-2 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
               <p class="text-lg font-semibold uppercase tracking-wider font-display">Combos para hoy</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               @for (combo of menus(); track combo._id || combo.id) {
-                <app-combos-comida
-                  [nomProducto]="combo.nombre"
-                  [precioProducto]="combo.precio?.toString() || '0'"
-                  [infoProducto]="combo.descripcion"
-                  [imagenUrl]="combo.imagenUrl"
-                  [recomendado]="combo.recomendado"
-                />
+                <div class="stagger-animate h-full">
+                  <app-combos-comida
+                    class="h-full block"
+                    [nomProducto]="combo.nombre"
+                    [precioProducto]="combo.precio?.toString() || '0'"
+                    [infoProducto]="combo.descripcion"
+                    [imagenUrl]="combo.imagenUrl"
+                    [recomendado]="combo.recomendado"
+                  />
+                </div>
               }
             </div>
           </div>
         }
 
         <!-- En cartelera / Resultados -->
-        <div class="mb-6 animate-in fade-in duration-300">
+        <div class="mb-6">
           <div class="flex items-center gap-2 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             <p class="text-lg font-semibold uppercase tracking-wider font-display">
@@ -97,9 +103,10 @@
           
           @if (peliculas().length > 0) {
             @if (peliculasFiltradas().length > 0) {
-              <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-300">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 @for (pelicula of peliculasFiltradas(); track pelicula._id || pelicula.id) {
                   <app-peli-cartelera
+                    class="stagger-animate"
                     [peliIdc]="pelicula._id || pelicula.id"
                     [peliTituloc]="pelicula.titulo"
                     [peliDurationc]="pelicula.duracionMinutos?.toString() || '0'"
@@ -108,7 +115,7 @@
                 }
               </div>
             } @else {
-              <div class="flex flex-col p-10 w-full items-center justify-center text-center border border-border rounded-xl shadow-sm bg-card/50 backdrop-blur-xl min-h-[200px] animate-in fade-in duration-300">
+              <div class="flex flex-col p-10 w-full items-center justify-center text-center border border-border rounded-xl shadow-sm bg-card/50 backdrop-blur-xl min-h-[200px]">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30 mb-4"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
                 <p class="text-xl font-medium font-display uppercase tracking-widest text-muted-foreground">Sin resultados</p>
                 <p class="text-muted-foreground mt-2 text-sm">No encontramos películas con el título "{{ searchTerm() }}".</p>

@@ -13,8 +13,8 @@ color-scheme: light;
 --card-foreground: 344.97 13.46% 3.85%;
 --popover: 0 0% 100%;
 --popover-foreground: 344.97 13.46% 3.85%;
---primary: 344.35 7.21% 9.8%;
---primary-foreground: 0 0.5% 98.03%;
+--primary: 348 83% 47%;
+--primary-foreground: 0 0% 100%;
 --secondary: 344.02 3.93% 95.75%;
 --secondary-foreground: 344.35 7.21% 9.8%;
 --muted: 344.02 3.93% 95.75%;
@@ -24,14 +24,14 @@ color-scheme: light;
 --destructive: 351.72 100% 40.53%;
 --border: 344.76 6.76% 89.87%;
 --input: 344.76 6.76% 89.87%;
---ring: 239.9 5.73% 64.3%;
+--ring: 348 83% 47%;
 --radius: 0.625rem;
 --sidebar: 240 5% 98%;
 --sidebar-foreground: 240 4% 16%;
 --sidebar-accent: 240 5% 96%;
 --sidebar-accent-foreground: 240 5% 22%;
 --sidebar-border: 240 4% 88%;
---sidebar-ring: 240 3% 70%;
+--sidebar-ring: 348 83% 47%;
 }
 
 :root.dark {
@@ -42,8 +42,8 @@ color-scheme: dark;
 --card-foreground: 0 0.5% 98.03%;
 --popover: 344.35 7.21% 9.8%;
 --popover-foreground: 0 0.5% 98.03%;
---primary: 344.76 6.76% 89.87%;
---primary-foreground: 344.35 7.21% 9.8%;
+--primary: 348 83% 55%;
+--primary-foreground: 0 0% 100%;
 --secondary: 344.51 4.81% 15.74%;
 --secondary-foreground: 0 0.5% 98.03%;
 --muted: 344.51 4.81% 15.74%;
@@ -53,13 +53,13 @@ color-scheme: dark;
 --destructive: 358.76 100% 69.84%;
 --border: 0 0% 13.73%;
 --input: 0 0% 18.43%;
---ring: 239.97 4.41% 46.34%;
+--ring: 348 83% 55%;
 --sidebar: 240 5% 22%;
 --sidebar-foreground: 0 0% 98%;
 --sidebar-accent: 240 4% 26%;
 --sidebar-accent-foreground: 0 0% 98%;
 --sidebar-border: 0 0% 10%;
---sidebar-ring: 240 3% 65%;
+--sidebar-ring: 348 83% 55%;
 }
 
 @layer base {

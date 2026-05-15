@@ -1,5 +1,6 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {  Component, OnInit, inject, signal, computed , DestroyRef } from '@angular/core';
+import {  Component, OnInit, inject, signal, computed , DestroyRef, afterNextRender, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { animate, utils } from 'animejs';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DefaultLayoutComponent } from '../../layouts/default-layout/default-layout.component';
@@ -23,6 +24,24 @@ export class IndexComponent implements OnInit {
   private menuService = inject(MenuService);
   private salasService = inject(SalasService);
   private router = inject(Router);
+
+  constructor() {
+    afterNextRender(() => {
+      animate('.stagger-animate', {
+        translateY: [20, 0],
+        opacity: [0, 1],
+        delay: utils.stagger(100),
+        duration: 800,
+        ease: 'outExpo'
+      });
+      animate('.hero-animate', {
+        translateY: [30, 0],
+        opacity: [0, 1],
+        duration: 1200,
+        ease: 'outQuart'
+      });
+    });
+  }
   
   peliculas = signal<any[]>([]);
   menus = signal<any[]>([]);
