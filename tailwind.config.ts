@@ -11,9 +11,16 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Bebas Neue"', 'sans-serif'],
-        body: ['Outfit', 'sans-serif'],
-        display: ['"Bebas Neue"', 'sans-serif'],
+        sans: ['"Lora"', 'serif'],
+        body: ['"Lora"', 'serif'],
+        display: ['"Playfair Display"', 'serif'],
+      },
+      colors: {
+        velvet: {
+          500: '#A31515',
+          700: '#7A0000',
+          900: '#4A0000',
+        }
       }
     },
   },

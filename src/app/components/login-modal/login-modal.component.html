@@ -1,17 +1,20 @@
 <hlm-dialog>
-      <button hlmBtn brnDialogTrigger variant="ghost" class="px-4 py-2 font-display tracking-widest text-lg text-muted-foreground hover:text-foreground transition-colors">
-        Entrar
+      <button hlmBtn brnDialogTrigger variant="ghost" class="px-6 py-2 font-display tracking-[0.2em] text-sm uppercase text-[#C5A059] border border-[#C5A059] hover:bg-[#C5A059] hover:text-black transition-colors rounded-none">
+        Taquilla
       </button>
 
-      <hlm-dialog-content class="w-[95vw] sm:max-w-[900px] h-auto max-h-[90vh] rounded-none border-[3px] border-border bg-background shadow-[8px_8px_0_0_rgba(0,0,0,0.1)] dark:shadow-[8px_8px_0_0_rgba(255,255,255,0.05)] p-0 overflow-y-auto overflow-x-hidden flex flex-col md:flex-row gap-0" *brnDialogContent="let ctx">
-        <button hlmBtn variant="ghost" size="icon" hlmDialogClose class="absolute right-4 top-4 z-20 rounded-none bg-background border-2 border-border text-foreground hover:bg-muted transition-all hover:-translate-y-0.5 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0_0_rgba(255,255,255,0.3)]">
+      <hlm-dialog-content class="w-[95vw] sm:max-w-[900px] h-auto max-h-[90vh] rounded-none border-[4px] border-[#332B1A] bg-[#0A0A0A] shadow-2xl shadow-black/80 p-0 overflow-y-auto overflow-x-hidden flex flex-col md:flex-row gap-0" *brnDialogContent="let ctx">
+        
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none z-0"></div>
+
+        <button hlmBtn variant="ghost" size="icon" hlmDialogClose class="absolute right-4 top-4 z-20 rounded-none bg-black border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-black transition-colors">
           <ng-icon hlm name="lucideX" size="sm"></ng-icon>
         </button>
 
-        <app-login-marketing class="w-full md:w-5/12 flex-shrink-0"></app-login-marketing>
+        <app-login-marketing class="w-full md:w-5/12 flex-shrink-0 z-10 border-r border-[#332B1A]"></app-login-marketing>
 
         <app-login-form-content
-          class="w-full md:w-7/12"
+          class="w-full md:w-7/12 z-10"
           [motar]="motar()"
           (toggleMode)="toggleMode()"
           (loginSubmit)="handleLogin($event)"

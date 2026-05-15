@@ -5,61 +5,73 @@
 @tailwind utilities;
 
 :root {
-color-scheme: light;
---font-sans: "Bebas Neue", sans-serif;
---background: 0 0% 100%;
---foreground: 344.97 13.46% 3.85%;
---card: 0 0% 100%;
---card-foreground: 344.97 13.46% 3.85%;
---popover: 0 0% 100%;
---popover-foreground: 344.97 13.46% 3.85%;
---primary: 348 83% 47%;
---primary-foreground: 0 0% 100%;
---secondary: 344.02 3.93% 95.75%;
---secondary-foreground: 344.35 7.21% 9.8%;
---muted: 344.02 3.93% 95.75%;
---muted-foreground: 239.97 4.41% 46.34%;
---accent: 344.02 3.93% 95.75%;
---accent-foreground: 344.35 7.21% 9.8%;
---destructive: 351.72 100% 40.53%;
---border: 344.76 6.76% 89.87%;
---input: 344.76 6.76% 89.87%;
---ring: 348 83% 47%;
---radius: 0.625rem;
---sidebar: 240 5% 98%;
---sidebar-foreground: 240 4% 16%;
---sidebar-accent: 240 5% 96%;
---sidebar-accent-foreground: 240 5% 22%;
---sidebar-border: 240 4% 88%;
---sidebar-ring: 348 83% 47%;
+  /* Forzamos el modo oscuro como predeterminado y única estética para el cine clásico */
+  color-scheme: dark;
+  
+  --background: 0 0% 4%; /* #0A0A0A */
+  --foreground: 47 24% 88%; /* #EAE6D7 Cream */
+  
+  --card: 0 0% 7%; /* #111111 */
+  --card-foreground: 47 24% 88%;
+  
+  --popover: 0 0% 7%;
+  --popover-foreground: 47 24% 88%;
+  
+  --primary: 40 47% 56%; /* #C5A059 Gold */
+  --primary-foreground: 0 0% 4%; /* #0A0A0A */
+  
+  --secondary: 0 0% 10%; /* #1A1A1A */
+  --secondary-foreground: 40 47% 56%; /* Gold */
+  
+  --muted: 0 0% 13%; /* #222222 */
+  --muted-foreground: 47 9% 50%; /* #8C8775 */
+  
+  --accent: 0 0% 10%;
+  --accent-foreground: 40 47% 56%;
+  
+  --destructive: 0 100% 24%; /* #7A0000 Velvet Red */
+  --destructive-foreground: 47 24% 88%;
+  
+  --border: 40 33% 15%; /* #332B1A Dark Gold Border */
+  --input: 40 33% 15%;
+  --ring: 40 47% 56%;
+  
+  --radius: 0rem; /* Bordes cuadrados, más serios y retro */
+  
+  --sidebar: 0 0% 7%;
+  --sidebar-foreground: 47 24% 88%;
+  --sidebar-accent: 0 0% 10%;
+  --sidebar-accent-foreground: 40 47% 56%;
+  --sidebar-border: 40 33% 15%;
+  --sidebar-ring: 40 47% 56%;
 }
 
 :root.dark {
-color-scheme: dark;
---background: 344.97 13.46% 3.85%;
---foreground: 0 0.5% 98.03%;
---card: 344.35 7.21% 9.8%;
---card-foreground: 0 0.5% 98.03%;
---popover: 344.35 7.21% 9.8%;
---popover-foreground: 0 0.5% 98.03%;
---primary: 348 83% 55%;
---primary-foreground: 0 0% 100%;
---secondary: 344.51 4.81% 15.74%;
---secondary-foreground: 0 0.5% 98.03%;
---muted: 344.51 4.81% 15.74%;
---muted-foreground: 239.9 5.73% 64.3%;
---accent: 344.51 4.81% 15.74%;
---accent-foreground: 0 0.5% 98.03%;
---destructive: 358.76 100% 69.84%;
---border: 0 0% 13.73%;
---input: 0 0% 18.43%;
---ring: 348 83% 55%;
---sidebar: 240 5% 22%;
---sidebar-foreground: 0 0% 98%;
---sidebar-accent: 240 4% 26%;
---sidebar-accent-foreground: 0 0% 98%;
---sidebar-border: 0 0% 10%;
---sidebar-ring: 348 83% 55%;
+  /* Mismos valores para que no se rompa si togglean el tema */
+  --background: 0 0% 4%;
+  --foreground: 47 24% 88%;
+  --card: 0 0% 7%;
+  --card-foreground: 47 24% 88%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 47 24% 88%;
+  --primary: 40 47% 56%;
+  --primary-foreground: 0 0% 4%;
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 40 47% 56%;
+  --muted: 0 0% 13%;
+  --muted-foreground: 47 9% 50%;
+  --accent: 0 0% 10%;
+  --accent-foreground: 40 47% 56%;
+  --destructive: 0 100% 24%;
+  --border: 40 33% 15%;
+  --input: 40 33% 15%;
+  --ring: 40 47% 56%;
+  --sidebar: 0 0% 7%;
+  --sidebar-foreground: 47 24% 88%;
+  --sidebar-accent: 0 0% 10%;
+  --sidebar-accent-foreground: 40 47% 56%;
+  --sidebar-border: 40 33% 15%;
+  --sidebar-ring: 40 47% 56%;
 }
 
 @layer base {
@@ -68,11 +80,56 @@ color-scheme: dark;
   }
   body {
     @apply bg-background text-foreground tracking-wide;
+    background-image: radial-gradient(circle at center, rgba(197, 160, 89, 0.03) 0%, transparent 70%);
   }
   p, span, div.text-sm, input, label, th, td, a {
     @apply font-body tracking-normal;
   }
-  h1, h2, h3, h4, h5, h6, button, .font-display {
-    @apply font-sans tracking-wide uppercase;
+  h1, h2, h3, h4, h5, h6, button, .heading-style {
+    @apply font-display tracking-wide uppercase;
+  }
+  
+  /* Ticket Deco utility classes */
+  .ticket-border {
+    position: relative;
+    border: 2px solid theme('colors.primary.DEFAULT');
+  }
+  .ticket-border::before, .ticket-border::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: theme('colors.background');
+    border-radius: 50%;
+    border: 2px solid theme('colors.primary.DEFAULT');
+    z-index: 10;
+  }
+  .ticket-border::before {
+    left: -12px;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+  }
+  .ticket-border::after {
+    right: -12px;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+  }
+  
+  /* Art Deco border utility */
+  .art-deco-border {
+    position: relative;
+    padding: 4px;
+  }
+  .art-deco-border::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid theme('colors.primary.DEFAULT');
+    opacity: 0.5;
+    pointer-events: none;
   }
 }

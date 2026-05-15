@@ -1,17 +1,19 @@
 <!doctype html>
-<html lang="es" class="antialiased font-sans text-gray-900 bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-100">
+<html lang="es" class="antialiased font-body text-foreground bg-background dark">
 <head>
   <meta charset="utf-8">
-  <title>Cine POOR</title>
+  <title>Cine POOR - La Magia del Séptimo Arte</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Fuentes de cine: Bebas Neue para títulos (estilo póster 80s), Outfit para UI limpia -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Fuentes Clásicas: Playfair Display para títulos, Lora para cuerpos de texto -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 </head>
-<body class="min-h-screen selection:bg-blue-500 selection:text-white">
+<body class="min-h-screen selection:bg-primary selection:text-primary-foreground relative">
+  <!-- Capa de Grano de Película (Film Grain) -->
+  <div class="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-40 mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
   <app-root></app-root>
 </body>
 </html>

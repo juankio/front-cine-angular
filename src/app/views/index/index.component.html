@@ -1,39 +1,46 @@
 <app-default-layout>
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 flex flex-col gap-10">
 
-        <!-- Hero Cinematográfico (Overdrive) -->
-        <div class="hero-animate relative w-full h-[50vh] md:h-[60vh] min-h-[400px] max-h-[700px] rounded-3xl overflow-hidden shadow-2xl mb-4">
-          <!-- Fondo Cinematográfico Collage/Placeholder -->
-          <div class="absolute inset-0 bg-black">
-             <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 mix-blend-overlay" alt="Cinema background" />
-             <!-- Gradiente de profundidad -->
-             <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
-             <!-- Gradiente lateral dramático -->
-             <div class="absolute inset-0 bg-gradient-to-r from-background via-black/40 to-transparent"></div>
-          </div>
+<app-default-layout>
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-12 flex flex-col gap-16 relative z-10">
 
-          <div class="absolute inset-0 flex flex-col items-center justify-center p-6 md:p-12 text-center z-10">
-            <span class="px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary font-display tracking-widest text-sm uppercase mb-6 backdrop-blur-md shadow-lg">
-              La Magia del Séptimo Arte
-            </span>
-            <h1 class="text-6xl md:text-8xl lg:text-9xl font-display tracking-widest text-white uppercase drop-shadow-[0_0_15px_rgba(0,0,0,0.8)] leading-[0.85] mb-6">
+        <!-- Hero Cinematográfico Clásico -->
+        <div class="hero-animate relative w-full h-[50vh] md:h-[65vh] min-h-[450px] max-h-[700px] border-4 border-primary/40 bg-card overflow-hidden shadow-2xl flex flex-col items-center justify-center">
+          
+          <!-- Patrón Art Deco en las esquinas -->
+          <div class="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-primary"></div>
+          <div class="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-primary"></div>
+          <div class="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-primary"></div>
+          <div class="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-primary"></div>
+
+          <!-- Cortinas Clásicas (Fondo) -->
+          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
+          <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90"></div>
+
+          <div class="relative flex flex-col items-center justify-center p-6 text-center z-10 w-full max-w-4xl mx-auto">
+            <div class="mb-4 flex items-center justify-center gap-4">
+              <div class="h-[1px] w-12 bg-primary"></div>
+              <span class="text-primary font-display tracking-[0.3em] text-sm uppercase">La Época Dorada del Cine</span>
+              <div class="h-[1px] w-12 bg-primary"></div>
+            </div>
+            
+            <h1 class="text-6xl md:text-8xl lg:text-9xl font-display tracking-widest text-foreground uppercase drop-shadow-lg mb-8" style="text-shadow: 2px 2px 0px rgba(0,0,0,1), 4px 4px 0px rgba(197, 160, 89, 0.3);">
               CINE <span class="text-primary">POOR</span>
             </h1>
             
-            <div class="relative w-full max-w-2xl mt-4 group">
-              <div class="absolute -inset-1 bg-gradient-to-r from-primary/30 via-primary/10 to-primary/30 rounded-full blur opacity-0 group-hover-within:opacity-100 transition duration-500"></div>
-              <div class="relative flex items-center bg-background/90 backdrop-blur-xl border border-white/10 rounded-full p-2 shadow-2xl transition-all duration-300 ring-1 ring-white/5 focus-within:ring-primary focus-within:border-primary">
-                <div class="pl-4 pr-2 flex items-center justify-center text-primary">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <div class="relative w-full md:w-[600px] mt-6 group">
+              <div class="relative flex items-center bg-card/80 border border-primary/50 p-1 shadow-2xl transition-all duration-300 focus-within:border-primary">
+                <div class="pl-4 pr-3 flex items-center justify-center text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.4-2.2 1.5-2.5l13.5-4c1.1-.3 2.2.4 2.5 1.5l.6 2.4z"/><path d="m2 13 18.2-4.4c1.1-.3 2.2.4 2.5 1.5l.8 2.5c.3 1.1-.4 2.2-1.5 2.5L3.8 19.5c-1.1.3-2.2-.4-2.5-1.5L.5 15.5c-.3-1.1.4-2.2 1.5-2.5z"/><path d="m6 12 1.8-5.3"/><path d="m10 11 1.8-5.3"/><path d="m14 10 1.8-5.3"/><path d="m18 9 1.8-5.3"/></svg>
                 </div>
                 <input 
                   type="text" 
-                  placeholder="¿Qué película quieres ver hoy?..." 
+                  placeholder="Buscar en el catálogo estelar..." 
                   [value]="searchTerm()" 
                   (input)="onSearchInput($event)" 
-                  class="w-full bg-transparent border-none text-foreground placeholder:text-muted-foreground focus:ring-0 text-lg md:text-xl font-medium h-14 outline-none px-2" 
+                  class="w-full bg-transparent border-none text-foreground placeholder:text-muted-foreground focus:ring-0 text-lg md:text-xl font-body h-14 outline-none px-2" 
                 />
-                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-widest uppercase px-8 h-12 rounded-full transition-transform hover:scale-105 shadow-md">
+                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-[0.15em] text-lg uppercase px-8 h-12 transition-colors border border-transparent hover:border-white/30">
                   Buscar
                 </button>
               </div>
