@@ -56,6 +56,11 @@ export const routes: Routes = [
         loadComponent: () => import('./views/admin/reservas/reservas.component').then(m => m.ReservasComponent)
       },
       {
+        path: 'escanear',
+        title: 'Admin - Escanear Entradas',
+        loadComponent: () => import('./views/admin/escanear/escanear.component').then(m => m.EscanearComponent)
+      },
+      {
         path: 'pos',
         title: 'Admin - Punto de Venta',
         loadComponent: () => import('./views/admin/pos/pos.component').then(m => m.PosComponent)
@@ -66,6 +71,12 @@ export const routes: Routes = [
     path: 'reset-password',
     title: 'Restablecer Contraseña',
     loadComponent: () => import('./views/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
+    path: 'pasarela-pagos',
+    title: 'Pasarela de Pagos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./views/pasarela-pagos/pasarela-pagos.component').then(m => m.PasarelaPagosComponent)
   },
   {
     path: '**',

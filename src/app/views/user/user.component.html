@@ -55,18 +55,19 @@
                 <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Película & Función</th>
                 <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4">Asientos</th>
                 <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4 text-right">Total</th>
+                <th hlmTh class="font-display tracking-widest uppercase text-muted-foreground py-4 text-center">Ticket</th>
               </tr>
             </thead>
             <tbody hlmTBody>
               @if (loading()) {
                 <tr hlmTr>
-                  <td hlmTd colspan="4" class="py-12 text-center text-muted-foreground animate-pulse">
+                  <td hlmTd colspan="5" class="py-12 text-center text-muted-foreground animate-pulse">
                     Cargando historial de compras...
                   </td>
                 </tr>
               } @else if (reservas().length === 0) {
                 <tr hlmTr>
-                  <td hlmTd colspan="4" class="text-center py-12 text-muted-foreground">
+                  <td hlmTd colspan="5" class="text-center py-12 text-muted-foreground">
                     <div class="flex flex-col items-center gap-2 opacity-50">
                       <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
                       <p class="font-display tracking-widest uppercase text-lg">Aún no hay reservas confirmadas.</p>
@@ -89,7 +90,14 @@
                       </div>
                     </td>
                     <td hlmTd class="text-right font-display tracking-widest text-xl text-primary py-4">
-                      \${{ reserva.totalPagado | number:'1.2-2' }}
+                      ${{ reserva.totalPagado | number:'1.2-2' }}
+                    </td>
+                    <td hlmTd class="text-center py-4">
+                      @if (reserva.codigo) {
+                        <div class="inline-block p-1 bg-white rounded shadow-sm hover:scale-[2] origin-right transition-transform">
+                          <qrcode [qrdata]="reserva.codigo" [width]="64" [errorCorrectionLevel]="'M'"></qrcode>
+                        </div>
+                      }
                     </td>
                   </tr>
                 }

@@ -9,6 +9,8 @@ import { HlmTableImports } from '@spartan-ng/helm/table';
 import { AuthStore } from '../../state/auth.store';
 import { EntradasService } from '../../services/entradas.service';
 
+import { QRCodeComponent } from 'angularx-qrcode';
+
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -17,7 +19,8 @@ import { EntradasService } from '../../services/entradas.service';
     UserLayoutComponent,
     RecuadroInformacionComponent,
     HlmCardImports,
-    HlmTableImports
+    HlmTableImports,
+    QRCodeComponent
   ],
   templateUrl: './user.component.html'})
 export class UserComponent implements OnInit {

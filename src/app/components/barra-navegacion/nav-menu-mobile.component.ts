@@ -17,7 +17,7 @@ export class NavMenuMobileComponent {
   authStore = inject(AuthStore);
   router = inject(Router);
 
-  filteredLinks = input.required<{ label: string; to: string; exact: boolean; auth: boolean; admin: boolean }[]>();
+  filteredLinks = input.required<{ label: string; to: string; fragment?: string; exact: boolean; auth: boolean; admin: boolean }[]>();
   isDarkMode = input.required<boolean>();
 
   closeMenu = output<void>();

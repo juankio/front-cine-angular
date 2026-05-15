@@ -29,9 +29,11 @@ export class BarraNavegacionComponent {
   isDarkMode = signal(false);
 
   navLinks = [
-    { label: 'Inicio', to: '/', exact: true, auth: false, admin: false },
-    { label: 'Usuario', to: '/user', exact: false, auth: true, admin: false },
-    { label: 'Admin', to: '/admin', exact: false, auth: false, admin: true },
+    { label: 'Inicio', to: '/', fragment: undefined, exact: true, auth: false, admin: false },
+    { label: 'Cartelera', to: '/', fragment: 'cartelera', exact: false, auth: false, admin: false },
+    { label: 'Dulcería', to: '/', fragment: 'dulceria', exact: false, auth: false, admin: false },
+    { label: 'Mis Entradas', to: '/user', fragment: undefined, exact: false, auth: true, admin: false },
+    { label: 'Admin', to: '/admin', fragment: undefined, exact: false, auth: false, admin: true },
   ];
 
   filteredLinks = computed(() => {

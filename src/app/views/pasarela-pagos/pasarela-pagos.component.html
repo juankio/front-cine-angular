@@ -1,0 +1,58 @@
+<div class="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h2 class="mt-6 text-center text-5xl font-display uppercase tracking-widest text-primary">
+      Pago Seguro
+    </h2>
+    <p class="mt-2 text-center text-sm text-muted-foreground">
+      Estás a un paso de confirmar tu reserva.
+    </p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <hlm-card class="py-8 px-4 shadow sm:rounded-lg sm:px-10 border-border bg-card">
+      
+      @if (exito()) {
+        <div class="text-center">
+          <svg class="mx-auto h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <h3 class="text-2xl font-display text-foreground mb-2">¡Pago Exitoso!</h3>
+          <p class="text-muted-foreground text-sm">Tu entrada ha sido confirmada. Redirigiendo a tus entradas...</p>
+        </div>
+      } @else {
+        <div class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Número de Tarjeta (Simulada)
+            </label>
+            <input hlmInput type="text" value="4242 4242 4242 4242" disabled class="w-full bg-muted/50 text-muted-foreground" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-foreground mb-2">Expiración</label>
+              <input hlmInput type="text" value="12/28" disabled class="w-full bg-muted/50 text-muted-foreground" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-foreground mb-2">CVC</label>
+              <input hlmInput type="text" value="123" disabled class="w-full bg-muted/50 text-muted-foreground" />
+            </div>
+          </div>
+
+          <button 
+            hlmBtn 
+            class="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-widest text-xl mt-6 py-6"
+            [disabled]="procesando()"
+            (click)="simularPago()"
+          >
+            {{ procesando() ? 'PROCESANDO...' : 'PAGAR Y CONFIRMAR' }}
+          </button>
+          
+          <p class="text-xs text-center text-muted-foreground mt-4">
+            *Esta es una pasarela simulada para desarrollo local. No se realizarán cobros reales.
+          </p>
+        </div>
+      }
+    </hlm-card>
+  </div>
+</div>

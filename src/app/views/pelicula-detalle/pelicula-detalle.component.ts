@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { PeliculasService } from '../../services/peliculas.service';
 import { SalasService } from '../../services/salas.service';
 import { EntradasService } from '../../services/entradas.service';
@@ -25,6 +25,7 @@ export class PeliculaDetalleComponent implements OnInit {
   private ps = inject(PeliculasService);
   private ss = inject(SalasService);
   private es = inject(EntradasService);
+  private router = inject(Router);
   private ts = inject(ToastService);
 
   pelicula = signal<any>(null);
@@ -85,17 +86,25 @@ export class PeliculaDetalleComponent implements OnInit {
     this.procesando.set(true);
     const f = this.funcionSeleccionada();
     this.es.comprarFuncion(f._id || f.id, { asientos: this.asientosSeleccionados() }).subscribe({
-      next: () => {
-        this.ts.success("¡Compra exitosa!");
-        this.procesando.set(false);
-        this.seleccionarFuncion(f);
+      next: (res: any) => {
+        // En lugar de "¡Compra exitosa!", redirigimos a la pasarela simulada
+        if (res.checkoutUrl) {
+          const urlParts = res.checkoutUrl.split('/');
+          const ticketId = urlParts[urlParts.length - 1];
+          this.router.navigate(['/pasarela-pagos'], { queryParams: { ticketId } });
+        } else {
+          // Fallback por si backend devuelve directo
+          this.ts.success("¡Compra exitosa!");
+          this.procesando.set(false);
+          this.seleccionarFuncion(f);
+        }
       },
       error: (err) => {
         if (err.status === 409 || err.status === 400 || err.error?.message?.includes('ocupado')) {
           this.ts.error("Alguien ya reservó estos asientos. Actualizando mapa...");
           this.seleccionarFuncion(f); // Recargar asientos
         } else {
-          this.ts.error("Error al procesar pago.");
+          this.ts.error("Error al procesar reserva.");
         }
         this.procesando.set(false);
       }

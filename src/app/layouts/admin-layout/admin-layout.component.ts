@@ -11,6 +11,7 @@ import { BarraNavegacionComponent } from '../../components/barra-navegacion/barr
 export class AdminLayoutComponent {
   navItems = [
     { label: 'Dashboard', to: '/admin', icon: 'home', exact: true },
+    { label: 'Escanear QR', to: '/admin/escanear', icon: 'qr_code_scanner', exact: false },
     { label: 'Películas', to: '/admin/peliculas', icon: 'movie', exact: false },
     { label: 'Salas', to: '/admin/salas', icon: 'salas', exact: false },
     { label: 'Menú', to: '/admin/menu', icon: 'menu', exact: false },

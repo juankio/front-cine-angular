@@ -8,5 +8,5 @@ import { HlmButton } from '@spartan-ng/helm/button';
   imports: [RouterLink, RouterLinkActive, HlmButton],
   templateUrl: './nav-menu-desktop.component.html'})
 export class NavMenuDesktopComponent {
-  filteredLinks = input.required<{ label: string; to: string; exact: boolean; auth: boolean; admin: boolean }[]>();
+  filteredLinks = input.required<{ label: string; to: string; fragment?: string; exact: boolean; auth: boolean; admin: boolean }[]>();
 }

@@ -1,0 +1,89 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-3xl font-display uppercase tracking-widest text-foreground">Escáner de Entradas</h2>
+      <p class="text-muted-foreground mt-1">Valida los tickets de los clientes escaneando su código QR.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    <hlm-card class="bg-card shadow-sm border-border overflow-hidden">
+      <div class="p-4 bg-muted border-b border-border flex justify-between items-center">
+        <h3 class="font-display tracking-widest uppercase">Cámara</h3>
+        <div class="flex items-center gap-2">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" [class.hidden]="!scannerEnabled()"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3" [class.bg-primary]="scannerEnabled()" [class.bg-muted-foreground]="!scannerEnabled()"></span>
+          </span>
+          <span class="text-xs uppercase font-medium text-muted-foreground tracking-widest">
+            {{ scannerEnabled() ? 'Buscando QR...' : 'Pausado' }}
+          </span>
+        </div>
+      </div>
+      <div class="aspect-square relative bg-black flex items-center justify-center overflow-hidden">
+        @if (scannerEnabled()) {
+          <zxing-scanner 
+            [formats]="formats"
+            (scanSuccess)="onCodeResult($event)"
+            class="absolute inset-0 object-cover w-full h-full"
+          ></zxing-scanner>
+          <div class="absolute inset-0 border-[3px] border-primary/30 m-12 rounded-2xl pointer-events-none flex items-center justify-center">
+            <div class="w-full h-0.5 bg-primary/50 shadow-[0_0_8px_rgba(255,0,0,0.5)] animate-pulse"></div>
+          </div>
+        } @else {
+          <div class="text-white text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 opacity-50"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <p class="font-display tracking-widest uppercase text-xl">Procesando código...</p>
+          </div>
+        }
+      </div>
+    </hlm-card>
+
+    <div>
+      @if (ticketInfo()) {
+        <hlm-card class="bg-primary/10 border-primary shadow-lg shadow-primary/20 animate-in slide-in-from-right duration-300">
+          <div class="p-6 text-center border-b border-primary/20">
+            <div class="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/40">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            </div>
+            <h3 class="text-3xl font-display uppercase tracking-widest text-primary">¡Acceso Permitido!</h3>
+            <p class="text-sm font-medium mt-1">El ticket es válido y ha sido descontado.</p>
+          </div>
+          <div class="p-6 space-y-4">
+            <div>
+              <p class="text-xs text-muted-foreground uppercase tracking-widest">Película</p>
+              <p class="text-xl font-display uppercase">{{ ticketInfo().peliculaTitulo }}</p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-muted-foreground uppercase tracking-widest">Sala</p>
+                <p class="text-lg font-medium">{{ ticketInfo().salaNombre }}</p>
+              </div>
+              <div>
+                <p class="text-xs text-muted-foreground uppercase tracking-widest">Hora</p>
+                <p class="text-lg font-medium">{{ ticketInfo().inicioFuncion | date:'shortTime' }}</p>
+              </div>
+            </div>
+            <div class="bg-background/50 rounded-lg p-3 border border-border mt-4">
+              <p class="text-xs text-muted-foreground uppercase tracking-widest mb-1 text-center">Asientos Asignados</p>
+              <div class="flex flex-wrap gap-2 justify-center">
+                @for (asiento of ticketInfo().asientos; track asiento) {
+                  <span class="px-3 py-1 bg-primary text-primary-foreground font-display tracking-widest rounded-md text-lg shadow-sm">
+                    {{ asiento }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </hlm-card>
+      } @else {
+        <hlm-card class="bg-card shadow-sm border-border h-full flex flex-col items-center justify-center p-12 text-center text-muted-foreground opacity-50">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-6"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 14v6"/><path d="M4 14v7h2"/></svg>
+          <h3 class="text-2xl font-display uppercase tracking-widest mb-2">Esperando Código</h3>
+          <p class="text-sm max-w-[250px]">Apunta la cámara al código QR del cliente para validarlo.</p>
+        </hlm-card>
+      }
+    </div>
+  </div>
+</div>
