@@ -199,11 +199,15 @@
                         <p class="text-xs italic text-[#8C8775]/50 font-body">Pendiente</p>
                       }
                     </div>
+                    <div class="flex justify-between items-center">
+                      <p class="text-xs font-display tracking-widest text-[#8C8775] uppercase">Precio c/u</p>
+                      <p class="font-display text-[#EAE6D7]">\${{ (funcionSeleccionada()?.precio || 1500) | number:'1.2-2' }}</p>
+                    </div>
                   </div>
 
                   <div class="border-t-2 border-dashed border-[#332B1A] pt-6 mb-8 flex justify-between items-end">
                     <span class="text-xs font-display tracking-widest text-[#8C8775] uppercase mb-1">Total a pagar</span>
-                    <span class="text-4xl font-display text-[#C5A059] leading-none">\${{ (asientosSeleccionados().length * 1500) | number:'1.2-2' }}</span>
+                    <span class="text-4xl font-display text-[#C5A059] leading-none">\${{ (asientosSeleccionados().length * (funcionSeleccionada()?.precio || 1500)) | number:'1.2-2' }}</span>
                   </div>
 
                   <button 
