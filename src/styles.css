@@ -132,6 +132,15 @@
     content: '';
     @apply absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-[#C5A059]/10 to-transparent;
   }
+  
+  /* Esconder scrollbar en submenus horizontales */
+  .custom-scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .custom-scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }
 
 @keyframes shimmer {

@@ -1,27 +1,27 @@
-<div class="min-h-screen bg-background text-foreground relative flex flex-col overflow-hidden">
+<div class="min-h-screen bg-[#0A0A0A] text-[#EAE6D7] relative flex flex-col overflow-hidden">
       <!-- Fondo Minimalista -->
       <div class="absolute inset-0 z-0 pointer-events-none">
         <div class="absolute top-0 inset-x-0 h-full bg-gradient-to-b from-primary/5 via-transparent to-transparent"></div>
       </div>
 
-      <div class="relative z-0 border-b border-border/50 hidden md:block">
+      <div class="relative z-0 border-b border-border/50">
         <app-barra-navegacion />
       </div>
 
-      <div class="relative z-0 flex flex-col md:flex-row w-full h-[calc(100vh-64px)] overflow-hidden">
+      <div class="relative z-0 flex flex-col md:flex-row w-full h-[calc(100vh-80px)] overflow-hidden">
         <!-- Sidebar Limpio -->
-        <aside class="hidden md:flex w-64 shrink-0 border-r border-border/50 bg-card/40 backdrop-blur-xl flex-col z-0 relative">
+        <aside class="hidden md:flex w-64 shrink-0 border-r border-[#332B1A] bg-[#0A0A0A]/90 backdrop-blur-xl flex-col z-0 relative">
           <div class="p-6 pb-2">
-            <p class="font-display tracking-[0.1em] uppercase text-primary text-sm font-semibold">Panel de Control</p>
+            <p class="font-display tracking-[0.1em] uppercase text-[#C5A059] text-xs font-semibold">Panel de Control</p>
           </div>
           <ul class="flex flex-col gap-1 px-3 py-4 overflow-y-auto">
             @for (item of navItems; track item.to) {
               <li>
                 <a
                   [routerLink]="item.to"
-                  routerLinkActive="bg-primary/10 text-primary font-medium"
+                  routerLinkActive="bg-[#1A1A1A] text-[#C5A059] border-l-2 border-[#C5A059]"
                   [routerLinkActiveOptions]="{exact: item.exact}"
-                  class="flex items-center gap-3 px-4 py-2.5 w-full justify-start rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors group"
+                  class="flex items-center gap-3 px-4 py-3 w-full justify-start rounded-r-lg text-sm text-[#8C8775] font-display tracking-widest uppercase hover:text-[#EAE6D7] hover:bg-[#1A1A1A] transition-all group border-l-2 border-transparent"
                 >
                   <span class="opacity-70 group-[.active]:opacity-100 group-hover:opacity-100 transition-opacity">
                     @if (item.icon === 'home') {
@@ -50,13 +50,13 @@
         </aside>
 
         <!-- Mobile Nav -->
-        <nav class="flex md:hidden w-full border-b border-border/50 bg-card/40 backdrop-blur-xl overflow-x-auto whitespace-nowrap shrink-0 p-2 gap-2 z-10 custom-scrollbar-hide">
+        <nav class="flex md:hidden w-full border-b border-[#332B1A] bg-[#0A0A0A]/95 backdrop-blur-xl overflow-x-auto whitespace-nowrap shrink-0 p-2 gap-2 z-10 custom-scrollbar-hide">
             @for (item of navItems; track item.to) {
                 <a
                   [routerLink]="item.to"
-                  routerLinkActive="bg-primary/10 text-primary font-medium"
+                  routerLinkActive="bg-[#1A1A1A] text-[#C5A059] border-[#C5A059]/50"
                   [routerLinkActiveOptions]="{exact: item.exact}"
-                  class="inline-flex items-center gap-2 px-4 py-3 rounded-lg text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                  class="inline-flex items-center gap-2 px-4 py-3 rounded-md text-xs font-display tracking-widest uppercase text-[#8C8775] border border-transparent hover:text-[#EAE6D7] hover:bg-[#1A1A1A] transition-all shrink-0"
                 >
                   <span class="opacity-70 group-[.active]:opacity-100 group-hover:opacity-100 transition-opacity">
                     @if (item.icon === 'home') {
@@ -83,7 +83,7 @@
         </nav>
 
         <!-- Contenido Central -->
-        <main class="flex-1 min-w-0 h-full overflow-y-auto bg-background/30 md:rounded-tl-2xl md:border-t border-l-0 md:border-l border-border/40 shadow-sm relative z-[5]">
+        <main class="flex-1 min-w-0 h-full overflow-y-auto bg-[#0A0A0A] md:rounded-tl-2xl md:border-t border-l-0 md:border-l border-[#332B1A] shadow-sm relative z-[5]">
           <div class="h-full w-full relative z-10">
             <ng-content></ng-content>
           </div>
