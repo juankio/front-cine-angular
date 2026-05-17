@@ -47,8 +47,68 @@
           <p class="text-sm text-muted-foreground">Historial de tus últimas compras en Cine POOR.</p>
         </div>
 
-        <div class="rounded-2xl border border-border/60 bg-card/60 backdrop-blur-2xl shadow-xl shadow-primary/5 overflow-x-auto custom-scrollbar-hide">
-          <table hlmTable class="w-full min-w-[600px] md:min-w-full">
+        <div class="rounded-2xl border border-border/60 bg-card/60 backdrop-blur-2xl shadow-xl shadow-primary/5">
+          <!-- Vista móvil: Tarjetas -->
+          <div class="block md:hidden">
+            @if (loading()) {
+              <div class="py-16 text-center">
+                <div class="flex flex-col items-center justify-center space-y-4">
+                  <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  <p class="text-sm font-medium text-muted-foreground uppercase tracking-widest">Sincronizando tickets...</p>
+                </div>
+              </div>
+            } @else if (reservas().length === 0) {
+              <div class="text-center py-24 text-muted-foreground">
+                <div class="flex flex-col items-center gap-4 opacity-40">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>
+                  <p class="font-display tracking-widest uppercase text-2xl">Bóveda vacía</p>
+                  <p class="font-body text-sm max-w-sm text-center">Aún no has comprado entradas. Revisa la cartelera y ven a disfrutar la magia del cine.</p>
+                </div>
+              </div>
+            } @else {
+              <div class="flex flex-col divide-y divide-border/40">
+                @for (reserva of reservas(); track reserva._id || reserva.id) {
+                  <div class="p-6 flex flex-col gap-4 relative">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <p class="text-xs font-medium text-muted-foreground mb-1">{{ reserva.createdAt | date:'short' }}</p>
+                        <h3 class="font-display tracking-wider text-xl text-foreground">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</h3>
+                      </div>
+                      <div class="font-display tracking-widest text-xl text-primary">
+                        ${{ reserva.totalPagado | number:'1.2-2' }}
+                      </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-3">
+                      <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-[10px] font-medium text-secondary-foreground uppercase tracking-widest ring-1 ring-inset ring-secondary-foreground/10">{{ reserva.salaNombre || '-' }}</span>
+                      <span class="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        {{ reserva.inicioFuncion | date:'shortTime' }}
+                      </span>
+                    </div>
+
+                    <div class="flex justify-between items-end mt-2">
+                      <div class="flex flex-wrap gap-1.5">
+                        @for (asiento of reserva.asientos; track asiento) {
+                          <span class="inline-flex items-center justify-center min-w-[24px] h-6 rounded bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary shadow-sm">{{ asiento }}</span>
+                        }
+                      </div>
+                      
+                      @if (reserva.codigo) {
+                        <div class="inline-block p-1 bg-white rounded-lg shadow-sm ring-1 ring-black/5">
+                          <qrcode [qrdata]="reserva.codigo" [width]="48" [errorCorrectionLevel]="'M'"></qrcode>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Vista desktop: Tabla original -->
+          <div class="hidden md:block overflow-x-auto custom-scrollbar-hide">
+            <table hlmTable class="w-full">
             <thead hlmTHead class="bg-muted/40 border-b border-border/60">
               <tr hlmTr class="hover:bg-transparent">
                 <th hlmTh class="font-display tracking-widest text-lg text-foreground py-5">Fecha Compra</th>
@@ -117,7 +177,8 @@
                 }
               }
             </tbody>
-          </table>
+            </table>
+          </div>
         </div>
       </div>
     </app-user-layout>
