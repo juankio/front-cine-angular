@@ -21,13 +21,13 @@
               <div class="h-[1px] w-12 bg-primary"></div>
             </div>
             
-            <h1 class="text-6xl md:text-8xl lg:text-9xl font-display tracking-widest text-foreground uppercase drop-shadow-lg mb-8" style="text-shadow: 2px 2px 0px rgba(0,0,0,1), 4px 4px 0px rgba(197, 160, 89, 0.3);">
+            <h1 class="text-5xl md:text-8xl lg:text-9xl font-display tracking-widest text-foreground uppercase drop-shadow-lg mb-8 text-center break-words" style="text-shadow: 2px 2px 0px rgba(0,0,0,1), 4px 4px 0px rgba(197, 160, 89, 0.3);">
               CINE <span class="text-primary">POOR</span>
             </h1>
             
-            <div class="relative w-full md:w-[600px] mt-6 group">
-              <div class="relative flex items-center bg-card/80 border border-primary/50 p-1 shadow-2xl transition-all duration-300 focus-within:border-primary">
-                <div class="pl-4 pr-3 flex items-center justify-center text-primary">
+            <div class="relative w-full md:w-[600px] mt-6 group max-w-full">
+              <div class="relative flex flex-col sm:flex-row items-center bg-card/80 border border-primary/50 p-1 shadow-2xl transition-all duration-300 focus-within:border-primary w-full">
+                <div class="hidden sm:flex pl-4 pr-3 items-center justify-center text-primary">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.4-2.2 1.5-2.5l13.5-4c1.1-.3 2.2.4 2.5 1.5l.6 2.4z"/><path d="m2 13 18.2-4.4c1.1-.3 2.2.4 2.5 1.5l.8 2.5c.3 1.1-.4 2.2-1.5 2.5L3.8 19.5c-1.1.3-2.2-.4-2.5-1.5L.5 15.5c-.3-1.1.4-2.2 1.5-2.5z"/><path d="m6 12 1.8-5.3"/><path d="m10 11 1.8-5.3"/><path d="m14 10 1.8-5.3"/><path d="m18 9 1.8-5.3"/></svg>
                 </div>
                 <input 
@@ -35,9 +35,9 @@
                   placeholder="Buscar en el catálogo estelar..." 
                   [value]="searchTerm()" 
                   (input)="onSearchInput($event)" 
-                  class="w-full bg-transparent border-none text-foreground placeholder:text-muted-foreground focus:ring-0 text-lg md:text-xl font-body h-14 outline-none px-2" 
+                  class="w-full bg-transparent border-none text-foreground placeholder:text-muted-foreground focus:ring-0 text-base md:text-xl font-body h-14 outline-none px-4 sm:px-2 text-center sm:text-left" 
                 />
-                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-[0.15em] text-lg uppercase px-8 h-12 transition-colors border border-transparent hover:border-white/30">
+                <button class="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-[0.15em] text-sm sm:text-lg uppercase px-8 h-12 transition-colors border border-transparent hover:border-white/30 mt-2 sm:mt-0">
                   Buscar
                 </button>
               </div>
