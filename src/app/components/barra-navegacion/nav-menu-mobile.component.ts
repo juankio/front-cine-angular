@@ -33,12 +33,27 @@ export class NavMenuMobileComponent {
     });
   }
 
+  adminNavItems = [
+    { label: 'Dashboard', to: '/admin', exact: true },
+    { label: 'Escanear QR', to: '/admin/escanear', exact: false },
+    { label: 'Películas', to: '/admin/peliculas', exact: false },
+    { label: 'Salas', to: '/admin/salas', exact: false },
+    { label: 'Menú', to: '/admin/menu', exact: false },
+    { label: 'Ingredientes', to: '/admin/ingredientes', exact: false },
+    { label: 'Recetas', to: '/admin/recetas', exact: false },
+    { label: 'Reservas', to: '/admin/reservas', exact: false },
+    { label: 'Caja', to: '/admin/pos', exact: false },
+  ];
+
   isActive(link: any): boolean {
     if (link.to === '/' && link.fragment) {
       return this.currentUrl.includes('#' + link.fragment);
     }
     if (link.to === '/' && !link.fragment) {
       return this.currentUrl === '/' || this.currentUrl.startsWith('/?');
+    }
+    if (link.exact) {
+      return this.currentUrl === link.to;
     }
     return this.currentUrl.startsWith(link.to);
   }

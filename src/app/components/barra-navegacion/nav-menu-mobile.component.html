@@ -1,5 +1,6 @@
-<div class="flex flex-col gap-2 border-t border-[#332B1A] py-4 md:hidden px-4 bg-[#0A0A0A]">
+<div class="flex flex-col gap-2 border-t border-[#332B1A] py-4 md:hidden px-4 bg-[#0A0A0A] max-h-[85vh] overflow-y-auto">
       @for (link of filteredLinks(); track link.to) {
+        @if (link.label !== 'Admin') {
           <a
             [routerLink]="link.to"
             [fragment]="link.fragment"
@@ -9,7 +10,27 @@
             (click)="closeMenu.emit()"
           >
           {{ link.label }}
-        </a>
+          </a>
+        }
+      }
+
+      @if (authStore.isAdmin()) {
+        <div class="mt-2 pt-4 border-t border-[#332B1A]">
+          <h3 class="text-[10px] font-display tracking-[0.2em] uppercase text-[#C5A059] mb-3 text-center opacity-80">Menú Administrativo</h3>
+          <div class="grid grid-cols-2 gap-2">
+            @for (adminLink of adminNavItems; track adminLink.to) {
+              <a
+                [routerLink]="adminLink.to"
+                [class.bg-[#1A1A1A]]="isActive(adminLink)"
+                [class.text-[#C5A059]]="isActive(adminLink)"
+                class="w-full text-center px-2 py-3 font-display tracking-widest text-[10px] uppercase text-[#8C8775] hover:text-[#EAE6D7] transition-colors border border-transparent hover:border-[#332B1A] rounded bg-[#111]"
+                (click)="closeMenu.emit()"
+              >
+                {{ adminLink.label }}
+              </a>
+            }
+          </div>
+        </div>
       }
 
       <div class="flex flex-col items-center gap-4 pt-4 border-t border-[#332B1A] mt-2">
