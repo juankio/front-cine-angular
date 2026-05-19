@@ -90,12 +90,24 @@ export class CarritoComponent implements OnInit {
           this.ts.error('Hubo un problema procesando alguna de las reservas.');
         });
     } else if (productos.length > 0) {
-      // Solo productos. Fake it por ahora.
-      setTimeout(() => {
-        this.cart.clear();
-        this.ts.success('¡Compra de dulcería exitosa!');
-        this.router.navigate(['/user']);
-      }, 1000);
+      // Solo productos. Hacemos la peticion al nuevo backend.
+      this.es.comprarDulceria(productos).subscribe({
+        next: (res: any) => {
+          this.cart.clear();
+          if (res.checkoutUrl) {
+            const urlParts = res.checkoutUrl.split('/');
+            const ticketId = urlParts[urlParts.length - 1];
+            this.router.navigate(['/pasarela-pagos'], { queryParams: { ticketId } });
+          } else {
+            this.ts.success('¡Compra de dulcería exitosa!');
+            this.router.navigate(['/user']);
+          }
+        },
+        error: (err) => {
+          this.procesando.set(false);
+          this.ts.error('Hubo un problema procesando tu compra de comida.');
+        }
+      });
     }
   }
 }

@@ -18,6 +18,10 @@ export class EntradasService {
     return this.http.post(`${this.apiUrl}/funciones/${funcionId}/entradas`, payload);
   }
 
+  comprarDulceria(productos: any[]): Observable<any> {
+    return this.http.post(`${this.apiUrl}/dulceria/comprar`, { productos });
+  }
+
   misEntradas(): Observable<any> {
     return this.http.get(`${this.apiUrl}/mis-entradas`);
   }

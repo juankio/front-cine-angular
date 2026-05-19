@@ -72,7 +72,7 @@
                     <div class="flex justify-between items-start">
                       <div>
                         <p class="text-xs font-medium text-muted-foreground mb-1">{{ reserva.createdAt | date:'short' }}</p>
-                        <h3 class="font-display tracking-wider text-xl text-foreground">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</h3>
+                        <h3 class="font-display tracking-wider text-xl text-foreground">{{ reserva.peliculaTitulo || (reserva.tipoVenta === 'dulceria' ? 'Compra en Dulcería' : 'Película Desconocida') }}</h3>
                       </div>
                       <div class="font-display tracking-widest text-xl text-primary">
                         ${{ reserva.totalPagado | number:'1.2-2' }}
@@ -80,11 +80,15 @@
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-3">
-                      <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-[10px] font-medium text-secondary-foreground uppercase tracking-widest ring-1 ring-inset ring-secondary-foreground/10">{{ reserva.salaNombre || '-' }}</span>
-                      <span class="text-xs font-medium text-muted-foreground flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        {{ reserva.inicioFuncion | date:'shortTime' }}
-                      </span>
+                      @if (reserva.tipoVenta !== 'dulceria') {
+                        <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-[10px] font-medium text-secondary-foreground uppercase tracking-widest ring-1 ring-inset ring-secondary-foreground/10">{{ reserva.salaNombre || '-' }}</span>
+                        <span class="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                          {{ reserva.inicioFuncion | date:'shortTime' }}
+                        </span>
+                      } @else {
+                        <span class="inline-flex items-center rounded-md bg-[#C5A059]/20 text-[#C5A059] px-2 py-1 text-[10px] font-medium uppercase tracking-widest ring-1 ring-inset ring-[#C5A059]/30">Snacks & Bebidas</span>
+                      }
                     </div>
 
                     <!-- Mostrar Productos / Comida (Mobile) -->
@@ -158,13 +162,17 @@
                   <tr hlmTr class="hover:bg-primary/5 transition-colors border-b border-border/40 group">
                     <td hlmTd class="text-sm font-medium text-muted-foreground py-6">{{ reserva.createdAt | date:'short' }}</td>
                     <td hlmTd class="py-6">
-                      <div class="font-display tracking-wider text-2xl text-foreground group-hover:text-primary transition-colors">{{ reserva.peliculaTitulo || 'Película Desconocida' }}</div>
+                      <div class="font-display tracking-wider text-2xl text-foreground group-hover:text-primary transition-colors">{{ reserva.peliculaTitulo || (reserva.tipoVenta === 'dulceria' ? 'Compra en Dulcería' : 'Película Desconocida') }}</div>
                       <div class="flex items-center gap-2 mt-1">
-                        <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-[10px] font-medium text-secondary-foreground uppercase tracking-widest ring-1 ring-inset ring-secondary-foreground/10">{{ reserva.salaNombre || '-' }}</span>
-                        <span class="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                          {{ reserva.inicioFuncion | date:'shortTime' }}
-                        </span>
+                        @if (reserva.tipoVenta !== 'dulceria') {
+                          <span class="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-[10px] font-medium text-secondary-foreground uppercase tracking-widest ring-1 ring-inset ring-secondary-foreground/10">{{ reserva.salaNombre || '-' }}</span>
+                          <span class="text-sm font-medium text-muted-foreground flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            {{ reserva.inicioFuncion | date:'shortTime' }}
+                          </span>
+                        } @else {
+                          <span class="inline-flex items-center rounded-md bg-[#C5A059]/20 text-[#C5A059] px-2 py-1 text-[10px] font-medium uppercase tracking-widest ring-1 ring-inset ring-[#C5A059]/30">Snacks & Bebidas</span>
+                        }
                       </div>
                     </td>
                     <td hlmTd class="py-6">
