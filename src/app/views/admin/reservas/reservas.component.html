@@ -37,14 +37,30 @@
                <p class="text-sm font-body text-[#8C8775]">Sala {{ reserva.salaNombre || '-' }} | {{ reserva.inicioFuncion | date:'shortTime' }}</p>
             </div>
             
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1 mb-4">
               <span class="text-[10px] font-display tracking-[0.3em] uppercase text-[#8C8775]">Asientos Confirmados</span>
               <div class="flex flex-wrap gap-2">
-                @for (asiento of reserva.asientos; track asiento) {
-                  <span class="font-display text-lg text-black bg-[#C5A059] px-2 leading-none shadow-sm">{{ asiento }}</span>
+                @if (reserva.asientos && reserva.asientos.length > 0) {
+                  @for (asiento of reserva.asientos; track asiento) {
+                    <span class="font-display text-lg text-black bg-[#C5A059] px-2 leading-none shadow-sm">{{ asiento }}</span>
+                  }
+                } @else {
+                  <span class="font-display text-sm text-[#8C8775] italic">Ninguno</span>
                 }
               </div>
             </div>
+
+            <!-- Dulcería en Reservas Admin -->
+            @if (reserva.productos && reserva.productos.length > 0) {
+              <div class="flex flex-col gap-1 pt-3 border-t border-[#332B1A]/50 mt-auto">
+                <span class="text-[10px] font-display tracking-[0.3em] uppercase text-[#8C8775]">Dulcería</span>
+                <div class="flex flex-wrap gap-2">
+                  @for (prod of reserva.productos; track prod.nombre) {
+                    <span class="text-xs text-[#EAE6D7] border border-[#332B1A] bg-black px-1.5 py-0.5 rounded-sm">{{ prod.cantidad }}x {{ prod.nombre }}</span>
+                  }
+                </div>
+              </div>
+            }
           </div>
           
           <!-- Lado Derecho (Cobro) -->

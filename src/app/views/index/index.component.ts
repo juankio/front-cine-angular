@@ -108,9 +108,8 @@ export class IndexComponent implements OnInit {
     this.menuService.listar().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response) => {
         const data = response?.data || response;
-        // Limitar a los primeros 3 para mantener el diseño original si hay muchos
         const items = Array.isArray(data) ? data : [];
-        this.menus.set(items.slice(0, 3));
+        this.menus.set(items); // Mostrar todos los items de la dulcería
       },
       error: (err) => console.error('Error al obtener menús:', err)
     });
