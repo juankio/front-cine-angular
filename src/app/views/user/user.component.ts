@@ -31,9 +31,18 @@ export class UserComponent implements OnInit {
 
   reservas = signal<any[]>([]);
   loading = signal(false);
+  selectedQr = signal<any>(null);
 
   ngOnInit() {
     this.cargarReservas();
+  }
+
+  abrirQr(reserva: any) {
+    this.selectedQr.set(reserva);
+  }
+
+  cerrarQr() {
+    this.selectedQr.set(null);
   }
 
   cargarReservas() {
