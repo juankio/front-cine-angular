@@ -159,9 +159,14 @@ export class PosComponent implements OnInit {
         asientos: item.asientos,
         productos: productos // Se mandan los productos en el body
       }).subscribe({next: res, error: res})))).then(() => this.completarCobro());
-    } else {
-      // Si solo es comida, no hay backend actual, pero podemos fingirlo
-      setTimeout(() => this.completarCobro(true), 800);
+    } else if (productos.length) {
+      this.es.comprarDulceria(productos).subscribe({
+        next: () => this.completarCobro(true),
+        error: () => {
+          this.ts.error('Error registrando venta en dulcería.');
+          this.procesando.set(false);
+        }
+      });
     }
   }
 

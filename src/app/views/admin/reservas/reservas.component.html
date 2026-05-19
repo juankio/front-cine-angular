@@ -33,22 +33,28 @@
                  <span class="text-[10px] font-display tracking-[0.3em] uppercase text-[#8C8775]">Taquilla Central</span>
                  <span class="ml-auto text-[10px] font-display tracking-[0.1em] text-[#C5A059] px-2 py-0.5 border border-[#C5A059]/30 bg-black">{{ reserva.createdAt | date:'short' }}</span>
                </div>
-               <h3 class="font-display uppercase tracking-widest text-2xl text-[#EAE6D7] leading-none mb-1 group-hover:text-[#C5A059] transition-colors">{{ reserva.peliculaTitulo || 'Obra Desconocida' }}</h3>
-               <p class="text-sm font-body text-[#8C8775]">Sala {{ reserva.salaNombre || '-' }} | {{ reserva.inicioFuncion | date:'shortTime' }}</p>
+               <h3 class="font-display uppercase tracking-widest text-2xl text-[#EAE6D7] leading-none mb-1 group-hover:text-[#C5A059] transition-colors">{{ reserva.peliculaTitulo || (reserva.tipoVenta === 'dulceria' ? 'COMPRA EN DULCERÍA' : 'Obra Desconocida') }}</h3>
+               @if (reserva.tipoVenta !== 'dulceria') {
+                 <p class="text-sm font-body text-[#8C8775]">Sala {{ reserva.salaNombre || '-' }} | {{ reserva.inicioFuncion | date:'shortTime' }}</p>
+               } @else {
+                 <p class="text-sm font-body text-[#C5A059] italic mt-1">Snacks y Bebidas</p>
+               }
             </div>
             
-            <div class="flex flex-col gap-1 mb-4">
-              <span class="text-[10px] font-display tracking-[0.3em] uppercase text-[#8C8775]">Asientos Confirmados</span>
-              <div class="flex flex-wrap gap-2">
-                @if (reserva.asientos && reserva.asientos.length > 0) {
-                  @for (asiento of reserva.asientos; track asiento) {
-                    <span class="font-display text-lg text-black bg-[#C5A059] px-2 leading-none shadow-sm">{{ asiento }}</span>
+            @if (reserva.tipoVenta !== 'dulceria') {
+              <div class="flex flex-col gap-1 mb-4">
+                <span class="text-[10px] font-display tracking-[0.3em] uppercase text-[#8C8775]">Asientos Confirmados</span>
+                <div class="flex flex-wrap gap-2">
+                  @if (reserva.asientos && reserva.asientos.length > 0) {
+                    @for (asiento of reserva.asientos; track asiento) {
+                      <span class="font-display text-lg text-black bg-[#C5A059] px-2 leading-none shadow-sm">{{ asiento }}</span>
+                    }
+                  } @else {
+                    <span class="font-display text-sm text-[#8C8775] italic">Ninguno</span>
                   }
-                } @else {
-                  <span class="font-display text-sm text-[#8C8775] italic">Ninguno</span>
-                }
+                </div>
               </div>
-            </div>
+            }
 
             <!-- Dulcería en Reservas Admin -->
             @if (reserva.productos && reserva.productos.length > 0) {
