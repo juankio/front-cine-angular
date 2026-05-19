@@ -113,7 +113,17 @@
                         }
                       </div>
                       
-                      @if (reserva.codigo) {
+                      @if (reserva.estado === 'usado') {
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-500/10 border border-green-500/20 text-green-500 font-display tracking-widest text-[10px] uppercase">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                          Validado
+                        </div>
+                      } @else if (reserva.tipoVenta !== 'dulceria' && isExpirada(reserva.inicioFuncion)) {
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive font-display tracking-widest text-[10px] uppercase">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                          Expirado
+                        </div>
+                      } @else if (reserva.codigo) {
                         <div class="inline-block p-1 bg-white rounded-lg shadow-sm ring-1 ring-black/5">
                           <qrcode [qrdata]="reserva.codigo" [width]="48" [errorCorrectionLevel]="'M'"></qrcode>
                         </div>
@@ -200,7 +210,21 @@
                       ${{ reserva.totalPagado | number:'1.2-2' }}
                     </td>
                     <td hlmTd class="text-center py-6">
-                      @if (reserva.codigo) {
+                      @if (reserva.estado === 'usado') {
+                        <div class="inline-flex flex-col items-center gap-1 text-green-500 font-display tracking-widest text-[10px] uppercase">
+                          <div class="w-12 h-12 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                          </div>
+                          Validado
+                        </div>
+                      } @else if (reserva.tipoVenta !== 'dulceria' && isExpirada(reserva.inicioFuncion)) {
+                        <div class="inline-flex flex-col items-center gap-1 text-destructive font-display tracking-widest text-[10px] uppercase">
+                          <div class="w-12 h-12 rounded-full bg-destructive/10 border border-destructive/20 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                          </div>
+                          Expirado
+                        </div>
+                      } @else if (reserva.codigo) {
                         <div class="inline-block p-1.5 bg-white rounded-xl shadow-md ring-1 ring-black/5 hover:scale-[2.5] hover:-translate-x-12 origin-right transition-all duration-300 cursor-zoom-in relative group/qr z-10 hover:z-50">
                           <qrcode [qrdata]="reserva.codigo" [width]="72" [errorCorrectionLevel]="'M'"></qrcode>
                           <!-- Tooltip al hacer hover en el QR -->

@@ -51,6 +51,13 @@ export class UserComponent implements OnInit {
     });
   }
 
+  isExpirada(fecha: string): boolean {
+    if (!fecha) return false;
+    // Si la función fue hace más de 3 horas, consideramos el ticket expirado
+    const limite = new Date(new Date(fecha).getTime() + (3 * 60 * 60 * 1000));
+    return new Date() > limite;
+  }
+
   cerrarSesion() {
     this.authStore.logout();
     this.router.navigate(['/']);
