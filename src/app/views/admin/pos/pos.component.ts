@@ -44,7 +44,14 @@ export class PosComponent implements OnInit {
     this.loadingFunciones.set(true);
     this.ss.listar().subscribe({
       next: (res) => {
-        this.funciones.set((res?.data || res || []).flatMap((s: any) => (s.funciones || []).map((f: any) => ({ ...f, sala: s }))));
+        const limite = new Date(Date.now() - 60 * 60 * 1000); // Hasta 1 hora después de iniciada
+        const funcList = (res?.data || res || []).flatMap((s: any) => 
+          (s.funciones || [])
+            .filter((f: any) => new Date(f.fechaInicio || f.inicio) >= limite)
+            .map((f: any) => ({ ...f, sala: s }))
+        );
+        funcList.sort((a: any, b: any) => new Date(a.fechaInicio || a.inicio).getTime() - new Date(b.fechaInicio || b.inicio).getTime());
+        this.funciones.set(funcList);
         this.loadingFunciones.set(false);
       },
       error: () => this.loadingFunciones.set(false)

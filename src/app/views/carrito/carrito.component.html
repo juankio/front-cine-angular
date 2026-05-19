@@ -58,7 +58,7 @@
               Antojos de taquilla
             </h2>
             
-            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
               @for (item of productosMenu(); track item._id || item.id) {
                 <div class="cursor-pointer group hover:border-[#C5A059] transition-all bg-[#111] border border-[#332B1A] flex flex-col overflow-hidden hover:shadow-[0_0_15px_rgba(197,160,89,0.2)] hover:-translate-y-1" (click)="agregarProducto(item)">
                   <div class="relative h-28 overflow-hidden bg-black flex items-center justify-center shrink-0">
@@ -69,10 +69,10 @@
                     }
                   </div>
                   <div class="p-4 flex-1 flex flex-col justify-between">
-                    <h3 class="font-body font-medium text-sm text-[#EAE6D7] leading-tight mb-2 group-hover:text-[#C5A059] transition-colors line-clamp-2" [title]="item.nombre">{{ item.nombre }}</h3>
-                    <div class="flex justify-between items-end mt-auto pt-2">
-                      <div class="font-display tracking-widest text-[#C5A059] text-lg">\${{ item.precio | number:'1.2-2' }}</div>
-                      <span class="text-[10px] uppercase font-display tracking-widest text-[#8C8775] border border-[#332B1A] px-2 py-1 group-hover:border-[#C5A059] group-hover:text-[#EAE6D7] transition-colors rounded-sm shadow-sm">Añadir +</span>
+                    <h3 class="font-body font-medium text-sm text-[#EAE6D7] leading-tight mb-2 group-hover:text-[#C5A059] transition-colors truncate" [title]="item.nombre">{{ item.nombre }}</h3>
+                    <div class="flex justify-between items-end mt-auto pt-2 gap-2">
+                      <div class="font-display tracking-widest text-[#C5A059] text-base md:text-lg truncate">\${{ item.precio | number:'1.2-2' }}</div>
+                      <span class="text-[10px] uppercase font-display tracking-widest text-[#8C8775] border border-[#332B1A] px-2 py-1 group-hover:border-[#C5A059] group-hover:text-[#EAE6D7] transition-colors rounded-sm shadow-sm whitespace-nowrap">Añadir +</span>
                     </div>
                   </div>
                 </div>
