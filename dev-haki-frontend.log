@@ -1,0 +1,354 @@
+🔥 [Sanji] Encendiendo el servidor de desarrollo: bun run start
+⏱️ [Usopp] Esperando 5 segundos para que el servidor compile y cargue...
+$ bun run config-env && ng serve
+$ node scripts/set-env.js
+◇ injected env (1) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[Nami] 🍊 Archivo environment.ts generado con API: http://localhost:3000/api
+❯ Building...
+✔ Building...
+Initial chunk files | Names                      |  Raw size
+styles.css          | styles                     |  89.55 kB | 
+main.js             | main                       |  21.06 kB | 
+chunk-RRCXRWMW.js   | -                          |   5.12 kB | 
+chunk-Y7K43J3G.js   | -                          |   1.52 kB | 
+chunk-FIG4OW5G.js   | -                          |   1.21 kB | 
+
+                    | Initial total              | 118.47 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-R3YNEYSY.js   | -                          | 103.29 kB | 
+chunk-XOUXTG6E.js   | salas-component            |  96.67 kB | 
+chunk-2NQGFPLX.js   | index-component            |  73.17 kB | 
+chunk-3DRNJA6I.js   | pelicula-detalle-component |  55.47 kB | 
+chunk-4BN6IMQT.js   | peliculas-component        |  51.45 kB | 
+chunk-HUBCL6TY.js   | menu-component             |  47.70 kB | 
+chunk-A5MA3PN4.js   | recetas-component          |  46.20 kB | 
+chunk-QE2BDEUM.js   | pos-component              |  43.37 kB | 
+chunk-WVPE5O6C.js   | admin-component            |  41.83 kB | 
+chunk-ITF6ZXX5.js   | ingredientes-component     |  40.31 kB | 
+chunk-3GMY3LIP.js   | user-component             |  32.79 kB | 
+chunk-7QDZ62YO.js   | pasarela-pagos-component   |  23.31 kB | 
+chunk-M2Q5OFNX.js   | escanear-component         |  19.99 kB | 
+chunk-V3VGOG5T.js   | reservas-component         |  17.95 kB | 
+chunk-VDWKOLFI.js   | reset-password-component   |  11.58 kB | 
+...and 12 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [3.615 seconds] - 2026-05-17T01:51:31.810Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  ➜  Local:   http://localhost:4200/
+🚀 [Luffy] Abriendo tu navegador real para que veas la magia...
+👁️ [Zoro/Brook] ¡Lanzando el Haki de Observación invisible sobre http://localhost:4200!
+[0.01ms] ".env"
+🏴‍☠️ [Luffy] Desplegando el Haki de Observación en http://localhost:4200...
+👁️ [Haki de Observación] Activado. Vigilando: http://localhost:4200
+📸 [Brook] Página cargada. Tomando foto del UI para análisis visual...
+✨ Foto guardada en: /home/juankio/Documentos/programacion/front-cine-angular/ui-snapshot.png
+🧠 [Zoro/Robin] ¡Listo para la crítica visual (UX/UI)!
+👁️ [Haki] Vigilancia completada.
+✅ [Luffy] ¡Todo corriendo de forma autónoma!
+Tu navegador está abierto y el Vigía IA te está cubriendo la espalda.
+Presiona Ctrl+C para detener el servidor.
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names           | Raw size
+main.js             | main            | 21.06 kB | 
+
+Lazy chunk files    | Names           | Raw size
+chunk-E6X2ATLL.js   | admin-component | 41.79 kB | 
+
+Application bundle generation complete. [1.308 seconds] - 2026-05-17T01:56:58.746Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names           | Raw size
+styles.css          | styles          | 89.61 kB | 
+main.js             | main            | 21.06 kB | 
+
+Lazy chunk files    | Names           | Raw size
+chunk-7L3NNXBJ.js   | admin-component | 41.79 kB | 
+
+Application bundle generation complete. [0.213 seconds] - 2026-05-17T01:57:05.262Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names           | Raw size
+main.js             | main            | 21.06 kB | 
+
+Lazy chunk files    | Names           | Raw size
+chunk-K3TXE5HR.js   | admin-component | 41.99 kB | 
+
+Application bundle generation complete. [0.186 seconds] - 2026-05-17T01:57:15.327Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names           | Raw size
+styles.css          | styles          | 89.78 kB | 
+main.js             | main            | 21.06 kB | 
+
+Lazy chunk files    | Names           | Raw size
+chunk-3XON3K4V.js   | admin-component | 42.17 kB | 
+
+Application bundle generation complete. [0.199 seconds] - 2026-05-17T01:57:22.843Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names           | Raw size
+main.js             | main            | 21.06 kB | 
+
+Lazy chunk files    | Names           | Raw size
+chunk-3FTBSUUY.js   | admin-component | 42.16 kB | 
+
+Application bundle generation complete. [0.192 seconds] - 2026-05-17T01:57:37.350Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names           | Raw size
+main.js             | main            | 21.06 kB | 
+
+Lazy chunk files    | Names           | Raw size
+chunk-4B2DXKCY.js   | admin-component | 42.16 kB | 
+
+Application bundle generation complete. [0.187 seconds] - 2026-05-17T01:57:45.148Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names  | Raw size
+styles.css          | styles | 89.61 kB | 
+
+Application bundle generation complete. [0.272 seconds] - 2026-05-17T01:58:10.402Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names                      |  Raw size
+styles.css          | styles                     |  89.61 kB | 
+main.js             | main                       |  21.06 kB | 
+chunk-RRCXRWMW.js   | -                          |   5.12 kB | 
+chunk-Y7K43J3G.js   | -                          |   1.52 kB | 
+chunk-FIG4OW5G.js   | -                          |   1.21 kB | 
+
+                    | Initial total              | 118.53 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-R3YNEYSY.js   | -                          | 103.29 kB | 
+chunk-XOUXTG6E.js   | salas-component            |  96.67 kB | 
+chunk-2NQGFPLX.js   | index-component            |  73.17 kB | 
+chunk-3DRNJA6I.js   | pelicula-detalle-component |  55.47 kB | 
+chunk-4BN6IMQT.js   | peliculas-component        |  51.45 kB | 
+chunk-HUBCL6TY.js   | menu-component             |  47.70 kB | 
+chunk-A5MA3PN4.js   | recetas-component          |  46.20 kB | 
+chunk-QE2BDEUM.js   | pos-component              |  43.37 kB | 
+chunk-4B2DXKCY.js   | admin-component            |  42.16 kB | 
+chunk-ITF6ZXX5.js   | ingredientes-component     |  40.31 kB | 
+chunk-3GMY3LIP.js   | user-component             |  32.79 kB | 
+chunk-7QDZ62YO.js   | pasarela-pagos-component   |  23.31 kB | 
+chunk-M2Q5OFNX.js   | escanear-component         |  19.99 kB | 
+chunk-V3VGOG5T.js   | reservas-component         |  17.95 kB | 
+chunk-VDWKOLFI.js   | reset-password-component   |  11.58 kB | 
+...and 12 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [0.155 seconds] - 2026-05-17T02:03:19.345Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmButton is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:45:
+[37m      14 │ ...erLink, LoginModalComponent, [32mHlmButton[37m, HlmIcon, NgIconComponent],
+         ╵                                 [32m~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: HlmIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:56:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, [32mHlmIcon[37m, NgIconComponent],
+         ╵                                            [32m~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: NgIcon is not used within the template of NavMenuMobileComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/components/barra-navegacion/nav-menu-mobile.component.ts:14:65:
+[37m      14 │ ...erLink, LoginModalComponent, HlmButton, HlmIcon, [32mNgIconComponent[37m],
+         ╵                                                     [32m~~~~~~~~~~~~~~~[0m
+
+
+error: script "start" was terminated by signal SIGKILL (Forced quit)
+/home/juankio/Obsidian/MiVault/80-Sistema/Scripts/dev-haki.sh: línea 32:  3577 Terminado (killed)         $DEV_CMD
+Apagando servidor...
+/home/juankio/Obsidian/MiVault/80-Sistema/Scripts/dev-haki.sh: línea 1: kill: (3577) - No existe el proceso

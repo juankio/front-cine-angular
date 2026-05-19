@@ -40,27 +40,27 @@
                 <p class="font-display tracking-widest uppercase text-xl">No hay funciones hoy</p>
               </div>
             } @else {
-              <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                 @for (funcion of funciones(); track funcion._id || funcion.id) {
                   <div class="cursor-pointer group hover:border-primary/50 transition-all bg-card/60 backdrop-blur-md shadow-sm border border-border/50 rounded-xl flex flex-col p-4 relative overflow-hidden hover:shadow-md hover:-translate-y-1" (click)="agregarEntrada(funcion)">
                     <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative z-10 flex flex-col h-full justify-between gap-4">
-                      <div class="flex items-start justify-between">
-                        <div>
+                      <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1 min-w-0">
                           <p class="text-xs text-primary font-bold uppercase tracking-wider mb-1 flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                             {{ funcion.inicio | date:'shortTime' }}
                           </p>
-                          <h3 class="font-display text-xl uppercase font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">{{ funcion.pelicula?.titulo || funcion.tituloPelicula || 'Película Desconocida' }}</h3>
+                          <h3 class="font-display text-xl uppercase font-semibold text-foreground group-hover:text-primary transition-colors leading-tight truncate" [title]="funcion.pelicula?.titulo || funcion.tituloPelicula || 'Película Desconocida'">{{ funcion.pelicula?.titulo || funcion.tituloPelicula || 'Película Desconocida' }}</h3>
                         </div>
-                        <div class="text-right">
+                        <div class="text-right shrink-0">
                           <div class="font-display tracking-widest text-primary text-xl">\${{ funcion.precio | number:'1.2-2' }}</div>
                         </div>
                       </div>
                       
                       <div class="flex items-center gap-2 mt-auto">
-                        <span class="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-muted/50 text-muted-foreground uppercase tracking-widest border border-border/50">{{ funcion.formato }}</span>
-                        <span class="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-muted/50 text-muted-foreground uppercase tracking-widest border border-border/50">{{ funcion.idioma }}</span>
+                        <span class="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-muted/50 text-muted-foreground uppercase tracking-widest border border-border/50 shrink-0">{{ funcion.formato }}</span>
+                        <span class="text-[10px] font-medium px-2 py-0.5 rounded-sm bg-muted/50 text-muted-foreground uppercase tracking-widest border border-border/50 shrink-0">{{ funcion.idioma }}</span>
                         <span class="text-xs text-muted-foreground truncate ml-auto font-medium">{{ funcion.salaNombre }}</span>
                       </div>
                     </div>
@@ -82,7 +82,7 @@
                 <p class="font-display tracking-widest uppercase text-xl">El menú está vacío</p>
               </div>
             } @else {
-              <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                 @for (item of productos(); track item._id || item.id) {
                   <div class="cursor-pointer group hover:border-primary/50 transition-all bg-card/60 backdrop-blur-md shadow-sm border border-border/50 rounded-xl flex flex-col overflow-hidden hover:shadow-md hover:-translate-y-1" (click)="agregarProducto(item)">
                     <div class="relative h-32 overflow-hidden bg-muted/50 flex items-center justify-center">
@@ -94,7 +94,7 @@
                       }
                     </div>
                     <div class="p-4 flex-1 flex flex-col justify-between bg-card/80 backdrop-blur-sm border-t border-border/50 relative z-20">
-                      <h3 class="font-body font-medium text-lg text-foreground leading-tight mb-2 group-hover:text-primary transition-colors">{{ item.nombre }}</h3>
+                      <h3 class="font-body font-medium text-lg text-foreground leading-tight mb-2 group-hover:text-primary transition-colors truncate" [title]="item.nombre">{{ item.nombre }}</h3>
                       <div class="font-display tracking-widest text-primary text-2xl">\${{ item.precio | number:'1.2-2' }}</div>
                     </div>
                   </div>
@@ -170,3 +170,85 @@
         </div>
       </aside>
     </div>
+
+    <!-- Modal de Asientos POS -->
+    @if (modalAsientos()) {
+      <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in zoom-in-95 duration-200">
+        <div class="bg-card border-2 border-border shadow-2xl rounded-xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden relative">
+          
+          <div class="p-6 border-b border-border/50 flex justify-between items-center bg-muted/20">
+            <div>
+              <h2 class="text-2xl font-display tracking-widest uppercase text-foreground">Seleccionar Butacas</h2>
+              <p class="text-muted-foreground">{{ funcionSeleccionada()?.pelicula?.titulo }} - Sala {{ funcionSeleccionada()?.sala?.nombre }} ({{ funcionSeleccionada()?.inicio | date:'shortTime' }})</p>
+            </div>
+            <button class="text-muted-foreground hover:text-foreground hover:bg-muted p-2 rounded-full transition-colors" (click)="modalAsientos.set(false)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+
+          <div class="p-8 flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center bg-[#111]">
+            <!-- Pantalla -->
+            <div class="w-2/3 h-4 bg-gradient-to-b from-primary/40 to-transparent mb-12 relative border-t-2 border-primary shadow-[0_0_15px_rgba(var(--primary),0.2)]">
+              <div class="absolute -top-8 w-full text-center text-xs font-display tracking-[0.5em] text-primary uppercase">PANTALLA</div>
+            </div>
+
+            <!-- Grilla -->
+            <div class="flex flex-col gap-4 perspective-1000">
+              @for (fila of matrizAsientos(); track fila.letra; let i = $index) {
+                <div class="flex items-center gap-6 justify-center" [style.transform]="'rotateX(' + (i * 0.5) + 'deg)'">
+                  <span class="w-4 text-center font-display text-lg text-muted-foreground">{{ fila.letra }}</span>
+                  <div class="flex gap-2">
+                    @for (asiento of fila.asientos; track asiento.id; let j = $index) {
+                      <button 
+                        class="w-8 h-8 md:w-10 md:h-10 border transition-all text-xs font-display flex items-center justify-center rounded-t-lg rounded-b-sm"
+                        [class.bg-[#1A1A1A]]="asiento.estado === 'ocupado'"
+                        [class.border-[#332B1A]]="asiento.estado === 'ocupado'"
+                        [class.text-[#332B1A]]="asiento.estado === 'ocupado'"
+                        [class.opacity-50]="asiento.estado === 'ocupado'"
+                        [class.cursor-not-allowed]="asiento.estado === 'ocupado'"
+                        
+                        [class.bg-primary]="asiento.estado === 'seleccionado'"
+                        [class.border-primary]="asiento.estado === 'seleccionado'"
+                        [class.text-primary-foreground]="asiento.estado === 'seleccionado'"
+                        [class.shadow-[0_0_10px_rgba(var(--primary),0.4)]]="asiento.estado === 'seleccionado'"
+                        [class.scale-110]="asiento.estado === 'seleccionado'"
+                        
+                        [class.bg-[#0A0A0A]]="asiento.estado === 'libre'"
+                        [class.border-border]="asiento.estado === 'libre'"
+                        [class.text-muted-foreground]="asiento.estado === 'libre'"
+                        [class.hover:border-primary]="asiento.estado === 'libre'"
+                        [class.hover:text-primary]="asiento.estado === 'libre'"
+                        
+                        [disabled]="asiento.estado === 'ocupado'"
+                        (click)="toggleAsiento(asiento.id)">
+                        {{ asiento.numero }}
+                      </button>
+                    }
+                  </div>
+                  <span class="w-4 text-center font-display text-lg text-muted-foreground">{{ fila.letra }}</span>
+                </div>
+              }
+            </div>
+            
+            <div class="flex gap-6 mt-12 text-xs font-display tracking-widest uppercase text-muted-foreground border-t border-border/50 pt-6 w-full justify-center">
+              <div class="flex items-center gap-2"><div class="w-4 h-4 border border-border bg-[#0A0A0A]"></div> Disponible</div>
+              <div class="flex items-center gap-2 text-primary"><div class="w-4 h-4 border border-primary bg-primary shadow-[0_0_8px_rgba(var(--primary),0.4)]"></div> Seleccionado</div>
+              <div class="flex items-center gap-2 opacity-50"><div class="w-4 h-4 bg-[#1A1A1A] border border-[#332B1A]"></div> Ocupado</div>
+            </div>
+          </div>
+
+          <div class="p-6 border-t border-border/50 bg-card flex justify-between items-center">
+            <div>
+              <p class="text-sm text-muted-foreground font-display tracking-wider uppercase mb-1">Butacas ({{ asientosSeleccionados().length }})</p>
+              <p class="font-bold text-primary">{{ asientosSeleccionados().join(', ') || 'Ninguna' }}</p>
+            </div>
+            <button 
+              class="h-12 px-8 font-display tracking-[0.2em] uppercase text-sm text-primary-foreground bg-primary rounded-sm shadow-md hover:shadow-lg disabled:opacity-50 transition-all" 
+              (click)="confirmarAsientos()" 
+              [disabled]="asientosSeleccionados().length === 0">
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    }

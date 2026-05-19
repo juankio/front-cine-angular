@@ -172,6 +172,37 @@
                     </div>
 
                   </div>
+                  
+                  <!-- SECCIÓN: Dulcería -->
+                  @if (asientosSeleccionados().length > 0) {
+                    <div class="mt-16 animate-in fade-in slide-in-from-bottom-8 duration-500">
+                      <h2 class="text-3xl md:text-4xl font-display tracking-[0.1em] uppercase mb-8 flex items-center gap-4 text-[#C5A059]">
+                        <span class="bg-[#111] border border-[#C5A059] text-[#C5A059] w-10 h-10 flex items-center justify-center text-xl shadow-lg">III</span>
+                        Añadir Dulcería
+                      </h2>
+                      
+                      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        @for (item of productosMenu(); track item._id || item.id) {
+                          <div class="cursor-pointer group hover:border-[#C5A059] transition-all bg-[#111] border border-[#332B1A] flex flex-col overflow-hidden hover:shadow-[0_0_15px_rgba(197,160,89,0.2)] hover:-translate-y-1" (click)="agregarProducto(item)">
+                            <div class="relative h-24 overflow-hidden bg-black flex items-center justify-center">
+                              @if (item.imagenUrl) {
+                                <img [src]="item.imagenUrl" alt="Producto" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100" />
+                              } @else {
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#8C8775]/50 transition-transform duration-500 group-hover:scale-110 group-hover:text-[#C5A059]"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="1" y2="3"/><line x1="10" x2="10" y1="1" y2="3"/><line x1="14" x2="14" y1="1" y2="3"/></svg>
+                              }
+                            </div>
+                            <div class="p-3 flex-1 flex flex-col justify-between">
+                              <h3 class="font-body font-medium text-sm text-[#EAE6D7] leading-tight mb-2 group-hover:text-[#C5A059] transition-colors">{{ item.nombre }}</h3>
+                              <div class="flex justify-between items-end">
+                                <div class="font-display tracking-widest text-[#C5A059] text-lg">\${{ item.precio | number:'1.2-2' }}</div>
+                                <span class="text-[10px] uppercase font-display tracking-widest text-[#8C8775] border border-[#332B1A] px-1 group-hover:border-[#C5A059] transition-colors">Add +</span>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
                 </div>
 
                 <!-- Resumen de Compra Lateral (Estilo Ticket) -->
@@ -205,16 +236,39 @@
                     </div>
                   </div>
 
+                  @if (carritoComida().length > 0) {
+                    <div class="border-t border-[#332B1A] pt-4 mb-8">
+                      <p class="text-xs font-display tracking-widest text-[#8C8775] uppercase mb-3">Dulcería</p>
+                      <div class="space-y-3">
+                        @for (prod of carritoComida(); track prod.id) {
+                          <div class="flex justify-between items-center text-sm font-body text-[#EAE6D7]">
+                            <div class="flex items-center gap-2">
+                              <span class="text-[#C5A059] font-display">{{ prod.cantidad }}x</span>
+                              <span class="truncate max-w-[120px]">{{ prod.nombre }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                              <div class="flex items-center bg-[#111] border border-[#332B1A] rounded overflow-hidden">
+                                <button class="px-2 py-0.5 hover:bg-[#332B1A] text-[#8C8775]" (click)="restarProducto(prod.id)">-</button>
+                                <button class="px-2 py-0.5 hover:bg-[#332B1A] text-[#8C8775]" (click)="sumarProducto(prod.id)">+</button>
+                              </div>
+                              <span class="font-display">\${{ (prod.precio * prod.cantidad) | number:'1.2-2' }}</span>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+
                   <div class="border-t-2 border-dashed border-[#332B1A] pt-6 mb-8 flex justify-between items-end">
-                    <span class="text-xs font-display tracking-widest text-[#8C8775] uppercase mb-1">Total a pagar</span>
-                    <span class="text-4xl font-display text-[#C5A059] leading-none">\${{ (asientosSeleccionados().length * (funcionSeleccionada()?.precio || 1500)) | number:'1.2-2' }}</span>
+                    <span class="text-xs font-display tracking-widest text-[#8C8775] uppercase mb-1">Subtotal</span>
+                    <span class="text-4xl font-display text-[#C5A059] leading-none">\${{ (asientosSeleccionados().length * (funcionSeleccionada()?.precio || 1500) + totalComida()) | number:'1.2-2' }}</span>
                   </div>
 
                   <button 
                     class="w-full bg-[#C5A059] hover:bg-[#EAE6D7] text-black font-display tracking-[0.2em] uppercase text-lg h-14 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
                     [disabled]="asientosSeleccionados().length === 0 || procesando()"
                     (click)="confirmarCompra()">
-                    {{ procesando() ? 'Validando...' : 'Confirmar Reserva' }}
+                    {{ procesando() ? 'Añadiendo...' : 'Añadir al Carrito' }}
                   </button>
                 </div>
 

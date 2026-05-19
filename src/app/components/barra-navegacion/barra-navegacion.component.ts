@@ -1,14 +1,15 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {  Component, inject, computed, signal, effect , DestroyRef } from '@angular/core';
+import { Component, inject, computed, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthStore } from '../../state/auth.store';
+import { CartService } from '../../services/cart.service';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { provideIcons } from '@ng-icons/core';
-import { lucideMenu, lucideX, lucideSun, lucideMoon } from '@ng-icons/lucide';
+import { lucideMenu, lucideX, lucideSun, lucideMoon, lucideShoppingCart } from '@ng-icons/lucide';
 import { NgIconComponent } from '@ng-icons/core';
 
 import { NavMenuDesktopComponent } from './nav-menu-desktop.component';
@@ -17,12 +18,14 @@ import { NavMenuMobileComponent } from './nav-menu-mobile.component';
 @Component({
   selector: 'app-barra-navegacion',
   standalone: true,
-  imports: [CommonModule, LoginModalComponent, HlmButton, HlmIcon, NgIconComponent, NavMenuDesktopComponent, NavMenuMobileComponent],
-  providers: [provideIcons({ lucideMenu, lucideX, lucideSun, lucideMoon })],
-  templateUrl: './barra-navegacion.component.html'})
+  imports: [CommonModule, RouterLink, LoginModalComponent, HlmButton, HlmIcon, NgIconComponent, NavMenuDesktopComponent, NavMenuMobileComponent],
+  providers: [provideIcons({ lucideMenu, lucideX, lucideSun, lucideMoon, lucideShoppingCart })],
+  templateUrl: './barra-navegacion.component.html'
+})
 export class BarraNavegacionComponent {
   private destroyRef = inject(DestroyRef);
   authStore = inject(AuthStore);
+  cartStore = inject(CartService);
   router = inject(Router);
 
   menuAbierto = signal(false);

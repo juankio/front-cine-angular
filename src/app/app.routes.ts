@@ -68,6 +68,11 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'carrito',
+    title: 'Carrito de Compras',
+    loadComponent: () => import('./views/carrito/carrito.component').then(m => m.CarritoComponent)
+  },
+  {
     path: 'reset-password',
     title: 'Restablecer Contraseña',
     loadComponent: () => import('./views/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)

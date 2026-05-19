@@ -16,8 +16,18 @@
         <app-nav-menu-desktop [filteredLinks]="filteredLinks()" />
 
         <div class="flex items-center gap-4">
-            <button
-              hlmBtn
+          <!-- Botón de Carrito -->
+          <button routerLink="/carrito" class="relative group p-2 text-[#C5A059] hover:text-[#EAE6D7] transition-colors">
+            <ng-icon hlm name="lucideShoppingCart" size="sm"></ng-icon>
+            @if (cartStore.items().length > 0) {
+              <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-[9px] font-bold text-black bg-[#C5A059] rounded-full border border-black transform translate-x-1/4 -translate-y-1/4 group-hover:scale-110 transition-transform">
+                {{ cartStore.totalArticulos() }}
+              </span>
+            }
+          </button>
+
+          <button
+            hlmBtn
               variant="ghost"
               size="icon"
               class="md:hidden text-[#C5A059] hover:bg-[#1A1A1A] hover:text-[#EAE6D7]"

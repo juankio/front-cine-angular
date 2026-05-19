@@ -1,10 +1,12 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { PeliculasService } from '../../services/peliculas.service';
 import { SalasService } from '../../services/salas.service';
 import { EntradasService } from '../../services/entradas.service';
+import { MenuService } from '../../services/menu.service';
 import { ToastService } from '../../services/toast.service';
+import { CartService } from '../../services/cart.service';
 import { DefaultLayoutComponent } from '../../layouts/default-layout/default-layout.component';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmBadge } from '@spartan-ng/helm/badge';
@@ -12,6 +14,14 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 import { AuthStore } from '../../state/auth.store';
 import { LoginModalComponent } from '../../components/login-modal/login-modal.component';
+
+export interface CartItem {
+  id: string;
+  nombre: string;
+  precio: number;
+  cantidad: number;
+  objRef?: any;
+}
 
 @Component({
   selector: 'app-pelicula-detalle',
@@ -25,6 +35,8 @@ export class PeliculaDetalleComponent implements OnInit {
   private ps = inject(PeliculasService);
   private ss = inject(SalasService);
   private es = inject(EntradasService);
+  private ms = inject(MenuService);
+  private cart = inject(CartService);
   private router = inject(Router);
   private ts = inject(ToastService);
 
@@ -34,12 +46,24 @@ export class PeliculaDetalleComponent implements OnInit {
   funcionSeleccionada = signal<any>(null);
   matrizAsientos = signal<any[]>([]);
   asientosSeleccionados = signal<string[]>([]);
+  
+  productosMenu = signal<any[]>([]);
+  carritoComida = signal<CartItem[]>([]);
+  
+  totalComida = computed(() => this.carritoComida().reduce((acc, c) => acc + (c.precio * c.cantidad), 0));
+  
   procesando = signal(false);
   Math = Math;
 
   ngOnInit() {
     const id = this.r.snapshot.paramMap.get('id');
     id ? this.cargarDatos(id) : this.loading.set(false);
+    
+    this.ms.listar().subscribe({
+      next: (res) => {
+        this.productosMenu.set(Array.isArray(res?.data || res) ? (res?.data || res) : []);
+      }
+    });
   }
 
   cargarDatos(id: string) {
@@ -82,32 +106,51 @@ export class PeliculaDetalleComponent implements OnInit {
     this.matrizAsientos.update(m => m.map(f => ({ ...f, asientos: f.asientos.map((a: any) => a.id === id ? { ...a, estado: idx > -1 ? 'libre' : 'seleccionado' } : a) })));
   }
 
+  agregarProducto(item: any) {
+    const id = item._id || item.id;
+    this.carritoComida.update(items => {
+      const ex = items.find(i => i.id === id);
+      if (ex) {
+        return items.map(i => i.id === id ? { ...i, cantidad: i.cantidad + 1 } : i);
+      }
+      return [...items, { id, nombre: item.nombre, precio: item.precio, cantidad: 1, objRef: item }];
+    });
+    this.ts.success(`Añadido: ${item.nombre}`);
+  }
+
+  restarProducto(id: string) {
+    this.carritoComida.update(items => 
+      items.map(i => i.id === id ? { ...i, cantidad: i.cantidad - 1 } : i).filter(i => i.cantidad > 0)
+    );
+  }
+
+  sumarProducto(id: string) {
+    this.carritoComida.update(items => 
+      items.map(i => i.id === id ? { ...i, cantidad: i.cantidad + 1 } : i)
+    );
+  }
+
   confirmarCompra() {
     this.procesando.set(true);
     const f = this.funcionSeleccionada();
-    this.es.comprarFuncion(f._id || f.id, { asientos: this.asientosSeleccionados() }).subscribe({
-      next: (res: any) => {
-        // En lugar de "¡Compra exitosa!", redirigimos a la pasarela simulada
-        if (res.checkoutUrl) {
-          const urlParts = res.checkoutUrl.split('/');
-          const ticketId = urlParts[urlParts.length - 1];
-          this.router.navigate(['/pasarela-pagos'], { queryParams: { ticketId } });
-        } else {
-          // Fallback por si backend devuelve directo
-          this.ts.success("¡Compra exitosa!");
-          this.procesando.set(false);
-          this.seleccionarFuncion(f);
-        }
-      },
-      error: (err) => {
-        if (err.status === 409 || err.status === 400 || err.error?.message?.includes('ocupado')) {
-          this.ts.error("Alguien ya reservó estos asientos. Actualizando mapa...");
-          this.seleccionarFuncion(f); // Recargar asientos
-        } else {
-          this.ts.error("Error al procesar reserva.");
-        }
-        this.procesando.set(false);
-      }
+    
+    // Add tickets to global cart
+    this.cart.addEntradas(f, this.asientosSeleccionados(), f.precio || 1500);
+    
+    // Add food to global cart
+    this.carritoComida().forEach(prod => {
+      this.cart.addProducto(prod.objRef, prod.cantidad);
     });
+    
+    this.ts.success("¡Añadido al carrito!");
+    this.procesando.set(false);
+    
+    // Reset selection so they can keep browsing
+    this.funcionSeleccionada.set(null);
+    this.asientosSeleccionados.set([]);
+    this.carritoComida.set([]);
+    
+    // Opcional: Redirigir al inicio para que siga comprando
+    this.router.navigate(['/']);
   }
 }

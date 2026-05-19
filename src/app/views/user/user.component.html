@@ -87,7 +87,22 @@
                       </span>
                     </div>
 
-                    <div class="flex justify-between items-end mt-2">
+                    <!-- Mostrar Productos / Comida (Mobile) -->
+                    @if (reserva.productos && reserva.productos.length > 0) {
+                      <div class="mt-2 p-3 bg-muted/30 rounded-lg border border-border/50">
+                        <p class="text-[10px] font-display tracking-widest uppercase text-muted-foreground mb-2">Comida & Snacks</p>
+                        <ul class="text-xs text-foreground space-y-1">
+                          @for (prod of reserva.productos; track prod.nombre) {
+                            <li class="flex justify-between">
+                              <span>{{ prod.cantidad }}x {{ prod.nombre }}</span>
+                              <span class="text-primary font-medium">${{ (prod.precio * prod.cantidad) | number:'1.2-2' }}</span>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                    }
+
+                    <div class="flex justify-between items-end mt-4">
                       <div class="flex flex-wrap gap-1.5">
                         @for (asiento of reserva.asientos; track asiento) {
                           <span class="inline-flex items-center justify-center min-w-[24px] h-6 rounded bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary shadow-sm">{{ asiento }}</span>
@@ -153,11 +168,25 @@
                       </div>
                     </td>
                     <td hlmTd class="py-6">
-                      <div class="flex flex-wrap gap-2">
+                      <div class="flex flex-wrap gap-2 mb-2">
                         @for (asiento of reserva.asientos; track asiento) {
                            <span class="inline-flex items-center justify-center min-w-[28px] h-7 rounded bg-primary/10 border border-primary/20 text-xs font-bold text-primary shadow-sm">{{ asiento }}</span>
                         }
                       </div>
+                      
+                      <!-- Mostrar Productos / Comida (Desktop) -->
+                      @if (reserva.productos && reserva.productos.length > 0) {
+                        <div class="mt-3">
+                          <p class="text-[10px] font-display tracking-widest uppercase text-muted-foreground mb-1 border-t border-border/50 pt-2">Comida Añadida</p>
+                          <div class="flex flex-col gap-1">
+                            @for (prod of reserva.productos; track prod.nombre) {
+                              <span class="text-xs text-foreground bg-muted/30 px-2 py-1 rounded inline-block w-fit border border-border/30">
+                                {{ prod.cantidad }}x {{ prod.nombre }}
+                              </span>
+                            }
+                          </div>
+                        </div>
+                      }
                     </td>
                     <td hlmTd class="text-right font-display tracking-widest text-2xl text-foreground py-6">
                       ${{ reserva.totalPagado | number:'1.2-2' }}
