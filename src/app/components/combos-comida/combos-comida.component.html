@@ -102,7 +102,7 @@
             </p>
           </div>
           @if (authStore.isAuthenticated()) {
-            <button class="bg-[#C5A059] text-black hover:bg-[#EAE6D7] font-display tracking-[0.2em] uppercase text-lg px-8 py-4 transition-colors" (click)="cerrarModal()">
+            <button class="bg-[#C5A059] text-black hover:bg-[#EAE6D7] font-display tracking-[0.2em] uppercase text-lg px-8 py-4 transition-colors" (click)="agregarAlCarrito($event)">
               Añadir a mi compra
             </button>
           } @else {

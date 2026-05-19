@@ -102,6 +102,7 @@
                 <div class="stagger-animate h-full">
                   <app-combos-comida
                     class="h-full block"
+                    [itemData]="combo"
                     [nomProducto]="combo.nombre"
                     [precioProducto]="combo.precio?.toString() || '0'"
                     [infoProducto]="combo.descripcion"

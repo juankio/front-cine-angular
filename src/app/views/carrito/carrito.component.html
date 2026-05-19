@@ -58,21 +58,21 @@
               Antojos de taquilla
             </h2>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               @for (item of productosMenu(); track item._id || item.id) {
-                <div class="cursor-pointer group hover:border-[#C5A059] transition-all bg-[#111] border border-[#332B1A] flex flex-col overflow-hidden hover:shadow-[0_0_15px_rgba(197,160,89,0.2)] hover:-translate-y-1" (click)="agregarProducto(item)">
-                  <div class="relative h-28 overflow-hidden bg-black flex items-center justify-center shrink-0">
+                <div class="cursor-pointer group hover:border-[#C5A059] transition-all bg-[#111] border border-[#332B1A] flex flex-row items-center overflow-hidden hover:shadow-[0_0_15px_rgba(197,160,89,0.2)] hover:-translate-y-1 p-2 gap-4" (click)="agregarProducto(item)">
+                  <div class="relative w-20 h-20 md:w-24 md:h-24 overflow-hidden bg-black flex items-center justify-center shrink-0 border border-[#332B1A] group-hover:border-[#C5A059]/50 transition-colors">
                     @if (item.imagenUrl) {
                       <img [src]="item.imagenUrl" alt="Producto" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-70 group-hover:opacity-100" />
                     } @else {
-                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#8C8775]/50 transition-transform duration-500 group-hover:scale-110 group-hover:text-[#C5A059]"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="1" y2="3"/><line x1="10" x2="10" y1="1" y2="3"/><line x1="14" x2="14" y1="1" y2="3"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#8C8775]/50 transition-transform duration-500 group-hover:scale-110 group-hover:text-[#C5A059]"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" x2="6" y1="1" y2="3"/><line x1="10" x2="10" y1="1" y2="3"/><line x1="14" x2="14" y1="1" y2="3"/></svg>
                     }
                   </div>
-                  <div class="p-4 flex-1 flex flex-col justify-between">
+                  <div class="flex-1 flex flex-col justify-center min-w-0 pr-2">
                     <h3 class="font-body font-medium text-sm text-[#EAE6D7] leading-tight mb-2 group-hover:text-[#C5A059] transition-colors truncate" [title]="item.nombre">{{ item.nombre }}</h3>
-                    <div class="flex justify-between items-end mt-auto pt-2 gap-2">
-                      <div class="font-display tracking-widest text-[#C5A059] text-base md:text-lg truncate">\${{ item.precio | number:'1.2-2' }}</div>
-                      <span class="text-[10px] uppercase font-display tracking-widest text-[#8C8775] border border-[#332B1A] px-2 py-1 group-hover:border-[#C5A059] group-hover:text-[#EAE6D7] transition-colors rounded-sm shadow-sm whitespace-nowrap">Añadir +</span>
+                    <div class="flex justify-between items-center w-full mt-1">
+                      <div class="font-display tracking-widest text-[#C5A059] text-base truncate">\${{ item.precio | number:'1.2-2' }}</div>
+                      <span class="text-[10px] uppercase font-display tracking-widest text-[#8C8775] border border-[#332B1A] px-2 py-1 group-hover:border-[#C5A059] group-hover:bg-[#C5A059] group-hover:text-black transition-colors rounded-sm shadow-sm whitespace-nowrap shrink-0">Añadir +</span>
                     </div>
                   </div>
                 </div>
