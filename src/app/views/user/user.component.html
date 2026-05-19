@@ -136,7 +136,7 @@
           </div>
 
           <!-- Vista desktop: Tabla original -->
-          <div class="hidden md:block overflow-x-auto custom-scrollbar-hide">
+          <div class="hidden md:block overflow-visible">
             <table hlmTable class="w-full">
             <thead hlmTHead class="bg-muted/40 border-b border-border/60">
               <tr hlmTr class="hover:bg-transparent">
@@ -225,12 +225,26 @@
                           Expirado
                         </div>
                       } @else if (reserva.codigo) {
-                        <div class="inline-block p-1.5 bg-white rounded-xl shadow-md ring-1 ring-black/5 hover:scale-[2.5] hover:-translate-x-12 origin-right transition-all duration-300 cursor-zoom-in relative group/qr z-10 hover:z-50">
+                        <div class="inline-block p-1.5 bg-white rounded-xl shadow-md ring-1 ring-black/5 cursor-pointer relative group/qr">
                           <qrcode [qrdata]="reserva.codigo" [width]="72" [errorCorrectionLevel]="'M'"></qrcode>
-                          <!-- Tooltip al hacer hover en el QR -->
-                          <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white text-[8px] font-medium px-2 py-1 rounded opacity-0 group-hover/qr:opacity-100 transition-opacity whitespace-nowrap">
-                            Escanear en entrada
+                          
+                          <!-- Tooltip inline normal -->
+                          <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-black text-white text-[9px] font-medium px-2 py-1 rounded opacity-0 group-hover/qr:opacity-100 transition-opacity whitespace-nowrap">
+                            Ver pase
                           </div>
+
+                          <!-- Popup gigante fijo en el centro de la pantalla al hacer hover -->
+                          <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#111] border-2 border-[#C5A059] p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[100] opacity-0 pointer-events-none scale-75 group-hover/qr:opacity-100 group-hover/qr:scale-100 group-hover/qr:pointer-events-auto transition-all duration-300 flex flex-col items-center">
+                            <div class="bg-white p-4 rounded-xl shadow-inner mb-6">
+                              <qrcode [qrdata]="reserva.codigo" [width]="256" [errorCorrectionLevel]="'H'"></qrcode>
+                            </div>
+                            <h3 class="text-2xl font-display text-[#EAE6D7] uppercase tracking-widest mb-1">{{ reserva.peliculaTitulo || 'Pase' }}</h3>
+                            <p class="text-[#8C8775] font-mono text-sm tracking-[0.2em]">{{ reserva.codigo }}</p>
+                            <p class="text-[#C5A059] text-xs font-display tracking-widest uppercase mt-6 border-t border-[#332B1A] pt-4 w-full text-center">Presenta este código en la entrada</p>
+                          </div>
+                          
+                          <!-- Fondo oscurecido para el popup -->
+                          <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] opacity-0 pointer-events-none group-hover/qr:opacity-100 transition-opacity duration-300"></div>
                         </div>
                       }
                     </td>
