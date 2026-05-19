@@ -25,6 +25,8 @@
         @if (scannerEnabled()) {
           <zxing-scanner 
             [formats]="formats"
+            [tryHarder]="true"
+            [autofocusEnabled]="true"
             (scanSuccess)="onCodeResult($event)"
             class="absolute inset-0 object-cover w-full h-full"
           ></zxing-scanner>
@@ -42,39 +44,64 @@
 
     <div>
       @if (ticketInfo()) {
-        <hlm-card class="bg-primary/10 border-primary shadow-lg shadow-primary/20 animate-in slide-in-from-right duration-300">
-          <div class="p-6 text-center border-b border-primary/20">
-            <div class="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/40">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        <hlm-card class="shadow-lg animate-in slide-in-from-right duration-300"
+          [class.bg-green-500/10]="ticketInfo().statusScan === 'success'" [class.border-green-500]="ticketInfo().statusScan === 'success'" [class.shadow-green-500/20]="ticketInfo().statusScan === 'success'"
+          [class.bg-destructive/10]="ticketInfo().statusScan === 'error'" [class.border-destructive]="ticketInfo().statusScan === 'error'" [class.shadow-destructive/20]="ticketInfo().statusScan === 'error'"
+        >
+          <div class="p-6 text-center border-b"
+            [class.border-green-500/20]="ticketInfo().statusScan === 'success'"
+            [class.border-destructive/20]="ticketInfo().statusScan === 'error'"
+          >
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
+              [class.bg-green-500]="ticketInfo().statusScan === 'success'" [class.text-white]="ticketInfo().statusScan === 'success'" [class.shadow-green-500/40]="ticketInfo().statusScan === 'success'"
+              [class.bg-destructive]="ticketInfo().statusScan === 'error'" [class.text-destructive-foreground]="ticketInfo().statusScan === 'error'" [class.shadow-destructive/40]="ticketInfo().statusScan === 'error'"
+            >
+              @if (ticketInfo().statusScan === 'success') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+              }
             </div>
-            <h3 class="text-3xl font-display uppercase tracking-widest text-primary">¡Acceso Permitido!</h3>
-            <p class="text-sm font-medium mt-1">El ticket es válido y ha sido descontado.</p>
+            <h3 class="text-3xl font-display uppercase tracking-widest"
+              [class.text-green-500]="ticketInfo().statusScan === 'success'"
+              [class.text-destructive]="ticketInfo().statusScan === 'error'"
+            >{{ ticketInfo().statusMessage }}</h3>
+            @if (ticketInfo().statusScan === 'success') {
+              <p class="text-sm font-medium mt-1 text-green-500/80">El ticket es válido y ha sido descontado.</p>
+            } @else {
+              <p class="text-sm font-medium mt-1 text-destructive/80">Este ticket no sirve para ingresar a la función.</p>
+            }
           </div>
           <div class="p-6 space-y-4">
             <div>
               <p class="text-xs text-muted-foreground uppercase tracking-widest">Película</p>
-              <p class="text-xl font-display uppercase">{{ ticketInfo().peliculaTitulo }}</p>
+              <p class="text-xl font-display uppercase">{{ ticketInfo().peliculaTitulo || 'DULCERÍA' }}</p>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-xs text-muted-foreground uppercase tracking-widest">Sala</p>
-                <p class="text-lg font-medium">{{ ticketInfo().salaNombre }}</p>
+            @if (ticketInfo().tipoVenta !== 'dulceria') {
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-muted-foreground uppercase tracking-widest">Sala</p>
+                  <p class="text-lg font-medium">{{ ticketInfo().salaNombre }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-muted-foreground uppercase tracking-widest">Hora</p>
+                  <p class="text-lg font-medium">{{ ticketInfo().inicioFuncion | date:'shortTime' }}</p>
+                </div>
               </div>
-              <div>
-                <p class="text-xs text-muted-foreground uppercase tracking-widest">Hora</p>
-                <p class="text-lg font-medium">{{ ticketInfo().inicioFuncion | date:'shortTime' }}</p>
+              <div class="bg-background/50 rounded-lg p-3 border border-border mt-4">
+                <p class="text-xs text-muted-foreground uppercase tracking-widest mb-1 text-center">Asientos Asignados</p>
+                <div class="flex flex-wrap gap-2 justify-center">
+                  @for (asiento of ticketInfo().asientos; track asiento) {
+                    <span class="px-3 py-1 font-display tracking-widest rounded-md text-lg shadow-sm"
+                      [class.bg-green-500]="ticketInfo().statusScan === 'success'" [class.text-white]="ticketInfo().statusScan === 'success'"
+                      [class.bg-destructive]="ticketInfo().statusScan === 'error'" [class.text-destructive-foreground]="ticketInfo().statusScan === 'error'"
+                    >
+                      {{ asiento }}
+                    </span>
+                  }
+                </div>
               </div>
-            </div>
-            <div class="bg-background/50 rounded-lg p-3 border border-border mt-4">
-              <p class="text-xs text-muted-foreground uppercase tracking-widest mb-1 text-center">Asientos Asignados</p>
-              <div class="flex flex-wrap gap-2 justify-center">
-                @for (asiento of ticketInfo().asientos; track asiento) {
-                  <span class="px-3 py-1 bg-primary text-primary-foreground font-display tracking-widest rounded-md text-lg shadow-sm">
-                    {{ asiento }}
-                  </span>
-                }
-              </div>
-            </div>
+            }
           </div>
         </hlm-card>
       } @else {

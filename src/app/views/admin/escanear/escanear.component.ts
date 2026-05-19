@@ -28,15 +28,13 @@ export class EscanearComponent {
     this.procesando.set(true);
     this.scannerEnabled.set(false);
 
-    // Endpoint ficticio para validar el ticket, asumiremos uno real
     this.http.post(`${environment.apiUrl}/entradas/validar`, { codigo: resultString })
       .subscribe({
         next: (res: any) => {
           this.ts.success('Ticket Válido: ' + res.message);
-          this.ticketInfo.set(res.entrada);
+          this.ticketInfo.set({ ...res.entrada, statusScan: 'success', statusMessage: '¡Acceso Permitido!' });
           this.procesando.set(false);
           
-          // Reactivar tras 5 segundos
           setTimeout(() => {
             this.ticketInfo.set(null);
             this.scannerEnabled.set(true);
@@ -44,12 +42,20 @@ export class EscanearComponent {
         },
         error: (err) => {
           this.ts.error(err.error?.message || 'Ticket Inválido o ya usado.');
-          this.procesando.set(false);
           
-          // Reactivar tras 3 segundos
+          if (err.error?.entrada) {
+            this.ticketInfo.set({ 
+              ...err.error.entrada, 
+              statusScan: 'error', 
+              statusMessage: err.error.message.includes('EXPIRADO') ? 'TICKET EXPIRADO' : 'TICKET INVÁLIDO / USADO' 
+            });
+          }
+          
+          this.procesando.set(false);
           setTimeout(() => {
+            this.ticketInfo.set(null);
             this.scannerEnabled.set(true);
-          }, 3000);
+          }, 5000);
         }
       });
   }
