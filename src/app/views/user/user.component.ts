@@ -1,7 +1,8 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {  Component, inject, OnInit, signal , DestroyRef } from '@angular/core';
+import {  Component, inject, OnInit, signal , DestroyRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { filter, interval, Subscription } from 'rxjs';
 import { UserLayoutComponent } from '../../layouts/user-layout/user-layout.component';
 import { RecuadroInformacionComponent } from '../../components/recuadro-informacion/recuadro-informacion.component';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -23,7 +24,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
     QRCodeComponent
   ],
   templateUrl: './user.component.html'})
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   authStore = inject(AuthStore);
   private entradasService = inject(EntradasService);
@@ -32,9 +33,20 @@ export class UserComponent implements OnInit {
   reservas = signal<any[]>([]);
   loading = signal(false);
   selectedQr = signal<any>(null);
+  
+  private pollingSub?: Subscription;
 
   ngOnInit() {
     this.cargarReservas();
+    
+    // Auto-recarga silenciosa cada 5 segundos para actualizar estado de tickets en tiempo real
+    this.pollingSub = interval(5000).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.cargarReservas(true);
+    });
+  }
+  
+  ngOnDestroy() {
+    if (this.pollingSub) this.pollingSub.unsubscribe();
   }
 
   abrirQr(reserva: any) {
@@ -45,17 +57,29 @@ export class UserComponent implements OnInit {
     this.selectedQr.set(null);
   }
 
-  cargarReservas() {
-    this.loading.set(true);
+  cargarReservas(silent: boolean = false) {
+    if (!silent) this.loading.set(true);
+    
     this.entradasService.misEntradas().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         const data = res?.data || res;
-        this.reservas.set(Array.isArray(data) ? data : []);
-        this.loading.set(false);
+        const newReservas = Array.isArray(data) ? data : [];
+        this.reservas.set(newReservas);
+        
+        // Si hay un QR abierto, verificamos si su estado cambió a 'usado' y cerramos el modal
+        const currentQr = this.selectedQr();
+        if (currentQr) {
+          const updatedTicket = newReservas.find(r => r.codigo === currentQr.codigo);
+          if (updatedTicket && updatedTicket.estado === 'usado') {
+            this.cerrarQr(); // Cerrar auto-mágicamente para mostrar el tick verde
+          }
+        }
+        
+        if (!silent) this.loading.set(false);
       },
       error: (err) => {
         console.error('Error cargando historial de reservas', err);
-        this.loading.set(false);
+        if (!silent) this.loading.set(false);
       }
     });
   }
