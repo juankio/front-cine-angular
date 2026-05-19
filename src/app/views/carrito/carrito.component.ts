@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DefaultLayoutComponent } from '../../layouts/default-layout/default-layout.component';
 import { CartService } from '../../services/cart.service';
 import { EntradasService } from '../../services/entradas.service';
+import { MenuService } from '../../services/menu.service';
 import { ToastService } from '../../services/toast.service';
 import { AuthStore } from '../../state/auth.store';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
@@ -12,17 +13,32 @@ import { LoginModalComponent } from '../../components/login-modal/login-modal.co
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule, DefaultLayoutComponent, HlmButtonImports, LoginModalComponent],
+  imports: [CommonModule, DefaultLayoutComponent, HlmButtonImports, LoginModalComponent, RouterLink],
   templateUrl: './carrito.component.html'
 })
-export class CarritoComponent {
+export class CarritoComponent implements OnInit {
   cart = inject(CartService);
   private es = inject(EntradasService);
+  private ms = inject(MenuService);
   private router = inject(Router);
   private ts = inject(ToastService);
   authStore = inject(AuthStore);
 
   procesando = signal(false);
+  productosMenu = signal<any[]>([]);
+
+  ngOnInit() {
+    this.ms.listar().subscribe({
+      next: (res) => {
+        this.productosMenu.set(Array.isArray(res?.data || res) ? (res?.data || res) : []);
+      }
+    });
+  }
+
+  agregarProducto(item: any) {
+    this.cart.addProducto(item, 1);
+    this.ts.success(`Añadido: ${item.nombre}`);
+  }
 
   pagar() {
     if (!this.authStore.isAuthenticated()) {
